@@ -122,13 +122,13 @@ public class Realm : AggregateRoot
   public IUserSettings UserSettings => new UserSettings(UniqueNameSettings, PasswordSettings, RequireUniqueEmail, RequireConfirmedAccount);
   public IRoleSettings RoleSettings => new RoleSettings(UniqueNameSettings);
 
-  public Realm(Slug uniqueName, JwtSecret secret, ActorId? actorId = null, RealmId? realmId = null) : base(realmId?.StreamId)
+  public Realm(Slug uniqueSlug, JwtSecret secret, ActorId? actorId = null, RealmId? realmId = null) : base(realmId?.StreamId)
   {
     UniqueNameSettings uniqueNameSettings = new();
     PasswordSettings passwordSettings = new();
     bool requireUniqueEmail = true;
     bool requireConfirmedAccount = true;
-    Raise(new RealmCreated(uniqueName, secret, uniqueNameSettings, passwordSettings, requireUniqueEmail, requireConfirmedAccount), actorId);
+    Raise(new RealmCreated(uniqueSlug, secret, uniqueNameSettings, passwordSettings, requireUniqueEmail, requireConfirmedAccount), actorId);
   }
   protected virtual void Handle(RealmCreated @event)
   {
@@ -172,9 +172,9 @@ public class Realm : AggregateRoot
   }
   protected virtual void Handle(RealmUpdated @event)
   {
-    if (@event.UniqueName != null)
+    if (@event.UniqueSlug != null)
     {
-      _uniqueSlug = @event.UniqueName;
+      _uniqueSlug = @event.UniqueSlug;
     }
     if (@event.DisplayName != null)
     {

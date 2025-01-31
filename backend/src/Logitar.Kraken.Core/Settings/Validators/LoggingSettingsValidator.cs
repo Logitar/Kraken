@@ -4,7 +4,7 @@ using Logitar.Kraken.Contracts.Settings;
 
 namespace Logitar.Kraken.Core.Settings.Validators;
 
-public class LoggingSettingsValidator : AbstractValidator<ILoggingSettings>
+internal class LoggingSettingsValidator : AbstractValidator<ILoggingSettings>
 {
   public LoggingSettingsValidator()
   {

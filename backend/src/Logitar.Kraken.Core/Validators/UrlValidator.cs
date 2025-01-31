@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 
 namespace Logitar.Kraken.Core.Validators;
 
-public class UrlValidator<T> : IPropertyValidator<T, string>
+internal class UrlValidator<T> : IPropertyValidator<T, string>
 {
   private readonly HashSet<string> _schemes = ["http", "https"];
 
