@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Resources;
 using Logitar.Kraken.Core.Realms;
+using Logitar.Kraken.Core.Roles;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Logitar.Kraken.Core;
@@ -17,6 +18,7 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddTransient<ILanguageManager, LanguageManager>()
-      .AddTransient<IRealmManager, RealmManager>();
+      .AddTransient<IRealmManager, RealmManager>()
+      .AddTransient<IRoleManager, RoleManager>();
   }
 }

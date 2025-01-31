@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 
 namespace Logitar.Kraken.Core.Validators;
 
-public class LocaleValidator<T> : IPropertyValidator<T, string>
+internal class LocaleValidator<T> : IPropertyValidator<T, string>
 {
   private const int LOCALE_CUSTOM_UNSPECIFIED = 0x1000;
 

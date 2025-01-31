@@ -44,7 +44,7 @@ internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrRepl
       realm = await _realmRepository.LoadAsync(realmId.Value, cancellationToken);
     }
 
-    ActorId? actorId = _applicationContext.GetActorId();
+    ActorId? actorId = _applicationContext.ActorId;
     Slug uniqueSlug = new(payload.UniqueSlug);
     JwtSecret secret = JwtSecret.CreateOrGenerate(payload.Secret);
 

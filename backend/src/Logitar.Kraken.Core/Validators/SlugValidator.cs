@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 
 namespace Logitar.Kraken.Core.Validators;
 
-public class SlugValidator<T> : IPropertyValidator<T, string>
+internal class SlugValidator<T> : IPropertyValidator<T, string>
 {
   public string Name { get; } = "SlugValidator";
 

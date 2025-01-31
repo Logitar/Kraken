@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 
 namespace Logitar.Kraken.Core.Validators;
 
-public class AllowedCharactersValidator<T> : IPropertyValidator<T, string>
+internal class AllowedCharactersValidator<T> : IPropertyValidator<T, string>
 {
   public string? AllowedCharacters { get; }
   public string Name { get; } = "AllowedCharactersValidator";

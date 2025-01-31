@@ -3,7 +3,7 @@ using Logitar.Kraken.Contracts.Settings;
 
 namespace Logitar.Kraken.Core.Settings.Validators;
 
-public class UniqueNameSettingsValidator : AbstractValidator<IUniqueNameSettings>
+internal class UniqueNameSettingsValidator : AbstractValidator<IUniqueNameSettings>
 {
   public UniqueNameSettingsValidator()
   {

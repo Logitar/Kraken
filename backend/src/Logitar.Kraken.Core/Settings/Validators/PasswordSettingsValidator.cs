@@ -3,7 +3,7 @@ using Logitar.Kraken.Contracts.Settings;
 
 namespace Logitar.Kraken.Core.Settings.Validators;
 
-public class PasswordSettingsValidator : AbstractValidator<IPasswordSettings>
+internal class PasswordSettingsValidator : AbstractValidator<IPasswordSettings>
 {
   public PasswordSettingsValidator()
   {
