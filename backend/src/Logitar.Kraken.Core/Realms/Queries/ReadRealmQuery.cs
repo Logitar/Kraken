@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Realms.Queries;
 
-public record ReadRealmQuery(Guid? Id, string? UniqueSlug) : IRequest<RealmModel?>;
+public record ReadRealmQuery(Guid? Id, string? UniqueSlug) : Activity, IRequest<RealmModel?>;
 
 internal class ReadRealmQueryHandler : IRequestHandler<ReadRealmQuery, RealmModel?>
 {

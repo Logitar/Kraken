@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Realms.Queries;
 
-public record SearchRealmsQuery(SearchRealmsPayload Payload) : IRequest<SearchResults<RealmModel>>;
+public record SearchRealmsQuery(SearchRealmsPayload Payload) : Activity, IRequest<SearchResults<RealmModel>>;
 
 internal class SearchRealmsQueryHandler : IRequestHandler<SearchRealmsQuery, SearchResults<RealmModel>>
 {
