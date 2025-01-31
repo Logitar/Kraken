@@ -16,7 +16,7 @@ public class Configuration : AggregateRoot
   public UniqueNameSettings UniqueNameSettings => _uniqueNameSettings ?? throw new InvalidOperationException("The configuration has not been initialized.");
   private PasswordSettings? _passwordSettings = null;
   public PasswordSettings PasswordSettings => _passwordSettings ?? throw new InvalidOperationException("The configuration has not been initialized.");
-  public IUserSettings UserSettings => new UserSettings(UniqueNameSettings, PasswordSettings);
+  public IUserSettings UserSettings => new UserSettings(UniqueNameSettings, PasswordSettings, RequireUniqueEmail: false, RequireConfirmedAccount: false);
   public IRoleSettings RoleSettings => new RoleSettings(UniqueNameSettings);
 
   private LoggingSettings? _loggingSettings = null;
