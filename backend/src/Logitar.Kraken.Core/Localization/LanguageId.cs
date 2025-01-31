@@ -22,6 +22,8 @@ public readonly struct LanguageId
 
   public static LanguageId NewId() => new(StreamId.NewId());
 
+  public Guid ToGuid() => StreamId.ToGuid();
+
   public static bool operator ==(LanguageId left, LanguageId right) => left.Equals(right);
   public static bool operator !=(LanguageId left, LanguageId right) => !left.Equals(right);
 

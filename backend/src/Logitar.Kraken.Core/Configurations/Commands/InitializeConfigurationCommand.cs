@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Commands;
 
-public record InitializeConfigurationCommand(string DefaultLocale, string UniqueName, string Password) : IRequest;
+public record InitializeConfigurationCommand(string DefaultLocale, string UniqueName, string Password) : Activity, IRequest;
 
 internal class InitializeConfigurationCommandHandler : IRequestHandler<InitializeConfigurationCommand>
 {
