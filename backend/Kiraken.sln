@@ -13,6 +13,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Core", "src\Logitar.Kraken.Core\Logitar.Kraken.Core.csproj", "{41D60DF6-97A3-4B35-A25D-466753A84DD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Contracts", "src\Logitar.Kraken.Contracts\Logitar.Kraken.Contracts.csproj", "{CAF62299-6795-4009-9792-3026BACB3984}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E09C9002-7C75-4A09-9A52-E3B1E5821134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Tests", "tests\Logitar.Kraken.Tests\Logitar.Kraken.Tests.csproj", "{41BDC0A0-FA33-4ED7-BCFE-EB34787B9031}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.UnitTests", "tests\Logitar.Kraken.UnitTests\Logitar.Kraken.UnitTests.csproj", "{DD04B062-83C5-422D-8404-7B738FE0DA34}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,8 +31,24 @@ Global
 		{41D60DF6-97A3-4B35-A25D-466753A84DD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41D60DF6-97A3-4B35-A25D-466753A84DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41D60DF6-97A3-4B35-A25D-466753A84DD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAF62299-6795-4009-9792-3026BACB3984}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF62299-6795-4009-9792-3026BACB3984}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF62299-6795-4009-9792-3026BACB3984}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF62299-6795-4009-9792-3026BACB3984}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41BDC0A0-FA33-4ED7-BCFE-EB34787B9031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41BDC0A0-FA33-4ED7-BCFE-EB34787B9031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41BDC0A0-FA33-4ED7-BCFE-EB34787B9031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41BDC0A0-FA33-4ED7-BCFE-EB34787B9031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD04B062-83C5-422D-8404-7B738FE0DA34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD04B062-83C5-422D-8404-7B738FE0DA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD04B062-83C5-422D-8404-7B738FE0DA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD04B062-83C5-422D-8404-7B738FE0DA34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{41BDC0A0-FA33-4ED7-BCFE-EB34787B9031} = {E09C9002-7C75-4A09-9A52-E3B1E5821134}
+		{DD04B062-83C5-422D-8404-7B738FE0DA34} = {E09C9002-7C75-4A09-9A52-E3B1E5821134}
 	EndGlobalSection
 EndGlobal
