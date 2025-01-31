@@ -31,7 +31,7 @@ internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Rol
 
   public async Task<RoleModel?> Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
   {
-    IRoleSettings roleSettings = _applicationContext.GetRoleSettings();
+    IRoleSettings roleSettings = _applicationContext.RoleSettings;
 
     UpdateRolePayload payload = command.Payload;
     new UpdateRoleValidator(roleSettings.UniqueNameSettings).ValidateAndThrow(payload);
@@ -43,7 +43,7 @@ internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Rol
       return null;
     }
 
-    ActorId? actorId = _applicationContext.GetActorId();
+    ActorId? actorId = _applicationContext.ActorId;
 
     if (!string.IsNullOrWhiteSpace(payload.UniqueName))
     {

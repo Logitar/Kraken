@@ -32,7 +32,7 @@ internal class CreateOrReplaceRoleCommandHandler : IRequestHandler<CreateOrRepla
 
   public async Task<CreateOrReplaceRoleResult> Handle(CreateOrReplaceRoleCommand command, CancellationToken cancellationToken)
   {
-    IRoleSettings roleSettings = _applicationContext.GetRoleSettings();
+    IRoleSettings roleSettings = _applicationContext.RoleSettings;
 
     CreateOrReplaceRolePayload payload = command.Payload;
     new CreateOrReplaceRoleValidator(roleSettings.UniqueNameSettings).ValidateAndThrow(payload);
@@ -45,7 +45,7 @@ internal class CreateOrReplaceRoleCommandHandler : IRequestHandler<CreateOrRepla
       role = await _roleRepository.LoadAsync(roleId.Value, cancellationToken);
     }
 
-    ActorId? actorId = _applicationContext.GetActorId();
+    ActorId? actorId = _applicationContext.ActorId;
     UniqueName uniqueName = new(roleSettings.UniqueNameSettings, payload.UniqueName);
 
     bool created = false;

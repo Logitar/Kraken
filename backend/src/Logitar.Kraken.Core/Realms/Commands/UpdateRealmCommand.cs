@@ -41,7 +41,7 @@ internal class UpdateRealmCommandHandler : IRequestHandler<UpdateRealmCommand, R
       return null;
     }
 
-    ActorId? actorId = _applicationContext.GetActorId();
+    ActorId? actorId = _applicationContext.ActorId;
 
     if (!string.IsNullOrWhiteSpace(payload.UniqueSlug))
     {
