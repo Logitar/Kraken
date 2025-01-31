@@ -6,7 +6,7 @@ using MediatR;
 namespace Logitar.Kraken.Core.Realms.Events;
 
 public record RealmCreated(
-  Slug UniqueName,
+  Slug UniqueSlug,
   JwtSecret Secret,
   UniqueNameSettings UniqueNameSettings,
   PasswordSettings PasswordSettings,

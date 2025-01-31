@@ -132,7 +132,7 @@ public class Realm : AggregateRoot
   }
   protected virtual void Handle(RealmCreated @event)
   {
-    _uniqueSlug = @event.UniqueName;
+    _uniqueSlug = @event.UniqueSlug;
 
     _secret = @event.Secret;
 

@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="System.Globalization" />
     <Using Include="System.Text" />
   </ItemGroup>
 

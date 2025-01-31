@@ -15,4 +15,6 @@ public class RealmModel : AggregateModel
   public PasswordSettingsModel PasswordSettings { get; set; } = new();
   public bool RequireUniqueEmail { get; set; }
   public bool RequireConfirmedAccount { get; set; }
+
+  public override string ToString() => $"{DisplayName ?? UniqueSlug} | {base.ToString()}";
 }
