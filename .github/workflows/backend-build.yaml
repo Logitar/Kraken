@@ -1,4 +1,4 @@
-name: Build CMS Backend
+name: Build Kraken Backend
 
 on:
   push:
@@ -19,7 +19,7 @@ defaults:
 
 jobs:
   build:
-    name: Build CMS Backend
+    name: Build Kraken Backend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
