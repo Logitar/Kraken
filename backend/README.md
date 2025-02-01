@@ -1,3 +1,3 @@
-# ?? Kraken Backend by Logitar
+﻿# 🐙 Kraken Backend by Logitar
 
-TODO
+Backend of the Logitar application management tool suite.

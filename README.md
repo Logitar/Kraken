@@ -1,3 +1,3 @@
 # 🐙 Kraken by Logitar
 
-TODO
+Application management tool suite.
