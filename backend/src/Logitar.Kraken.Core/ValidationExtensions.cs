@@ -41,6 +41,11 @@ public static class ValidationExtensions
     return ruleBuilder.SetValidator(new PastValidator<T>(moment));
   }
 
+  public static IRuleBuilderOptions<T, string> PersonName<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MaximumLength(Users.PersonName.MaximumLength);
+  }
+
   public static IRuleBuilderOptions<T, string> Slug<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Realms.Slug.MaximumLength).SetValidator(new SlugValidator<T>());
