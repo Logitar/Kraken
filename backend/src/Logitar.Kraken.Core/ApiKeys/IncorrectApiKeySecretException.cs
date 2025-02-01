@@ -1,15 +1,17 @@
 ﻿namespace Logitar.Kraken.Core.ApiKeys;
 
-/// <summary>
-/// The exception raised when an API key secret check fails.
-/// </summary>
-public class IncorrectApiKeySecretException : /*InvalidCredentials*/Exception
+public class IncorrectApiKeySecretException : InvalidCredentialsException
 {
   private const string ErrorMessage = "The specified secret did not match the API key.";
 
-  public string ApiKeyId
+  public Guid? RealmId
   {
-    get => (string)Data[nameof(ApiKeyId)]!;
+    get => (Guid?)Data[nameof(RealmId)]!;
+    private set => Data[nameof(RealmId)] = value;
+  }
+  public Guid ApiKeyId
+  {
+    get => (Guid)Data[nameof(ApiKeyId)]!;
     private set => Data[nameof(ApiKeyId)] = value;
   }
   public string AttemptedSecret
@@ -18,15 +20,29 @@ public class IncorrectApiKeySecretException : /*InvalidCredentials*/Exception
     private set => Data[nameof(AttemptedSecret)] = value;
   }
 
+  public override Error Error
+  {
+    get
+    {
+      Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(RealmId)] = RealmId;
+      error.Data[nameof(ApiKeyId)] = ApiKeyId;
+      error.Data[nameof(AttemptedSecret)] = AttemptedSecret;
+      return error;
+    }
+  }
+
   public IncorrectApiKeySecretException(ApiKey apiKey, string attemptedSecret)
     : base(BuildMessage(apiKey, attemptedSecret))
   {
-    ApiKeyId = apiKey.Id.Value;
+    RealmId = apiKey.Id.RealmId?.ToGuid();
+    ApiKeyId = apiKey.Id.EntityId;
     AttemptedSecret = attemptedSecret;
   }
 
   private static string BuildMessage(ApiKey apiKey, string attemptedSecret) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(ApiKeyId), apiKey.Id)
+    .AddData(nameof(RealmId), apiKey.Id.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(ApiKeyId), apiKey.Id.EntityId)
     .AddData(nameof(AttemptedSecret), attemptedSecret)
     .Build();
 }
