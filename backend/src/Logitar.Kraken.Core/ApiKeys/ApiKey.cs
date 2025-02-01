@@ -93,7 +93,7 @@ public class ApiKey : AggregateRoot, ICustomizable
   {
     if (RealmId != role.RealmId)
     {
-      throw new NotImplementedException(); // TODO(fpion): implement
+      throw new InvalidRealmException(RealmId, role.RealmId);
     }
 
     if (!HasRole(role))

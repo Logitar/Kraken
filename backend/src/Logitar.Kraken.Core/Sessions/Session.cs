@@ -29,7 +29,7 @@ public class Session : AggregateRoot, ICustomizable
   {
     if (RealmId != user.RealmId)
     {
-      throw new NotImplementedException(); // TODO(fpion): implement
+      throw new InvalidRealmException(RealmId, user.RealmId);
     }
 
     actorId ??= new(user.Id.Value);

@@ -210,7 +210,7 @@ public class User : AggregateRoot, ICustomizable
   {
     if (RealmId != role.RealmId)
     {
-      throw new NotImplementedException(); // TODO(fpion): implement
+      throw new InvalidRealmException(RealmId, role.RealmId);
     }
 
     if (!HasRole(role))
@@ -457,8 +457,8 @@ public class User : AggregateRoot, ICustomizable
     }
 
     actorId ??= new(Id.Value);
-    SessionId sid = sessionId.HasValue ? new SessionId(Id.RealmId, sessionId.Value) : SessionId.NewId(Id.RealmId); // TODO(fpion): rename
-    Session session = new(this, secret, actorId, sid);
+    SessionId id = sessionId.HasValue ? new SessionId(Id.RealmId, sessionId.Value) : SessionId.NewId(Id.RealmId);
+    Session session = new(this, secret, actorId, id);
     Raise(new UserSignedIn(session.CreatedOn), actorId.Value);
 
     return session;
