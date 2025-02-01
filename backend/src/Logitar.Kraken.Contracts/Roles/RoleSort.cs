@@ -4,6 +4,6 @@ public enum RoleSort
 {
   CreatedOn,
   DisplayName,
-  UniqueSlug,
+  UniqueName,
   UpdatedOn
 }
