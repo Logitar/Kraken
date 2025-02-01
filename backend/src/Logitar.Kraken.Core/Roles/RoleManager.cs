@@ -15,8 +15,8 @@ internal class RoleManager : IRoleManager
 
   public async Task SaveAsync(Role role, CancellationToken cancellationToken)
   {
-    bool hasUniqueSlugChanged = role.Changes.Any(change => change is RoleCreated || change is RoleUniqueSlugChanged);
-    if (hasUniqueSlugChanged)
+    bool hasUniqueNameChanged = role.Changes.Any(change => change is RoleCreated || change is RoleUniqueNameChanged);
+    if (hasUniqueNameChanged)
     {
       RoleId? conflictId = await _roleQuerier.FindIdAsync(role.UniqueName, cancellationToken);
       if (conflictId.HasValue && !conflictId.Value.Equals(role.Id))

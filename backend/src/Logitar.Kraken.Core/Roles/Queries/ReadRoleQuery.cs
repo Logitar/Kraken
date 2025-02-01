@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Roles.Queries;
 
-public record ReadRoleQuery(Guid? Id, string? UniqueSlug) : Activity, IRequest<RoleModel?>;
+public record ReadRoleQuery(Guid? Id, string? UniqueName) : Activity, IRequest<RoleModel?>;
 
 internal class ReadRoleQueryHandler : IRequestHandler<ReadRoleQuery, RoleModel?>
 {
@@ -26,9 +26,9 @@ internal class ReadRoleQueryHandler : IRequestHandler<ReadRoleQuery, RoleModel?>
         roles[role.Id] = role;
       }
     }
-    if (!string.IsNullOrWhiteSpace(query.UniqueSlug))
+    if (!string.IsNullOrWhiteSpace(query.UniqueName))
     {
-      RoleModel? role = await _roleQuerier.ReadAsync(query.UniqueSlug, cancellationToken);
+      RoleModel? role = await _roleQuerier.ReadAsync(query.UniqueName, cancellationToken);
       if (role != null)
       {
         roles[role.Id] = role;

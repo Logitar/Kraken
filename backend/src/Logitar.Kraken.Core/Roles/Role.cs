@@ -85,10 +85,10 @@ public class Role : AggregateRoot, ICustomizable
   {
     if (_uniqueName != uniqueName)
     {
-      Raise(new RoleUniqueSlugChanged(uniqueName), actorId);
+      Raise(new RoleUniqueNameChanged(uniqueName), actorId);
     }
   }
-  protected virtual void Handle(RoleUniqueSlugChanged @event)
+  protected virtual void Handle(RoleUniqueNameChanged @event)
   {
     _uniqueName = @event.UniqueName;
   }

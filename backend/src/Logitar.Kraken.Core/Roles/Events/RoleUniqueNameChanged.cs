@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Roles.Events;
 
-public record RoleUniqueSlugChanged(UniqueName UniqueName) : DomainEvent, INotification;
+public record RoleUniqueNameChanged(UniqueName UniqueName) : DomainEvent, INotification;
