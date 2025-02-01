@@ -1,21 +1,39 @@
 ﻿namespace Logitar.Kraken.Core.ApiKeys;
 
-public class ApiKeyIsExpiredException : /*InvalidCredentials*/Exception
+public class ApiKeyIsExpiredException : InvalidCredentialsException
 {
   private const string ErrorMessage = "The specified API key is expired.";
 
-  public string ApiKeyId
+  public Guid? RealmId
   {
-    get => (string)Data[nameof(ApiKeyId)]!;
+    get => (Guid?)Data[nameof(RealmId)];
+    private set => Data[nameof(RealmId)] = value;
+  }
+  public Guid ApiKeyId
+  {
+    get => (Guid)Data[nameof(ApiKeyId)]!;
     private set => Data[nameof(ApiKeyId)] = value;
+  }
+
+  public override Error Error
+  {
+    get
+    {
+      Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(RealmId)] = RealmId;
+      error.Data[nameof(ApiKeyId)] = ApiKeyId;
+      return error;
+    }
   }
 
   public ApiKeyIsExpiredException(ApiKey apiKey) : base(BuildMessage(apiKey))
   {
-    ApiKeyId = apiKey.Id.Value;
+    RealmId = apiKey.Id.RealmId?.ToGuid();
+    ApiKeyId = apiKey.Id.EntityId;
   }
 
   private static string BuildMessage(ApiKey apiKey) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(ApiKeyId), apiKey.Id)
+    .AddData(nameof(RealmId), apiKey.Id.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(ApiKeyId), apiKey.Id.EntityId)
     .Build();
 }
