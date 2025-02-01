@@ -86,7 +86,7 @@ internal class CreateOrReplaceApiKeyCommandHandler : IRequestHandler<CreateOrRep
 
     apiKey.SetCustomAttributes(payload.CustomAttributes, reference);
 
-    // TODO(fpion): Roles
+    await SetRolesAsync(payload, reference, apiKey, actorId, cancellationToken);
 
     apiKey.Update(actorId);
     await _apiKeyRepository.SaveAsync(apiKey, cancellationToken);
@@ -97,5 +97,27 @@ internal class CreateOrReplaceApiKeyCommandHandler : IRequestHandler<CreateOrRep
       model.XApiKey = new XApiKey(apiKey.Id, secretString).Encode();
     }
     return new CreateOrReplaceApiKeyResult(model, created);
+  }
+
+  private async Task SetRolesAsync(CreateOrReplaceApiKeyPayload payload, ApiKey reference, ApiKey apiKey, ActorId? actorId, CancellationToken cancellationToken)
+  {
+    IReadOnlyDictionary<RoleId, Role> roles = (await _roleManager.FindAsync(payload.Roles, cancellationToken))
+      .ToDictionary(x => x.Value.Id, x => x.Value);
+
+    foreach (RoleId roleId in reference.Roles)
+    {
+      if (!roles.ContainsKey(roleId))
+      {
+        apiKey.RemoveRole(roleId, actorId);
+      }
+    }
+
+    foreach (Role role in roles.Values)
+    {
+      if (!reference.HasRole(role))
+      {
+        apiKey.AddRole(role, actorId);
+      }
+    }
   }
 }

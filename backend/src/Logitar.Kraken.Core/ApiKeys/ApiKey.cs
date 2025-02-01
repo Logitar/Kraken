@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using Logitar.EventSourcing;
 using Logitar.Kraken.Core.ApiKeys.Events;
 using Logitar.Kraken.Core.Passwords;
+using Logitar.Kraken.Core.Roles;
 
 namespace Logitar.Kraken.Core.ApiKeys;
 
@@ -71,7 +72,8 @@ public class ApiKey : AggregateRoot, ICustomizable
   private readonly Dictionary<Identifier, string> _customAttributes = [];
   public IReadOnlyDictionary<Identifier, string> CustomAttributes => _customAttributes.AsReadOnly();
 
-  // TODO(fpion): Roles
+  private readonly HashSet<RoleId> _roles = [];
+  public IReadOnlyCollection<RoleId> Roles => _roles.ToList().AsReadOnly();
 
   public ApiKey(Password secret, DisplayName name, ActorId? actorId = null, ApiKeyId? apiKeyId = null) : base(apiKeyId?.StreamId)
   {
@@ -84,7 +86,22 @@ public class ApiKey : AggregateRoot, ICustomizable
     _name = @event.Name;
   }
 
-  // TODO(fpion): AddRole
+  public void AddRole(Role role, ActorId? actorId = null)
+  {
+    if (Id.RealmId != role.Id.RealmId)
+    {
+      throw new NotImplementedException(); // TODO(fpion): implement
+    }
+
+    if (!HasRole(role))
+    {
+      Raise(new ApiKeyRoleAdded(role.Id), actorId);
+    }
+  }
+  protected virtual void Handle(ApiKeyRoleAdded @event)
+  {
+    _roles.Add(@event.RoleId);
+  }
 
   public void Authenticate(string secret, ActorId? actorId = null)
   {
@@ -113,7 +130,8 @@ public class ApiKey : AggregateRoot, ICustomizable
     }
   }
 
-  // TODO(fpion): HasRole
+  public bool HasRole(Role role) => HasRole(role.Id);
+  public bool HasRole(RoleId roleId) => _roles.Contains(roleId);
 
   public bool IsExpired(DateTime? moment = null) => ExpiresOn.HasValue && ExpiresOn.Value.AsUniversalTime() <= (moment?.AsUniversalTime() ?? DateTime.UtcNow);
 
@@ -125,7 +143,25 @@ public class ApiKey : AggregateRoot, ICustomizable
     }
   }
 
-  // TODO(fpion): RemoveRole
+  public void RemoveRole(Role role, ActorId? actorId = null)
+  {
+    if (HasRole(role))
+    {
+      Raise(new ApiKeyRoleRemoved(role.Id), actorId);
+    }
+  }
+  public void RemoveRole(RoleId roleId, ActorId? actorId = null)
+  {
+    if (HasRole(roleId))
+    {
+      Raise(new ApiKeyRoleRemoved(roleId), actorId);
+    }
+  }
+  protected virtual void Handle(ApiKeyRoleRemoved @event)
+  {
+    _roles.Remove(@event.RoleId);
+  }
+
 
   public void SetCustomAttribute(Identifier key, string value)
   {
