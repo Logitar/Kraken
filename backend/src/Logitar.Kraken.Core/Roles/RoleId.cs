@@ -1,28 +1,33 @@
 ﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Roles;
 
 public readonly struct RoleId
 {
+  public RealmId? RealmId { get; }
+  public Guid EntityId { get; }
+
   public StreamId StreamId { get; }
   public string Value => StreamId.Value;
 
-  public RoleId(Guid value)
+  public RoleId(RealmId? realmId, Guid entityId)
   {
-    StreamId = new(value);
-  }
-  public RoleId(string value)
-  {
-    StreamId = new(value);
+    RealmId = realmId;
+    EntityId = entityId;
+
+    StreamId = IdHelper.Encode(realmId, entityId);
   }
   public RoleId(StreamId streamId)
   {
+    Tuple<RealmId?, Guid> parsed = IdHelper.Decode(streamId);
+    RealmId = parsed.Item1;
+    EntityId = parsed.Item2;
+
     StreamId = streamId;
   }
 
-  public static RoleId NewId() => new(StreamId.NewId());
-
-  public Guid ToGuid() => StreamId.ToGuid();
+  public static RoleId NewId(RealmId? realmId) => new(realmId, Guid.NewGuid());
 
   public static bool operator ==(RoleId left, RoleId right) => left.Equals(right);
   public static bool operator !=(RoleId left, RoleId right) => !left.Equals(right);
