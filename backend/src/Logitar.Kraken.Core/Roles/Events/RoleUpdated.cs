@@ -12,6 +12,5 @@ public record RoleUpdated : DomainEvent, INotification
   public Dictionary<Identifier, string?> CustomAttributes { get; set; } = [];
 
   [JsonIgnore]
-  public bool HasChanges => UniqueName != null || DisplayName != null || Description != null
-    || CustomAttributes.Count > 0;
+  public bool HasChanges => UniqueName != null || DisplayName != null || Description != null || CustomAttributes.Count > 0;
 }
