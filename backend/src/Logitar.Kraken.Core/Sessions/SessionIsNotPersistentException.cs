@@ -33,7 +33,7 @@ public class SessionIsNotPersistentException : InvalidCredentialsException
   }
 
   private static string BuildMessage(Session session) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), session.Id.RealmId?.ToGuid())
+    .AddData(nameof(RealmId), session.Id.RealmId?.ToGuid(), "<null>")
     .AddData(nameof(SessionId), session.Id.EntityId)
     .Build();
 }

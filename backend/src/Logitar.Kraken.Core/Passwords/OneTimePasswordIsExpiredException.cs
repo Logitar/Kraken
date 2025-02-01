@@ -33,7 +33,7 @@ public class OneTimePasswordIsExpiredException : InvalidCredentialsException
   }
 
   private static string BuildMessage(OneTimePassword oneTimePassword) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), oneTimePassword.Id.RealmId?.ToGuid())
+    .AddData(nameof(RealmId), oneTimePassword.Id.RealmId?.ToGuid(), "<null>")
     .AddData(nameof(OneTimePasswordId), oneTimePassword.Id.EntityId)
     .Build();
 }

@@ -1,7 +1,11 @@
-﻿using Logitar.EventSourcing;
-using Logitar.Kraken.Core.Passwords;
+﻿using Logitar.Kraken.Core.Passwords;
 using MediatR;
 
 namespace Logitar.Kraken.Core.Users.Events;
 
-public record UserPasswordChanged(Password Password) : DomainEvent, INotification;
+public record UserPasswordChanged : UserPasswordEvent, INotification
+{
+  public UserPasswordChanged(Password password) : base(password)
+  {
+  }
+}

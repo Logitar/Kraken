@@ -7,9 +7,6 @@ namespace Logitar.Kraken.Core.Sessions;
 
 public class Session : AggregateRoot, ICustomizable
 {
-  /// <summary>
-  /// The updated event.
-  /// </summary>
   private SessionUpdated _updatedEvent = new();
 
   public new SessionId Id => new(base.Id);
