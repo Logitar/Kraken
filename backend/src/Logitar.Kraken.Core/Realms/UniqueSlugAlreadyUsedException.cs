@@ -30,6 +30,8 @@ public class UniqueSlugAlreadyUsedException : ConflictException
     get
     {
       Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(RealmId)] = RealmId;
+      error.Data[nameof(ConflictId)] = ConflictId;
       error.Data[nameof(UniqueSlug)] = UniqueSlug;
       error.Data[nameof(PropertyName)] = PropertyName;
       return error;

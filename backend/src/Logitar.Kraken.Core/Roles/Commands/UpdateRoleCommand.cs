@@ -36,7 +36,7 @@ internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Rol
     UpdateRolePayload payload = command.Payload;
     new UpdateRoleValidator(roleSettings.UniqueNameSettings).ValidateAndThrow(payload);
 
-    RoleId roleId = new(command.Id);
+    RoleId roleId = new(_applicationContext.RealmId, command.Id);
     Role? role = await _roleRepository.LoadAsync(roleId, cancellationToken);
     if (role == null)
     {

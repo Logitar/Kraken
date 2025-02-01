@@ -71,6 +71,8 @@ public class ApiKey : AggregateRoot, ICustomizable
   private readonly Dictionary<Identifier, string> _customAttributes = [];
   public IReadOnlyDictionary<Identifier, string> CustomAttributes => _customAttributes.AsReadOnly();
 
+  // TODO(fpion): Roles
+
   public ApiKey(Password secret, DisplayName name, ActorId? actorId = null, ApiKeyId? apiKeyId = null) : base(apiKeyId?.StreamId)
   {
     Raise(new ApiKeyCreated(secret, name), actorId);
@@ -81,6 +83,8 @@ public class ApiKey : AggregateRoot, ICustomizable
 
     _name = @event.Name;
   }
+
+  // TODO(fpion): AddRole
 
   public void Authenticate(string secret, ActorId? actorId = null)
   {
@@ -109,6 +113,8 @@ public class ApiKey : AggregateRoot, ICustomizable
     }
   }
 
+  // TODO(fpion): HasRole
+
   public bool IsExpired(DateTime? moment = null) => ExpiresOn.HasValue && ExpiresOn.Value.AsUniversalTime() <= (moment?.AsUniversalTime() ?? DateTime.UtcNow);
 
   public void RemoveCustomAttribute(Identifier key)
@@ -118,6 +124,8 @@ public class ApiKey : AggregateRoot, ICustomizable
       _updatedEvent.CustomAttributes[key] = null;
     }
   }
+
+  // TODO(fpion): RemoveRole
 
   public void SetCustomAttribute(Identifier key, string value)
   {

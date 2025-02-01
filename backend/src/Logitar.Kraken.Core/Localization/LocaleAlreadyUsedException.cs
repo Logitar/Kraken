@@ -30,6 +30,8 @@ public class LocaleAlreadyUsedException : ConflictException
     get
     {
       Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(LanguageId)] = LanguageId;
+      error.Data[nameof(ConflictId)] = ConflictId;
       error.Data[nameof(Locale)] = Locale;
       error.Data[nameof(PropertyName)] = PropertyName;
       return error;

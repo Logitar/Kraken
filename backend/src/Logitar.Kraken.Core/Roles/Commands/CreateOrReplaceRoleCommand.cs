@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Roles;
+using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Roles.Validators;
 using Logitar.Kraken.Core.Settings;
 using MediatR;
@@ -37,12 +38,13 @@ internal class CreateOrReplaceRoleCommandHandler : IRequestHandler<CreateOrRepla
     CreateOrReplaceRolePayload payload = command.Payload;
     new CreateOrReplaceRoleValidator(roleSettings.UniqueNameSettings).ValidateAndThrow(payload);
 
-    RoleId? roleId = null;
+    RealmId? realmId = _applicationContext.RealmId;
+    RoleId roleId = RoleId.NewId(realmId);
     Role? role = null;
     if (command.Id.HasValue)
     {
-      roleId = new(command.Id.Value);
-      role = await _roleRepository.LoadAsync(roleId.Value, cancellationToken);
+      roleId = new(realmId, command.Id.Value);
+      role = await _roleRepository.LoadAsync(roleId, cancellationToken);
     }
 
     ActorId? actorId = _applicationContext.ActorId;

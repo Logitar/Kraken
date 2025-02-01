@@ -39,7 +39,7 @@ internal class InitializeConfigurationCommandHandler : IRequestHandler<Initializ
     Configuration? configuration = await _configurationRepository.LoadAsync(cancellationToken);
     if (configuration == null)
     {
-      UserId userId = UserId.NewId();
+      UserId userId = UserId.NewId(realmId: null);
       ActorId actorId = new(userId.Value);
 
       configuration = Configuration.Initialize(actorId);
