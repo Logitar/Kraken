@@ -13,6 +13,15 @@ internal class RoleManager : IRoleManager
     _roleRepository = roleRepository;
   }
 
+  public async Task<IReadOnlyDictionary<string, Role>> FindAsync(IEnumerable<string> roles, CancellationToken cancellationToken)
+  {
+    Dictionary<string, Role> foundRoles = new(capacity: roles.Count());
+
+    await Task.Delay(1, cancellationToken); // TODO(fpion): implement
+
+    return foundRoles.AsReadOnly();
+  }
+
   public async Task SaveAsync(Role role, CancellationToken cancellationToken)
   {
     bool hasUniqueNameChanged = role.Changes.Any(change => change is RoleCreated || change is RoleUniqueNameChanged);

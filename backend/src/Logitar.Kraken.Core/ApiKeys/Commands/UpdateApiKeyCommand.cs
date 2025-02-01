@@ -2,6 +2,7 @@
 using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts;
 using Logitar.Kraken.Contracts.ApiKeys;
+using Logitar.Kraken.Contracts.Roles;
 using Logitar.Kraken.Core.ApiKeys.Validators;
 using Logitar.Kraken.Core.Roles;
 using MediatR;
@@ -61,7 +62,20 @@ internal class UpdateApiKeyCommandHandler : IRequestHandler<UpdateApiKeyCommand,
       apiKey.SetCustomAttribute(new Identifier(customAttribute.Key), customAttribute.Value);
     }
 
-    // TODO(fpion): Roles
+    IReadOnlyDictionary<string, Role> roles = await _roleManager.FindAsync(payload.Roles.Select(action => action.Role), cancellationToken);
+    foreach (RoleAction action in payload.Roles)
+    {
+      Role role = roles[action.Role];
+      switch (action.Action)
+      {
+        case CollectionAction.Add:
+          apiKey.AddRole(role, actorId);
+          break;
+        case CollectionAction.Remove:
+          apiKey.RemoveRole(role, actorId);
+          break;
+      }
+    }
 
     apiKey.Update(actorId);
     await _apiKeyRepository.SaveAsync(apiKey, cancellationToken);
