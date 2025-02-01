@@ -15,15 +15,20 @@ public record Address : Contact, IAddress
   public string? Region { get; }
   public string Country { get; }
 
-  // TODO(fpion): JsonConstructor
-
-  public Address(IAddressHelper helper, string street, string locality, string country, string? region = null, string? postalCode = null, bool isVerified = false) : base(isVerified)
+  [JsonConstructor]
+  public Address(string street, string locality, string country, string? region = null, string? postalCode = null, bool isVerified = false)
+    : base(isVerified)
   {
     Street = street.Trim();
     Locality = locality.Trim();
     Region = region?.CleanTrim();
     PostalCode = postalCode?.CleanTrim();
     Country = country.Trim();
+  }
+
+  public Address(IAddressHelper helper, string street, string locality, string country, string? region = null, string? postalCode = null, bool isVerified = false)
+    : this(street, locality, country, region, postalCode, isVerified)
+  {
     new AddressValidator(helper).ValidateAndThrow(this);
   }
 
