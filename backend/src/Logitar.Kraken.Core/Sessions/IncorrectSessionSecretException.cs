@@ -35,14 +35,14 @@ public class IncorrectSessionSecretException : InvalidCredentialsException
   public IncorrectSessionSecretException(Session session, string attemptedSecret)
     : base(BuildMessage(session, attemptedSecret))
   {
-    RealmId = session.Id.RealmId?.ToGuid();
-    SessionId = session.Id.EntityId;
+    RealmId = session.RealmId?.ToGuid();
+    SessionId = session.EntityId;
     AttemptedSecret = attemptedSecret;
   }
 
   private static string BuildMessage(Session session, string attemptedSecret) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), session.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(SessionId), session.Id.EntityId)
+    .AddData(nameof(RealmId), session.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(SessionId), session.EntityId)
     .AddData(nameof(AttemptedSecret), attemptedSecret)
     .Build();
 }

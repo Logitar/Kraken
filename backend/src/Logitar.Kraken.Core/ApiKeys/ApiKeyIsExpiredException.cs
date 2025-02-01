@@ -28,12 +28,12 @@ public class ApiKeyIsExpiredException : InvalidCredentialsException
 
   public ApiKeyIsExpiredException(ApiKey apiKey) : base(BuildMessage(apiKey))
   {
-    RealmId = apiKey.Id.RealmId?.ToGuid();
-    ApiKeyId = apiKey.Id.EntityId;
+    RealmId = apiKey.RealmId?.ToGuid();
+    ApiKeyId = apiKey.EntityId;
   }
 
   private static string BuildMessage(ApiKey apiKey) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), apiKey.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(ApiKeyId), apiKey.Id.EntityId)
+    .AddData(nameof(RealmId), apiKey.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(ApiKeyId), apiKey.EntityId)
     .Build();
 }

@@ -1,5 +1,6 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Passwords;
+using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Sessions.Events;
 using Logitar.Kraken.Core.Users;
 
@@ -10,6 +11,8 @@ public class Session : AggregateRoot, ICustomizable
   private SessionUpdated _updatedEvent = new();
 
   public new SessionId Id => new(base.Id);
+  public RealmId? RealmId => Id.RealmId;
+  public Guid EntityId => Id.EntityId;
 
   private UserId? _userId = null;
   public UserId UserId => _userId ?? throw new InvalidOperationException("The session has not been initialized.");
@@ -24,7 +27,7 @@ public class Session : AggregateRoot, ICustomizable
 
   public Session(User user, Password? secret = null, ActorId? actorId = null, SessionId? id = null) : base(id?.StreamId)
   {
-    if (Id.RealmId != user.Id.RealmId)
+    if (RealmId != user.RealmId)
     {
       throw new NotImplementedException(); // TODO(fpion): implement
     }

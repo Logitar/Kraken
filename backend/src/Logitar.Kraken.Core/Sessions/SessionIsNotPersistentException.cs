@@ -28,12 +28,12 @@ public class SessionIsNotPersistentException : InvalidCredentialsException
 
   public SessionIsNotPersistentException(Session session) : base(BuildMessage(session))
   {
-    RealmId = session.Id.RealmId?.ToGuid();
-    SessionId = session.Id.EntityId;
+    RealmId = session.RealmId?.ToGuid();
+    SessionId = session.EntityId;
   }
 
   private static string BuildMessage(Session session) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), session.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(SessionId), session.Id.EntityId)
+    .AddData(nameof(RealmId), session.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(SessionId), session.EntityId)
     .Build();
 }

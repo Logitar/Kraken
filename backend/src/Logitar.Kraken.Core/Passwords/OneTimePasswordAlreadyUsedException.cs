@@ -29,12 +29,12 @@ public class OneTimePasswordAlreadyUsedException : InvalidCredentialsException
   public OneTimePasswordAlreadyUsedException(OneTimePassword oneTimePassword)
     : base(BuildMessage(oneTimePassword))
   {
-    RealmId = oneTimePassword.Id.RealmId?.ToGuid();
-    OneTimePasswordId = oneTimePassword.Id.EntityId;
+    RealmId = oneTimePassword.RealmId?.ToGuid();
+    OneTimePasswordId = oneTimePassword.EntityId;
   }
 
   private static string BuildMessage(OneTimePassword oneTimePassword) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(oneTimePassword), oneTimePassword.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(oneTimePassword), oneTimePassword.Id.EntityId)
+    .AddData(nameof(oneTimePassword), oneTimePassword.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(oneTimePassword), oneTimePassword.EntityId)
     .Build();
 }

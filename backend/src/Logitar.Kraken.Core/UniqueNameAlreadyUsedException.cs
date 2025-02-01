@@ -47,7 +47,7 @@ public class UniqueNameAlreadyUsedException : ConflictException
   }
 
   public UniqueNameAlreadyUsedException(Role role, RoleId conflictId)
-    : this(role.Id.RealmId?.ToGuid(), role.Id.EntityId, conflictId.EntityId, role.UniqueName.Value, nameof(role.UniqueName))
+    : this(role.RealmId?.ToGuid(), role.EntityId, conflictId.EntityId, role.UniqueName.Value, nameof(role.UniqueName))
   {
   }
   private UniqueNameAlreadyUsedException(Guid? realmId, Guid entityId, Guid conflictId, string uniqueName, string propertyName)

@@ -1,4 +1,5 @@
 ﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Roles.Events;
 
 namespace Logitar.Kraken.Core.Roles;
@@ -8,6 +9,8 @@ public class Role : AggregateRoot, ICustomizable
   private RoleUpdated _updatedEvent = new();
 
   public new RoleId Id => new(base.Id);
+  public RealmId? RealmId => Id.RealmId;
+  public Guid EntityId => Id.EntityId;
 
   private UniqueName? _uniqueName = null;
   public UniqueName UniqueName => _uniqueName ?? throw new InvalidOperationException("The role has not been initialized.");

@@ -35,14 +35,14 @@ public class IncorrectUserPasswordException : InvalidCredentialsException
   public IncorrectUserPasswordException(User user, string attemptedPassword)
     : base(BuildMessage(user, attemptedPassword))
   {
-    RealmId = user.Id.RealmId?.ToGuid();
-    UserId = user.Id.EntityId;
+    RealmId = user.RealmId?.ToGuid();
+    UserId = user.EntityId;
     AttemptedPassword = attemptedPassword;
   }
 
   private static string BuildMessage(User user, string attemptedPassword) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), user.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(UserId), user.Id.EntityId)
+    .AddData(nameof(RealmId), user.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(UserId), user.EntityId)
     .AddData(nameof(AttemptedPassword), attemptedPassword)
     .Build();
 }

@@ -35,14 +35,14 @@ public class IncorrectOneTimePasswordPasswordException : InvalidCredentialsExcep
   public IncorrectOneTimePasswordPasswordException(OneTimePassword oneTimePassword, string attemptedPassword)
     : base(BuildMessage(oneTimePassword, attemptedPassword))
   {
-    RealmId = oneTimePassword.Id.RealmId?.ToGuid();
-    OneTimePasswordId = oneTimePassword.Id.EntityId;
+    RealmId = oneTimePassword.RealmId?.ToGuid();
+    OneTimePasswordId = oneTimePassword.EntityId;
     AttemptedPassword = attemptedPassword;
   }
 
   private static string BuildMessage(OneTimePassword oneTimePassword, string attemptedPassword) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), oneTimePassword.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(OneTimePasswordId), oneTimePassword.Id.EntityId)
+    .AddData(nameof(RealmId), oneTimePassword.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(OneTimePasswordId), oneTimePassword.EntityId)
     .AddData(nameof(AttemptedPassword), attemptedPassword)
     .Build();
 }
