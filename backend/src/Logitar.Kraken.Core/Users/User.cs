@@ -1,4 +1,5 @@
 ﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Core.ApiKeys.Events;
 using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
 using Logitar.Kraken.Core.Roles;
@@ -202,7 +203,22 @@ public class User : AggregateRoot, ICustomizable
     _uniqueName = @event.UniqueName;
   }
 
-  // TODO(fpion): AddRole
+  public void AddRole(Role role, ActorId? actorId = null)
+  {
+    if (Id.RealmId != role.Id.RealmId)
+    {
+      throw new NotImplementedException(); // TODO(fpion): implement
+    }
+
+    if (!HasRole(role))
+    {
+      Raise(new ApiKeyRoleAdded(role.Id), actorId);
+    }
+  }
+  protected virtual void Handle(ApiKeyRoleAdded @event)
+  {
+    _roles.Add(@event.RoleId);
+  }
 
   public void Authenticate(string password, ActorId? actorId = null)
   {
@@ -312,6 +328,13 @@ public class User : AggregateRoot, ICustomizable
     if (HasRole(role))
     {
       Raise(new UserRoleRemoved(role.Id), actorId);
+    }
+  }
+  public void RemoveRole(RoleId roleId, ActorId? actorId = null)
+  {
+    if (HasRole(roleId))
+    {
+      Raise(new UserRoleRemoved(roleId), actorId);
     }
   }
   protected virtual void Handle(UserRoleRemoved @event)

@@ -162,7 +162,6 @@ public class ApiKey : AggregateRoot, ICustomizable
     _roles.Remove(@event.RoleId);
   }
 
-
   public void SetCustomAttribute(Identifier key, string value)
   {
     if (string.IsNullOrWhiteSpace(value))
