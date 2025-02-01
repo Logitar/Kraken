@@ -192,7 +192,8 @@ public class User : AggregateRoot, ICustomizable
   private readonly Dictionary<Identifier, string> _customAttributes = [];
   public IReadOnlyDictionary<Identifier, string> CustomAttributes => _customAttributes.AsReadOnly();
 
-  // TODO(fpion): CustomIdentifiers
+  private readonly Dictionary<Identifier, CustomIdentifier> _customIdentifiers = [];
+  public IReadOnlyDictionary<Identifier, CustomIdentifier> CustomIdentifiers => _customIdentifiers.AsReadOnly();
 
   private readonly HashSet<RoleId> _roles = [];
   public IReadOnlyCollection<RoleId> Roles => _roles.ToList().AsReadOnly();
@@ -210,7 +211,7 @@ public class User : AggregateRoot, ICustomizable
   {
     if (RealmId != role.RealmId)
     {
-      throw new NotImplementedException(); // TODO(fpion): implement
+      throw new InvalidRealmException(RealmId, role.RealmId);
     }
 
     if (!HasRole(role))
@@ -312,7 +313,17 @@ public class User : AggregateRoot, ICustomizable
     }
   }
 
-  // TODO(fpion): RemoveCustomIdentifier
+  public void RemoveCustomIdentifier(Identifier key, ActorId? actorId = null)
+  {
+    if (_customIdentifiers.ContainsKey(key))
+    {
+      Raise(new UserIdentifierRemoved(key), actorId);
+    }
+  }
+  protected virtual void Handle(UserIdentifierRemoved @event)
+  {
+    _customIdentifiers.Remove(@event.Key);
+  }
 
   public void RemovePassword(ActorId? actorId = null)
   {
@@ -387,7 +398,17 @@ public class User : AggregateRoot, ICustomizable
     }
   }
 
-  // TODO(fpion): SetCustomIdentifier
+  public void SetCustomIdentifier(Identifier key, CustomIdentifier value, ActorId? actorId = null)
+  {
+    if (!_customIdentifiers.TryGetValue(key, out CustomIdentifier? existingValue) || existingValue != value)
+    {
+      Raise(new UserIdentifierChanged(key, value), actorId);
+    }
+  }
+  protected virtual void Handle(UserIdentifierChanged @event)
+  {
+    _customIdentifiers[@event.Key] = @event.Value;
+  }
 
   public void SetEmail(Email? email, ActorId? actorId = null)
   {
@@ -457,8 +478,8 @@ public class User : AggregateRoot, ICustomizable
     }
 
     actorId ??= new(Id.Value);
-    SessionId sid = sessionId.HasValue ? new SessionId(Id.RealmId, sessionId.Value) : SessionId.NewId(Id.RealmId); // TODO(fpion): rename
-    Session session = new(this, secret, actorId, sid);
+    SessionId id = sessionId.HasValue ? new SessionId(Id.RealmId, sessionId.Value) : SessionId.NewId(Id.RealmId);
+    Session session = new(this, secret, actorId, id);
     Raise(new UserSignedIn(session.CreatedOn), actorId.Value);
 
     return session;
