@@ -35,14 +35,14 @@ public class IncorrectApiKeySecretException : InvalidCredentialsException
   public IncorrectApiKeySecretException(ApiKey apiKey, string attemptedSecret)
     : base(BuildMessage(apiKey, attemptedSecret))
   {
-    RealmId = apiKey.Id.RealmId?.ToGuid();
-    ApiKeyId = apiKey.Id.EntityId;
+    RealmId = apiKey.RealmId?.ToGuid();
+    ApiKeyId = apiKey.EntityId;
     AttemptedSecret = attemptedSecret;
   }
 
   private static string BuildMessage(ApiKey apiKey, string attemptedSecret) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), apiKey.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(ApiKeyId), apiKey.Id.EntityId)
+    .AddData(nameof(RealmId), apiKey.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(ApiKeyId), apiKey.EntityId)
     .AddData(nameof(AttemptedSecret), attemptedSecret)
     .Build();
 }

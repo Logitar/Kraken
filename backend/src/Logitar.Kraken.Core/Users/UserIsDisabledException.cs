@@ -28,12 +28,12 @@ public class UserIsDisabledException : InvalidCredentialsException
 
   public UserIsDisabledException(User user) : base(BuildMessage(user))
   {
-    RealmId = user.Id.RealmId?.ToGuid();
-    UserId = user.Id.EntityId;
+    RealmId = user.RealmId?.ToGuid();
+    UserId = user.EntityId;
   }
 
   private static string BuildMessage(User user) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), user.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(UserId), user.Id.EntityId)
+    .AddData(nameof(RealmId), user.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(UserId), user.EntityId)
     .Build();
 }

@@ -1,5 +1,6 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Passwords.Events;
+using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Passwords;
 
@@ -10,6 +11,8 @@ public class OneTimePassword : AggregateRoot, ICustomizable
   private Password? _password = null;
 
   public new OneTimePasswordId Id => new(base.Id);
+  public RealmId? RealmId => Id.RealmId;
+  public Guid EntityId => Id.EntityId;
 
   public DateTime? ExpiresOn { get; private set; }
   public int? MaximumAttempts { get; private set; }

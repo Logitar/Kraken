@@ -46,15 +46,15 @@ public class EmailAddressAlreadyUsedException : ConflictException
 
   public EmailAddressAlreadyUsedException(User user, UserId conflictId) : base(BuildMessage(user, conflictId))
   {
-    RealmId = user.Id.RealmId?.ToGuid();
-    UserId = user.Id.EntityId;
+    RealmId = user.RealmId?.ToGuid();
+    UserId = user.EntityId;
     ConflictId = conflictId.EntityId;
     EmailAddress = user.Email?.Address ?? throw new ArgumentException($"The {nameof(user.Email)} is required.", nameof(user));
     PropertyName = nameof(user.Email);
   }
 
   private static string BuildMessage(User user, UserId conflictId) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), user.Id.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(RealmId), user.RealmId?.ToGuid(), "<null>")
     .AddData(nameof(ConflictId), conflictId.EntityId)
     .AddData(nameof(EmailAddress), user.Email)
     .AddData(nameof(PropertyName), nameof(user.Email))

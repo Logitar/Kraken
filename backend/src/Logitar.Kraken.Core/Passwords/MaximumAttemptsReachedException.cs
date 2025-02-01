@@ -35,14 +35,14 @@ public class MaximumAttemptsReachedException : InvalidCredentialsException
   public MaximumAttemptsReachedException(OneTimePassword oneTimePassword, int attemptCount)
     : base(BuildMessage(oneTimePassword, attemptCount))
   {
-    RealmId = oneTimePassword.Id.RealmId?.ToGuid();
-    OneTimePasswordId = oneTimePassword.Id.EntityId;
+    RealmId = oneTimePassword.RealmId?.ToGuid();
+    OneTimePasswordId = oneTimePassword.EntityId;
     AttemptCount = attemptCount;
   }
 
   private static string BuildMessage(OneTimePassword oneTimePassword, int attemptCount) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(RealmId), oneTimePassword.Id.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(OneTimePasswordId), oneTimePassword.Id.EntityId)
+    .AddData(nameof(RealmId), oneTimePassword.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(OneTimePasswordId), oneTimePassword.EntityId)
     .AddData(nameof(AttemptCount), attemptCount)
     .Build();
 }

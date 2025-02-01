@@ -2,6 +2,7 @@
 using Logitar.Kraken.Core.ApiKeys.Events;
 using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
+using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Roles;
 using Logitar.Kraken.Core.Sessions;
 using Logitar.Kraken.Core.Users.Events;
@@ -14,6 +15,8 @@ public class User : AggregateRoot, ICustomizable
   private UserUpdated _updatedEvent = new();
 
   public new UserId Id => new(base.Id);
+  public RealmId? RealmId => Id.RealmId;
+  public Guid EntityId => Id.EntityId;
 
   private UniqueName? _uniqueName = null;
   public UniqueName UniqueName => _uniqueName ?? throw new InvalidOperationException("The user has not been initialized.");
@@ -205,7 +208,7 @@ public class User : AggregateRoot, ICustomizable
 
   public void AddRole(Role role, ActorId? actorId = null)
   {
-    if (Id.RealmId != role.Id.RealmId)
+    if (RealmId != role.RealmId)
     {
       throw new NotImplementedException(); // TODO(fpion): implement
     }
