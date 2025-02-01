@@ -4,6 +4,8 @@ namespace Logitar.Kraken.Contracts.ApiKeys;
 
 public class ApiKeyModel : AggregateModel
 {
+  public string? XApiKey { get; set; }
+
   public string Name { get; set; } = string.Empty;
   public string? Description { get; set; }
   public DateTime? ExpiresOn { get; set; }

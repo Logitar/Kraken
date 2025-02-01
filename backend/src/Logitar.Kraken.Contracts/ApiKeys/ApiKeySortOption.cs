@@ -10,7 +10,7 @@ public record ApiKeySortOption : SortOption
     set => base.Field = value.ToString();
   }
 
-  public ApiKeySortOption() : this(ApiKeySort.DisplayName)
+  public ApiKeySortOption() : this(ApiKeySort.Name)
   {
   }
 

@@ -16,6 +16,11 @@ public static class ValidationExtensions
     return ruleBuilder.NotEmpty().MaximumLength(Core.DisplayName.MaximumLength);
   }
 
+  public static IRuleBuilderOptions<T, DateTime> Future<T>(this IRuleBuilder<T, DateTime> ruleBuilder, DateTime? moment = null)
+  {
+    return ruleBuilder.SetValidator(new FutureValidator<T>(moment));
+  }
+
   public static IRuleBuilderOptions<T, string> Identifier<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Core.Identifier.MaximumLength).SetValidator(new IdentifierValidator<T>());
@@ -29,6 +34,11 @@ public static class ValidationExtensions
   public static IRuleBuilderOptions<T, string> Locale<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Localization.Locale.MaximumLength).SetValidator(new LocaleValidator<T>());
+  }
+
+  public static IRuleBuilderOptions<T, DateTime> Past<T>(this IRuleBuilder<T, DateTime> ruleBuilder, DateTime? moment = null)
+  {
+    return ruleBuilder.SetValidator(new PastValidator<T>(moment));
   }
 
   public static IRuleBuilderOptions<T, string> Slug<T>(this IRuleBuilder<T, string> ruleBuilder)
