@@ -82,6 +82,25 @@ public class ApiKey : AggregateRoot, ICustomizable
     _name = @event.Name;
   }
 
+  public void Authenticate(string secret, ActorId? actorId = null)
+  {
+    if (IsExpired())
+    {
+      throw new ApiKeyIsExpiredException(this);
+    }
+    else if (_secret == null || !_secret.IsMatch(secret))
+    {
+      throw new IncorrectApiKeySecretException(this, secret);
+    }
+
+    actorId ??= new(Id.Value);
+    Raise(new ApiKeyAuthenticated(), actorId.Value);
+  }
+  protected virtual void Handle(ApiKeyAuthenticated @event)
+  {
+    AuthenticatedOn = @event.OccurredOn;
+  }
+
   public void Delete(ActorId? actorId = null)
   {
     if (!IsDeleted)
@@ -89,6 +108,8 @@ public class ApiKey : AggregateRoot, ICustomizable
       Raise(new ApiKeyDeleted(), actorId);
     }
   }
+
+  public bool IsExpired(DateTime? moment = null) => ExpiresOn.HasValue && ExpiresOn.Value.AsUniversalTime() <= (moment?.AsUniversalTime() ?? DateTime.UtcNow);
 
   public void RemoveCustomAttribute(Identifier key)
   {
