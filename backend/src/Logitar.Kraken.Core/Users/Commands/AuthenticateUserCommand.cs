@@ -2,7 +2,6 @@
 using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core.Realms;
-using Logitar.Kraken.Core.Settings;
 using Logitar.Kraken.Core.Users.Validators;
 using MediatR;
 
@@ -37,14 +36,12 @@ internal class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUser
     new AuthenticateUserValidator().ValidateAndThrow(payload);
 
     RealmId? realmId = _applicationContext.RealmId;
-    IUserSettings userSettings = _applicationContext.UserSettings;
+    User user = await _userManager.FindAsync(realmId, payload.UniqueName, nameof(payload.UniqueName), includeId: false, cancellationToken);
 
-    User user = await _userManager.FindAsync(userSettings, realmId, payload.UniqueName, nameof(payload.UniqueName), includeId: false, cancellationToken);
     ActorId actorId = new(user.Id.Value);
-
     user.Authenticate(payload.Password, actorId);
 
-    await _userManager.SaveAsync(userSettings, user, actorId, cancellationToken);
+    await _userManager.SaveAsync(user, actorId, cancellationToken);
 
     return await _userQuerier.ReadAsync(user, cancellationToken);
   }

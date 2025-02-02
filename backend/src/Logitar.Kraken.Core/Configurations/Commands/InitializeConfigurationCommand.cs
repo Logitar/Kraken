@@ -55,7 +55,7 @@ internal class InitializeConfigurationCommandHandler : IRequestHandler<Initializ
 
       await _configurationRepository.SaveAsync(configuration, cancellationToken); // NOTE(fpion): this should cache the configuration.
       await _languageManager.SaveAsync(language, cancellationToken);
-      await _userManager.SaveAsync(configuration.UserSettings, user, actorId, cancellationToken);
+      await _userManager.SaveAsync(user, actorId, cancellationToken);
     }
     else
     {

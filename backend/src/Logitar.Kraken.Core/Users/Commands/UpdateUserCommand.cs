@@ -90,7 +90,7 @@ internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Use
       user.SetCustomAttribute(new Identifier(customAttribute.Key), customAttribute.Value);
     }
 
-    IReadOnlyDictionary<string, Role> roles = await _roleManager.FindAsync(realmId, payload.Roles.Select(x => x.Role), cancellationToken);
+    IReadOnlyDictionary<string, Role> roles = await _roleManager.FindAsync(user.RealmId, payload.Roles.Select(x => x.Role), cancellationToken);
     foreach (RoleAction action in payload.Roles)
     {
       Role role = roles[action.Role];
@@ -106,7 +106,7 @@ internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Use
     }
 
     user.Update(actorId);
-    await _userManager.SaveAsync(userSettings, user, actorId, cancellationToken);
+    await _userManager.SaveAsync(user, actorId, cancellationToken);
 
     return await _userQuerier.ReadAsync(user, cancellationToken);
   }

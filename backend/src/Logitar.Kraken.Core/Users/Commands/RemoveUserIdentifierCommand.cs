@@ -43,7 +43,7 @@ internal class RemoveUserIdentifierCommandHandler : IRequestHandler<RemoveUserId
     Identifier key = new(command.Key);
     ActorId? actorId = _applicationContext.ActorId;
     user.RemoveCustomIdentifier(key, actorId);
-    await _userManager.SaveAsync(_applicationContext.UserSettings, user, actorId, cancellationToken);
+    await _userManager.SaveAsync(user, actorId, cancellationToken);
 
     return await _userQuerier.ReadAsync(user, cancellationToken);
   }
