@@ -6,6 +6,7 @@ namespace Logitar.Kraken.Core.Roles;
 public interface IRoleQuerier
 {
   Task<RoleId?> FindIdAsync(UniqueName uniqueName, CancellationToken cancellationToken = default);
+  Task<IReadOnlyCollection<RoleId>> FindIdsAsync(IEnumerable<string> uniqueNames, CancellationToken cancellationToken = default);
 
   Task<RoleModel> ReadAsync(Role role, CancellationToken cancellationToken = default);
   Task<RoleModel?> ReadAsync(RoleId id, CancellationToken cancellationToken = default);
