@@ -3,7 +3,7 @@ using Logitar.Kraken.Contracts.Settings;
 
 namespace Logitar.Kraken.Core.Passwords;
 
-public interface IPasswordManager
+public interface IPasswordManager // TODO(fpion): remove settings whenever possible
 {
   Password Create(IPasswordSettings settings, string password);
 
