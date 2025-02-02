@@ -14,12 +14,17 @@ public record Phone : Contact, IPhone
   public string Number { get; }
   public string? Extension { get; }
 
+  [JsonConstructor]
   public Phone(string number, string? countryCode = null, string? extension = null, bool isVerified = false) : base(isVerified)
   {
     CountryCode = countryCode?.CleanTrim();
     Number = number.Trim();
     Extension = extension?.CleanTrim();
     new PhoneValidator().ValidateAndThrow(this);
+  }
+
+  public Phone(IPhone phone, bool isVerified = false) : this(phone.Number, phone.CountryCode, phone.Extension, isVerified)
+  {
   }
 
   public override string ToString() => this.FormatToE164();

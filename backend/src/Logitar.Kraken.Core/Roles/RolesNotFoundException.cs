@@ -29,7 +29,7 @@ public class RolesNotFoundException : NotFoundException
   {
     StringBuilder message = new();
     message.AppendLine(ErrorMessage);
-    message.AppendLine("Roles:");
+    message.Append(nameof(Roles)).Append(':').AppendLine();
     foreach (string role in roles)
     {
       message.Append(" - ").AppendLine(role);

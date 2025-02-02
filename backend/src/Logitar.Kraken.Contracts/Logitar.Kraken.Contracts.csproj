@@ -16,16 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="CustomIdentifierModel.cs" />
-    <None Include="Sessions\CreateSessionPayload.cs" />
-    <None Include="Sessions\SearchSessionsPayload.cs" />
-    <None Include="Sessions\SessionSort.cs" />
-    <None Include="Sessions\SignInSessionPayload.cs" />
-    <None Include="Users\ContactModel.cs" />
-    <None Include="Users\PhoneModel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="System.Globalization" />
     <Using Include="System.Text" />
   </ItemGroup>

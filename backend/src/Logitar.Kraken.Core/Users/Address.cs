@@ -31,6 +31,16 @@ public record Address : Contact, IAddress
     new AddressValidator(helper).ValidateAndThrow(this);
   }
 
+  public Address(IAddress address, bool isVerified = false)
+    : this(address.Street, address.Locality, address.Country, address.Region, address.PostalCode, isVerified)
+  {
+  }
+
+  public Address(IAddressHelper helper, IAddress address, bool isVerified = false)
+    : this(helper, address.Street, address.Locality, address.Country, address.Region, address.PostalCode, isVerified)
+  {
+  }
+
   public override string ToString()
   {
     StringBuilder formatted = new();
