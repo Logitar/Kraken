@@ -2,13 +2,11 @@
 using Logitar.Kraken.Core.Passwords.Commands;
 using Logitar.Kraken.Core.Passwords.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/one-time-passwords")]
 public class OneTimePasswordController : ControllerBase
 {
@@ -24,8 +22,8 @@ public class OneTimePasswordController : ControllerBase
   {
     CreateOneTimePasswordCommand command = new(payload);
     OneTimePasswordModel oneTimePassword = await _mediator.Send(command, cancellationToken);
-    Uri uri = new($"{Request.Scheme}://{Request.Host}/api/one-time-passwords/{oneTimePassword.Id}", UriKind.Absolute);
-    return Created(uri, oneTimePassword);
+    Uri location = new($"{Request.Scheme}://{Request.Host}/api/one-time-passwords/{oneTimePassword.Id}", UriKind.Absolute);
+    return Created(location, oneTimePassword);
   }
 
   [HttpGet("{id}")]

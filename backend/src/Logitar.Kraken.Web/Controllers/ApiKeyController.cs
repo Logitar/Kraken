@@ -76,8 +76,8 @@ public class ApiKeyController : ControllerBase
     }
     else if (result.Created)
     {
-      Uri uri = new($"{Request.Scheme}://{Request.Host}/api/keys/{result.ApiKey.Id}", UriKind.Absolute);
-      return Created(uri, result.ApiKey);
+      Uri location = new($"{Request.Scheme}://{Request.Host}/api/keys/{result.ApiKey.Id}", UriKind.Absolute);
+      return Created(location, result.ApiKey);
     }
     return Ok(result.ApiKey);
   }

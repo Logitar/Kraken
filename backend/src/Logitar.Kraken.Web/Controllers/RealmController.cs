@@ -76,8 +76,8 @@ public class RealmController : ControllerBase
     }
     else if (result.Created)
     {
-      Uri uri = new($"{Request.Scheme}://{Request.Host}/api/realms/{result.Realm.Id}", UriKind.Absolute);
-      return Created(uri, result.Realm);
+      Uri location = new($"{Request.Scheme}://{Request.Host}/api/realms/{result.Realm.Id}", UriKind.Absolute);
+      return Created(location, result.Realm);
     }
     return Ok(result.Realm);
   }
