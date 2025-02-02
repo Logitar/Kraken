@@ -171,12 +171,15 @@ public class ApiKey : AggregateRoot, ICustomizable
     {
       RemoveCustomAttribute(key);
     }
-    value = value.Trim();
-
-    if (!_customAttributes.TryGetValue(key, out string? existingValue) || existingValue != value)
+    else
     {
-      _customAttributes[key] = value;
-      _updatedEvent.CustomAttributes[key] = value;
+      value = value.Trim();
+
+      if (!_customAttributes.TryGetValue(key, out string? existingValue) || existingValue != value)
+      {
+        _customAttributes[key] = value;
+        _updatedEvent.CustomAttributes[key] = value;
+      }
     }
   }
 

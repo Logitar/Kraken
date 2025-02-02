@@ -5,24 +5,21 @@ namespace Logitar.Kraken.Core.Roles;
 
 internal class RoleManager : IRoleManager
 {
-  private readonly IApplicationContext _applicationContext;
   private readonly IRoleQuerier _roleQuerier;
   private readonly IRoleRepository _roleRepository;
 
-  public RoleManager(IApplicationContext applicationContext, IRoleQuerier roleQuerier, IRoleRepository roleRepository)
+  public RoleManager(IRoleQuerier roleQuerier, IRoleRepository roleRepository)
   {
-    _applicationContext = applicationContext;
     _roleQuerier = roleQuerier;
     _roleRepository = roleRepository;
   }
 
-  public async Task<IReadOnlyDictionary<string, Role>> FindAsync(IEnumerable<string> values, CancellationToken cancellationToken)
+  public async Task<IReadOnlyDictionary<string, Role>> FindAsync(RealmId? realmId, IEnumerable<string> values, CancellationToken cancellationToken)
   {
     int capacity = values.Count();
     Dictionary<string, Role> foundRoles = new(capacity);
     HashSet<string> missingRoles = new(capacity);
 
-    RealmId? realmId = _applicationContext.RealmId;
     HashSet<RoleId> ids = new(capacity);
     HashSet<string> uniqueNames = new(capacity);
     foreach (string value in values)

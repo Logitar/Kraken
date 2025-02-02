@@ -32,10 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Logitar.Kraken.Core\Logitar.Kraken.Core.csproj" />
+    <ProjectReference Include="..\..\src\Logitar.Kraken\Logitar.Kraken.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="System.Text" />
     <Using Include="Xunit" />
   </ItemGroup>
 

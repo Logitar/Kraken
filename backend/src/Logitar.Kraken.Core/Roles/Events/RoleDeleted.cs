@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Roles.Events;
 
-public record RoleDeleted : DomainEvent, INotification;
+public record RoleDeleted : DomainEvent, IDeleteEvent, INotification;

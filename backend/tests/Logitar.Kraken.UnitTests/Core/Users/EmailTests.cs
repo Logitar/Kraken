@@ -1,45 +1,56 @@
-﻿namespace Logitar.Kraken.Core.Users;
+﻿using Bogus;
+
+namespace Logitar.Kraken.Core.Users;
 
 [Trait(Traits.Category, Categories.Unit)]
 public class EmailTests
 {
-  [Fact(DisplayName = "It should be deserialized correctly.")]
-  public void Given_EmailAddress_When_Deserialize_Then_Deserialized()
+  private readonly Faker _faker = new();
+
+  [Theory(DisplayName = "ctor: it should construct a new email address.")]
+  [InlineData("info@test.com", false)]
+  [InlineData("  admin@test.com  ", true)]
+  public void ctor_it_should_construct_a_new_email_address(string address, bool isVerified)
   {
-    string address = "info@theatrebeanfield.ca";
-    bool isVerified = true;
-    string json = string.Concat(
-      '{',
-      $@"""Address"":""{address}"",",
-      $@"""IsVerified"":{isVerified.ToString().ToLowerInvariant()}",
-      '}');
-
-    Email? email = JsonSerializer.Deserialize<Email>(json);
-
-    Assert.NotNull(email);
-    Assert.Equal(address, email.Address);
+    Email email = new(address, isVerified);
+    Assert.Equal(address.Trim(), email.Address);
     Assert.Equal(isVerified, email.IsVerified);
   }
 
-  [Fact(DisplayName = "It should deserialize null correctly.")]
-  public void Given_Null_When_Deserialize_Then_Null()
+  [Theory(DisplayName = "ctor: it should throw ValidationException when the address is empty.")]
+  [InlineData("")]
+  [InlineData("  ")]
+  public void ctor_it_should_throw_ValidationException_when_the_address_is_empty(string address)
   {
-    Assert.Null(JsonSerializer.Deserialize<Email>("null"));
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Email(address));
+    Assert.All(exception.Errors, e =>
+    {
+      Assert.Equal("Address", e.PropertyName);
+      Assert.True(e.ErrorCode == "EmailValidator" || e.ErrorCode == "NotEmptyValidator");
+    });
   }
 
-  [Fact(DisplayName = "It should be serialized correctly.")]
-  public void Given_EmailAddress_When_Serialize_Then_Serialized()
+  [Fact(DisplayName = "ctor: it should throw ValidationException when the address is not valid.")]
+  public void ctor_it_should_throw_ValidationException_when_the_address_is_not_valid()
   {
-    string address = "info@theatrebeanfield.ca";
-    bool isVerified = true;
-    Email email = new(address, isVerified);
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Email("aa@@bb..cc"));
+    Assert.All(exception.Errors, e =>
+    {
+      Assert.Equal("Address", e.PropertyName);
+      Assert.Equal("EmailValidator", e.ErrorCode);
+    });
+  }
 
-    string json = JsonSerializer.Serialize(email);
+  [Fact(DisplayName = "ctor: it should throw ValidationException when the address is too long.")]
+  public void ctor_it_should_throw_ValidationException_when_the_address_is_too_long()
+  {
+    var address = string.Concat(_faker.Random.String(Email.MaximumLength, minChar: 'a', maxChar: 'z'), '@', _faker.Internet.DomainName());
 
-    Assert.Equal(string.Concat(
-      '{',
-      $@"""Address"":""{address}"",",
-      $@"""IsVerified"":{isVerified.ToString().ToLowerInvariant()}",
-      '}'), json);
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Email(address));
+    Assert.All(exception.Errors, e =>
+    {
+      Assert.Equal("Address", e.PropertyName);
+      Assert.Equal("MaximumLengthValidator", e.ErrorCode);
+    });
   }
 }
