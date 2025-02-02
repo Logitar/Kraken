@@ -69,12 +69,15 @@ public class OneTimePassword : AggregateRoot, ICustomizable
     {
       RemoveCustomAttribute(key);
     }
-    value = value.Trim();
-
-    if (!_customAttributes.TryGetValue(key, out string? existingValue) || existingValue != value)
+    else
     {
-      _customAttributes[key] = value;
-      _updated.CustomAttributes[key] = value;
+      value = value.Trim();
+
+      if (!_customAttributes.TryGetValue(key, out string? existingValue) || existingValue != value)
+      {
+        _customAttributes[key] = value;
+        _updated.CustomAttributes[key] = value;
+      }
     }
   }
 

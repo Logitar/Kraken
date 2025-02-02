@@ -1,65 +1,77 @@
-﻿namespace Logitar.Kraken.Core.Users;
+﻿using Bogus;
+
+namespace Logitar.Kraken.Core.Users;
 
 [Trait(Traits.Category, Categories.Unit)]
 public class AddressTests
 {
-  [Fact(DisplayName = "It should be deserialized correctly.")]
-  public void Given_PostalAddress_When_Deserialize_Then_Deserialized()
+  private readonly Faker _faker = new();
+  private readonly AddressHelper _addressHelper = new();
+
+  [Theory(DisplayName = "ctor: it should construct a new postal address.")]
+  [InlineData("150 Saint-Catherine St W", "Montreal", "CA", "QC", "H2X 3Y2", false)]
+  [InlineData(" 150 Saint-Catherine St W", " Montreal ", " CA ", " QC ", " H2X 3Y2 ", true)]
+  public void ctor_it_should_construct_a_new_address_address(string street, string locality, string country, string? region, string? postalCode, bool isVerified)
   {
-    string street = "2490 Notre-Dame St W";
-    string locality = "Montreal";
-    string postalCode = "H3J 1N5";
-    string region = "QC";
-    string country = "CA";
-    bool isVerified = false;
-    string json = string.Concat(
-      '{',
-      $@"""Street"":""{street}"",",
-      $@"""Locality"":""{locality}"",",
-      $@"""PostalCode"":""{postalCode}"",",
-      $@"""Region"":""{region}"",",
-      $@"""Country"":""{country}"",",
-      $@"""IsVerified"":{isVerified.ToString().ToLowerInvariant()}",
-      '}');
-
-    Address? address = JsonSerializer.Deserialize<Address>(json);
-
-    Assert.NotNull(address);
-    Assert.Equal(street, address.Street);
-    Assert.Equal(locality, address.Locality);
-    Assert.Equal(postalCode, address.PostalCode);
-    Assert.Equal(region, address.Region);
-    Assert.Equal(country, address.Country);
+    Address address = new(_addressHelper, street, locality, country, region, postalCode, isVerified);
+    Assert.Equal(street.Trim(), address.Street);
+    Assert.Equal(locality.Trim(), address.Locality);
+    Assert.Equal(postalCode?.CleanTrim(), address.PostalCode);
+    Assert.Equal(region?.CleanTrim(), address.Region);
+    Assert.Equal(country.Trim(), address.Country);
     Assert.Equal(isVerified, address.IsVerified);
   }
 
-  [Fact(DisplayName = "It should deserialize null correctly.")]
-  public void Given_Null_When_Deserialize_Then_Null()
+  [Theory(DisplayName = "ctor: it should throw ValidationException when a component is empty.")]
+  [InlineData("")]
+  [InlineData("  ")]
+  public void ctor_it_should_throw_ValidationException_when_a_component_is_empty(string value)
   {
-    Assert.Null(JsonSerializer.Deserialize<Address>("null"));
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Address(_addressHelper, value, value, value));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "NotEmptyValidator" && e.PropertyName == "Street");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "NotEmptyValidator" && e.PropertyName == "Locality");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "NotEmptyValidator" && e.PropertyName == "Country");
   }
 
-  [Fact(DisplayName = "It should be serialized correctly.")]
-  public void Given_PostalAddress_When_Serialize_Then_Serialized()
+  [Fact(DisplayName = "ctor: it should throw ValidationException when a component is too long.")]
+  public void ctor_it_should_throw_ValidationException_when_a_component_is_too_long()
   {
-    string street = "2490 Notre-Dame St W";
-    string locality = "Montreal";
-    string postalCode = "H3J 1N5";
-    string region = "QC";
-    string country = "CA";
-    bool isVerified = false;
-    Address address = new(street, locality, country, region, postalCode, isVerified);
+    var value = _faker.Random.String(Address.MaximumLength + 1, minChar: 'A', maxChar: 'Z');
 
-    string json = JsonSerializer.Serialize(address);
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Address(_addressHelper, value, value, value, value, value));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "MaximumLengthValidator" && e.PropertyName == "Street");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "MaximumLengthValidator" && e.PropertyName == "Locality");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "MaximumLengthValidator" && e.PropertyName == "Country");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "MaximumLengthValidator" && e.PropertyName == "Region");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "MaximumLengthValidator" && e.PropertyName == "PostalCode");
+  }
 
-    Assert.Equal(string.Concat(
-      '{',
-      $@"""Street"":""{street}"",",
-      $@"""Locality"":""{locality}"",",
-      $@"""PostalCode"":""{postalCode}"",",
-      $@"""Region"":""{region}"",",
-      $@"""Country"":""{country}"",",
-      $@"""IsVerified"":{isVerified.ToString().ToLowerInvariant()}",
-      '}'), json);
+  [Fact(DisplayName = "ctor: it should throw ValidationException when the country is not supported.")]
+  public void ctor_it_should_throw_ValidationException_when_the_country_is_not_supported()
+  {
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Address(_addressHelper, "150 Saint-Catherine St W", "Montreal", "QC"));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "CountryValidator" && e.PropertyName == "Country");
+  }
+
+  [Fact(DisplayName = "ctor: it should throw ValidationException when the postal code does not match the regular expression.")]
+  public void ctor_it_should_throw_ValidationException_when_the_postal_code_does_not_match_the_regular_expression()
+  {
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Address(_addressHelper, "150 Saint-Catherine St W", "Montreal", "CA", "QC", "D0L7A9"));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "PostalCodeValidator" && e.PropertyName == "PostalCode");
+  }
+
+  [Fact(DisplayName = "ctor: it should throw ValidationException when the region is not valid.")]
+  public void ctor_it_should_throw_ValidationException_when_the_region_is_not_valid()
+  {
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Address(_addressHelper, "150 Saint-Catherine St W", "Montreal", "CA", "ZZ", "H2X 3Y2"));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "RegionValidator" && e.PropertyName == "Region");
+  }
+
+  [Fact(DisplayName = "Format: it should format a postal address.")]
+  public void Format_it_should_format_a_postal_address()
+  {
+    Address address = new(_addressHelper, " Jean Du Pays\r\n \r\n150 Saint-Catherine St W ", " Montreal ", " CA ", " QC ", " H2X 3Y2 ");
+    var expected = string.Join(Environment.NewLine, ["Jean Du Pays", "150 Saint-Catherine St W", "Montreal QC H2X 3Y2", "CA"]);
+    Assert.Equal(expected, address.ToString());
   }
 }

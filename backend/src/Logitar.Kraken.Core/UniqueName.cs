@@ -15,6 +15,8 @@ public record UniqueName
     new Validator(settings).ValidateAndThrow(this);
   }
 
+  public static UniqueName? TryCreate(IUniqueNameSettings settings, string? value) => string.IsNullOrWhiteSpace(value) ? null : new(settings, value);
+
   public override string ToString() => Value;
 
   private class Validator : AbstractValidator<UniqueName>

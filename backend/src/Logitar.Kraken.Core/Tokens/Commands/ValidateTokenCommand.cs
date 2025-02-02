@@ -5,7 +5,6 @@ using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core.Tokens.Validators;
 using Logitar.Security.Claims;
 using MediatR;
-using System.Security.Claims;
 
 namespace Logitar.Kraken.Core.Tokens.Commands;
 

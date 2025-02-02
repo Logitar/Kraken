@@ -14,6 +14,8 @@ public record CustomIdentifier
     new Validator().ValidateAndThrow(this);
   }
 
+  public static CustomIdentifier? TryCreate(string? value) => string.IsNullOrWhiteSpace(value) ? null : new(value);
+
   public override string ToString() => Value;
 
   private class Validator : AbstractValidator<CustomIdentifier>

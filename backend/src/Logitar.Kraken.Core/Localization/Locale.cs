@@ -11,10 +11,10 @@ public record Locale
 
   public Locale(string code)
   {
-    Code = code;
+    Code = code.Trim();
     new Validator().ValidateAndThrow(this);
 
-    Culture = CultureInfo.GetCultureInfo(code);
+    Culture = CultureInfo.GetCultureInfo(Code);
   }
   public Locale(CultureInfo culture)
   {
@@ -23,6 +23,8 @@ public record Locale
 
     Culture = culture;
   }
+
+  public static Locale? TryCreate(string? value) => string.IsNullOrWhiteSpace(value) ? null : new(value);
 
   public override string ToString() => $"{Culture.DisplayName} ({Culture.Name})";
 

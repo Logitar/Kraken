@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace Logitar.Kraken.Core.Tokens;
+﻿namespace Logitar.Kraken.Core.Tokens;
 
 public interface ITokenManager
 {

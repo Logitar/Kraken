@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.ApiKeys.Events;
 
-public record ApiKeyDeleted : DomainEvent, INotification;
+public record ApiKeyDeleted : DomainEvent, IDeleteEvent, INotification;

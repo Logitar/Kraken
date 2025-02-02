@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Users.Events;
 
-public record UserDeleted : DomainEvent, INotification;
+public record UserDeleted : DomainEvent, IDeleteEvent, INotification;

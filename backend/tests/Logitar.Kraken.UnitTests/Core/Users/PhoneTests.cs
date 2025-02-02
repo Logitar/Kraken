@@ -1,55 +1,50 @@
-﻿namespace Logitar.Kraken.Core.Users;
+﻿using Bogus;
+
+namespace Logitar.Kraken.Core.Users;
 
 [Trait(Traits.Category, Categories.Unit)]
 public class PhoneTests
 {
-  [Fact(DisplayName = "It should be deserialized correctly.")]
-  public void Given_PhoneNumber_When_Deserialize_Then_Deserialized()
+  private readonly Faker _faker = new();
+
+  [Theory(DisplayName = "ctor: it should construct a new phone number.")]
+  [InlineData("+15148454636", "CA", "  ", false)]
+  [InlineData("  (514) 845-4636  ", "CA", "12345", true)]
+  public void ctor_it_should_construct_a_new_phone_number(string number, string? countryCode, string? extension, bool isVerified)
   {
-    string countryCode = "CA";
-    string number = "514-492-1775";
-    string extension = "123456";
-    bool isVerified = true;
-    string json = string.Concat(
-      '{',
-      $@"""CountryCode"":""{countryCode}"",",
-      $@"""Number"":""{number}"",",
-      $@"""Extension"":""{extension}"",",
-      $@"""IsVerified"":{isVerified.ToString().ToLowerInvariant()}",
-      '}');
-
-    Phone? phone = JsonSerializer.Deserialize<Phone>(json);
-
-    Assert.NotNull(phone);
-    Assert.Equal(countryCode, phone.CountryCode);
-    Assert.Equal(number, phone.Number);
-    Assert.Equal(extension, phone.Extension);
+    Phone phone = new(number, countryCode, extension, isVerified);
+    Assert.Equal(countryCode?.CleanTrim(), phone.CountryCode);
+    Assert.Equal(number.Trim(), phone.Number);
+    Assert.Equal(extension?.CleanTrim(), phone.Extension);
     Assert.Equal(isVerified, phone.IsVerified);
   }
 
-  [Fact(DisplayName = "It should deserialize null correctly.")]
-  public void Given_Null_When_Deserialize_Then_Null()
+  [Theory(DisplayName = "ctor: it should throw ValidationException when the number is empty.")]
+  [InlineData("")]
+  [InlineData("  ")]
+  public void ctor_it_should_throw_ValidationException_when_the_number_is_empty(string number)
   {
-    Assert.Null(JsonSerializer.Deserialize<Phone>("null"));
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Phone(number));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "NotEmptyValidator" && e.PropertyName == "Number");
   }
 
-  [Fact(DisplayName = "It should be serialized correctly.")]
-  public void Given_PhoneNumber_When_Serialize_Then_Serialized()
+  [Fact(DisplayName = "ctor: it should throw ValidationException when the number is not valid.")]
+  public void ctor_it_should_throw_ValidationException_when_the_number_is_not_valid()
   {
-    string countryCode = "CA";
-    string number = "514-492-1775";
-    string extension = "123456";
-    bool isVerified = true;
-    Phone phone = new(number, countryCode, extension, isVerified);
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Phone("+15148454636+12345", "CA", "12345"));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "PhoneValidator" && e.PropertyName == "");
+  }
 
-    string json = JsonSerializer.Serialize(phone);
+  [Fact(DisplayName = "ctor: it should throw ValidationException when a value is too long.")]
+  public void ctor_it_should_throw_ValidationException_when_a_value_is_too_long()
+  {
+    var countryCode = "CAD";
+    var number = _faker.Random.String(Phone.NumberMaximumLength + 1, minChar: '0', maxChar: '9');
+    var extension = _faker.Random.String(Phone.ExtensionMaximumLength + 1, minChar: '0', maxChar: '9');
 
-    Assert.Equal(string.Concat(
-      '{',
-      $@"""CountryCode"":""{countryCode}"",",
-      $@"""Number"":""{number}"",",
-      $@"""Extension"":""{extension}"",",
-      $@"""IsVerified"":{isVerified.ToString().ToLowerInvariant()}",
-      '}'), json);
+    var exception = Assert.Throws<FluentValidation.ValidationException>(() => new Phone(number, countryCode, extension));
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "ExactLengthValidator" && e.PropertyName == "CountryCode");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "MaximumLengthValidator" && e.PropertyName == "Number");
+    Assert.Contains(exception.Errors, e => e.ErrorCode == "MaximumLengthValidator" && e.PropertyName == "Extension");
   }
 }
