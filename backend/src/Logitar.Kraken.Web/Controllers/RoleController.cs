@@ -76,8 +76,8 @@ public class RoleController : ControllerBase
     }
     else if (result.Created)
     {
-      Uri uri = new($"{Request.Scheme}://{Request.Host}/api/roles/{result.Role.Id}", UriKind.Absolute);
-      return Created(uri, result.Role);
+      Uri location = new($"{Request.Scheme}://{Request.Host}/api/roles/{result.Role.Id}", UriKind.Absolute);
+      return Created(location, result.Role);
     }
     return Ok(result.Role);
   }

@@ -9,4 +9,5 @@ public interface IApplicationContext
   ActorId? ActorId { get; }
   RealmId? RealmId { get; }
   IRoleSettings RoleSettings { get; }
+  IUserSettings UserSettings { get; }
 }

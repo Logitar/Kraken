@@ -1,7 +1,10 @@
-﻿namespace Logitar.Kraken.Core.Users;
+﻿using Logitar.Kraken.Core.Sessions;
+
+namespace Logitar.Kraken.Core.Users;
 
 public interface IUserRepository
 {
+  Task<User> LoadAsync(Session session, CancellationToken cancellationToken = default);
   Task<User?> LoadAsync(UserId id, CancellationToken cancellationToken = default);
   Task<User?> LoadAsync(UserId id, long? version, CancellationToken cancellationToken = default);
 

@@ -1,3 +1,6 @@
 ﻿namespace Logitar.Kraken.Core;
 
-public interface IActivity;
+public interface IActivity
+{
+  IActivity Anonymize();
+}

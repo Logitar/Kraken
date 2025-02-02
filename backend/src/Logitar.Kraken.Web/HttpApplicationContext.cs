@@ -10,4 +10,5 @@ internal class HttpApplicationContext : IApplicationContext // TODO(fpion): Auth
   public ActorId? ActorId => throw new NotImplementedException();
   public RealmId? RealmId => throw new NotImplementedException();
   public IRoleSettings RoleSettings => throw new NotImplementedException();
+  public IUserSettings UserSettings => throw new NotImplementedException();
 }
