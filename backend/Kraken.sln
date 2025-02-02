@@ -21,6 +21,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Tests", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.UnitTests", "tests\Logitar.Kraken.UnitTests\Logitar.Kraken.UnitTests.csproj", "{DD04B062-83C5-422D-8404-7B738FE0DA34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Infrastructure", "src\Logitar.Kraken.Infrastructure\Logitar.Kraken.Infrastructure.csproj", "{9A633217-B0A6-485D-A037-BA1DD44DF51F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Infrastructure.PostgreSQL", "src\Logitar.Kraken.Infrastructure.PostgreSQL\Logitar.Kraken.Infrastructure.PostgreSQL.csproj", "{7D4D3786-C7DB-413F-B2F5-58CB9722E313}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Infrastructure.SqlServer", "src\Logitar.Kraken.Infrastructure.SqlServer\Logitar.Kraken.Infrastructure.SqlServer.csproj", "{EF7C9B84-E916-42F8-A400-FB109D6CF71E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Infrastructure.MongoDB", "src\Logitar.Kraken.Infrastructure.MongoDB\Logitar.Kraken.Infrastructure.MongoDB.csproj", "{687BC353-5C04-4516-933B-C952342202E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Web", "src\Logitar.Kraken.Web\Logitar.Kraken.Web.csproj", "{57C220A5-0E43-409A-8FB9-57F466E5986E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken", "src\Logitar.Kraken\Logitar.Kraken.csproj", "{F47B0C96-AC0B-4186-888F-53CD4397219B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +55,30 @@ Global
 		{DD04B062-83C5-422D-8404-7B738FE0DA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD04B062-83C5-422D-8404-7B738FE0DA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD04B062-83C5-422D-8404-7B738FE0DA34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A633217-B0A6-485D-A037-BA1DD44DF51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A633217-B0A6-485D-A037-BA1DD44DF51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A633217-B0A6-485D-A037-BA1DD44DF51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A633217-B0A6-485D-A037-BA1DD44DF51F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4D3786-C7DB-413F-B2F5-58CB9722E313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4D3786-C7DB-413F-B2F5-58CB9722E313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4D3786-C7DB-413F-B2F5-58CB9722E313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4D3786-C7DB-413F-B2F5-58CB9722E313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF7C9B84-E916-42F8-A400-FB109D6CF71E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF7C9B84-E916-42F8-A400-FB109D6CF71E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF7C9B84-E916-42F8-A400-FB109D6CF71E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF7C9B84-E916-42F8-A400-FB109D6CF71E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{687BC353-5C04-4516-933B-C952342202E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{687BC353-5C04-4516-933B-C952342202E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{687BC353-5C04-4516-933B-C952342202E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{687BC353-5C04-4516-933B-C952342202E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57C220A5-0E43-409A-8FB9-57F466E5986E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57C220A5-0E43-409A-8FB9-57F466E5986E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57C220A5-0E43-409A-8FB9-57F466E5986E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57C220A5-0E43-409A-8FB9-57F466E5986E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F47B0C96-AC0B-4186-888F-53CD4397219B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F47B0C96-AC0B-4186-888F-53CD4397219B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F47B0C96-AC0B-4186-888F-53CD4397219B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F47B0C96-AC0B-4186-888F-53CD4397219B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
