@@ -1,4 +1,6 @@
-﻿namespace Logitar.Kraken.Contracts.Roles;
+﻿using Logitar.Kraken.Contracts.Realms;
+
+namespace Logitar.Kraken.Contracts.Roles;
 
 public class RoleModel : AggregateModel
 {
@@ -7,6 +9,8 @@ public class RoleModel : AggregateModel
   public string? Description { get; set; }
 
   public List<CustomAttributeModel> CustomAttributes { get; set; } = [];
+
+  public RealmModel? Realm { get; set; }
 
   public override string ToString() => $"{DisplayName ?? UniqueName} | {base.ToString()}";
 }
