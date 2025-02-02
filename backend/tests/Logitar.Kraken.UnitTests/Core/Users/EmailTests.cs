@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace Logitar.Kraken.Core.Users;
+﻿namespace Logitar.Kraken.Core.Users;
 
 [Trait(Traits.Category, Categories.Unit)]
 public class EmailTests

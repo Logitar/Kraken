@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-
-namespace Logitar.Kraken.Core.Users;
+﻿namespace Logitar.Kraken.Core.Users;
 
 public record CountrySettings
 {
