@@ -36,7 +36,7 @@ internal class CreateOrReplaceRoleCommandHandler : IRequestHandler<CreateOrRepla
     IRoleSettings roleSettings = _applicationContext.RoleSettings;
 
     CreateOrReplaceRolePayload payload = command.Payload;
-    new CreateOrReplaceRoleValidator(roleSettings.UniqueNameSettings).ValidateAndThrow(payload);
+    new CreateOrReplaceRoleValidator(roleSettings.UniqueName).ValidateAndThrow(payload);
 
     RealmId? realmId = _applicationContext.RealmId;
     RoleId roleId = RoleId.NewId(realmId);
@@ -48,7 +48,7 @@ internal class CreateOrReplaceRoleCommandHandler : IRequestHandler<CreateOrRepla
     }
 
     ActorId? actorId = _applicationContext.ActorId;
-    UniqueName uniqueName = new(roleSettings.UniqueNameSettings, payload.UniqueName);
+    UniqueName uniqueName = new(roleSettings.UniqueName, payload.UniqueName);
 
     bool created = false;
     if (role == null)

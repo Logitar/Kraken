@@ -4,6 +4,8 @@ namespace Logitar.Kraken.Core.Settings;
 
 public interface IUserSettings
 {
-  IUniqueNameSettings UniqueNameSettings { get; }
-  IPasswordSettings PasswordSettings { get; }
+  IUniqueNameSettings UniqueName { get; }
+  IPasswordSettings Password { get; }
+  public bool RequireUniqueEmail { get; }
+  public bool RequireConfirmedAccount { get; }
 }

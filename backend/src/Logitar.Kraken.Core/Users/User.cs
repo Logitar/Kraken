@@ -95,7 +95,7 @@ public class User : AggregateRoot, ICustomizable
   }
 
   private DateTime? _birthdate = null;
-  public DateTime? Birthdate
+  public DateTime? Birthdate // TODO(fpion): should be in the past!
   {
     get => _birthdate;
     set

@@ -30,8 +30,8 @@ public class RealmController : ControllerBase
   [HttpGet("{id}")]
   public async Task<ActionResult<RealmModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
-    ReadRealmQuery command = new(id, UniqueSlug: null);
-    RealmModel? realm = await _mediator.Send(command, cancellationToken);
+    ReadRealmQuery query = new(id, UniqueSlug: null);
+    RealmModel? realm = await _mediator.Send(query, cancellationToken);
     return realm == null ? NotFound() : Ok(realm);
   }
 

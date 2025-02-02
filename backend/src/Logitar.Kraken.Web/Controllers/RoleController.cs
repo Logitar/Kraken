@@ -30,16 +30,16 @@ public class RoleController : ControllerBase
   [HttpGet("{id}")]
   public async Task<ActionResult<RoleModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
-    ReadRoleQuery command = new(id, UniqueName: null);
-    RoleModel? role = await _mediator.Send(command, cancellationToken);
+    ReadRoleQuery query = new(id, UniqueName: null);
+    RoleModel? role = await _mediator.Send(query, cancellationToken);
     return role == null ? NotFound() : Ok(role);
   }
 
   [HttpGet("name:{uniqueName}")]
   public async Task<ActionResult<RoleModel>> ReadAsync(string uniqueName, CancellationToken cancellationToken)
   {
-    ReadRoleQuery command = new(Id: null, uniqueName);
-    RoleModel? role = await _mediator.Send(command, cancellationToken);
+    ReadRoleQuery query = new(Id: null, uniqueName);
+    RoleModel? role = await _mediator.Send(query, cancellationToken);
     return role == null ? NotFound() : Ok(role);
   }
 

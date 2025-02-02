@@ -3,7 +3,7 @@
 namespace Logitar.Kraken.Core.Settings;
 
 public record UserSettings(
-  IUniqueNameSettings UniqueNameSettings,
-  IPasswordSettings PasswordSettings,
+  IUniqueNameSettings UniqueName,
+  IPasswordSettings Password,
   bool RequireUniqueEmail,
   bool RequireConfirmedAccount) : IUserSettings;

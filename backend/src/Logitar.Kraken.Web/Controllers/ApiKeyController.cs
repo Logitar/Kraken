@@ -38,8 +38,8 @@ public class ApiKeyController : ControllerBase
   [HttpGet("{id}")]
   public async Task<ActionResult<ApiKeyModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
-    ReadApiKeyQuery command = new(id);
-    ApiKeyModel? apiKey = await _mediator.Send(command, cancellationToken);
+    ReadApiKeyQuery query = new(id);
+    ApiKeyModel? apiKey = await _mediator.Send(query, cancellationToken);
     return apiKey == null ? NotFound() : Ok(apiKey);
   }
 
