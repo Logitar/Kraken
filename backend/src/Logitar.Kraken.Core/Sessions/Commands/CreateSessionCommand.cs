@@ -49,7 +49,7 @@ internal class CreateSessionCommandHandler : IRequestHandler<CreateSessionComman
       session = await _sessionRepository.LoadAsync(sessionId, cancellationToken);
       if (session != null)
       {
-        throw new NotImplementedException(); // TODO(fpion): ConflictException
+        throw new IdAlreadyUsedException(payload.Id.Value, nameof(payload.Id));
       }
     }
 

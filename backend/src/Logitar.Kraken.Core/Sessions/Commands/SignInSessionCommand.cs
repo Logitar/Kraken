@@ -60,7 +60,7 @@ internal class SignInSessionCommandHandler : IRequestHandler<SignInSessionComman
       session = await _sessionRepository.LoadAsync(sessionId, cancellationToken);
       if (session != null)
       {
-        throw new NotImplementedException(); // TODO(fpion): ConflictException
+        throw new IdAlreadyUsedException(payload.Id.Value, nameof(payload.Id));
       }
     }
 

@@ -41,7 +41,7 @@ internal class CreateOneTimePasswordCommandHandler : IRequestHandler<CreateOneTi
       oneTimePassword = await _oneTimePasswordRepository.LoadAsync(oneTimePasswordId, cancellationToken);
       if (oneTimePassword != null)
       {
-        throw new NotImplementedException(); // TODO(fpion): ConflictException
+        throw new IdAlreadyUsedException(payload.Id.Value, nameof(payload.Id));
       }
     }
 
