@@ -41,13 +41,4 @@
     <InternalsVisibleTo Include="Logitar.Kraken.UnitTests" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Sessions\InvalidRefreshTokenException.cs" />
-    <None Include="Sessions\ISessionRepository.cs" />
-    <None Include="Sessions\Queries\ReadSessionQuery.cs" />
-    <None Include="Sessions\SessionNotFoundException.cs" />
-    <None Include="Sessions\Validators\CreateSessionValidator.cs" />
-    <None Include="Sessions\Validators\RenewSessionValidator.cs" />
-  </ItemGroup>
-
 </Project>
