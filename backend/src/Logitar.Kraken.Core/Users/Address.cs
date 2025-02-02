@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core.Users.Validators;
-using System.Text;
 
 namespace Logitar.Kraken.Core.Users;
 

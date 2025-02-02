@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Logitar.Kraken.Core.Roles;
+﻿namespace Logitar.Kraken.Core.Roles;
 
 public class RolesNotFoundException : NotFoundException
 {
