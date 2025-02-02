@@ -4,5 +4,5 @@ namespace Logitar.Kraken.Core.Settings;
 
 public interface IRoleSettings
 {
-  IUniqueNameSettings UniqueNameSettings { get; }
+  IUniqueNameSettings UniqueName { get; }
 }

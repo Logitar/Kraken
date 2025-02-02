@@ -34,7 +34,7 @@ internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Rol
     IRoleSettings roleSettings = _applicationContext.RoleSettings;
 
     UpdateRolePayload payload = command.Payload;
-    new UpdateRoleValidator(roleSettings.UniqueNameSettings).ValidateAndThrow(payload);
+    new UpdateRoleValidator(roleSettings.UniqueName).ValidateAndThrow(payload);
 
     RoleId roleId = new(_applicationContext.RealmId, command.Id);
     Role? role = await _roleRepository.LoadAsync(roleId, cancellationToken);
@@ -47,7 +47,7 @@ internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Rol
 
     if (!string.IsNullOrWhiteSpace(payload.UniqueName))
     {
-      role.SetUniqueName(new UniqueName(roleSettings.UniqueNameSettings, payload.UniqueName));
+      role.SetUniqueName(new UniqueName(roleSettings.UniqueName, payload.UniqueName));
     }
     if (payload.DisplayName != null)
     {
