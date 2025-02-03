@@ -13,6 +13,11 @@ internal class LanguageManager : ILanguageManager
     _languageRepository = languageRepository;
   }
 
+  public Task<Language> FindAsync(string language, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException(); // TODO(fpion): implement
+  }
+
   public async Task SaveAsync(Language language, CancellationToken cancellationToken)
   {
     bool hasLocaleChanged = language.Changes.Any(change => change is LanguageCreated || change is LanguageLocaleChanged);
