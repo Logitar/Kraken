@@ -1,28 +1,33 @@
 ﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Localization;
 
 public readonly struct LanguageId
 {
+  public RealmId? RealmId { get; }
+  public Guid EntityId { get; }
+
   public StreamId StreamId { get; }
   public string Value => StreamId.Value;
 
-  public LanguageId(Guid value)
+  public LanguageId(RealmId? realmId, Guid entityId)
   {
-    StreamId = new(value);
-  }
-  public LanguageId(string value)
-  {
-    StreamId = new(value);
+    RealmId = realmId;
+    EntityId = entityId;
+
+    StreamId = IdHelper.Encode(realmId, entityId);
   }
   public LanguageId(StreamId streamId)
   {
+    Tuple<RealmId?, Guid> parsed = IdHelper.Decode(streamId);
+    RealmId = parsed.Item1;
+    EntityId = parsed.Item2;
+
     StreamId = streamId;
   }
 
-  public static LanguageId NewId() => new(StreamId.NewId());
-
-  public Guid ToGuid() => StreamId.ToGuid();
+  public static LanguageId NewId(RealmId? realmId) => new(realmId, Guid.NewGuid());
 
   public static bool operator ==(LanguageId left, LanguageId right) => left.Equals(right);
   public static bool operator !=(LanguageId left, LanguageId right) => !left.Equals(right);

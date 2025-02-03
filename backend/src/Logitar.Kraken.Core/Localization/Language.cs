@@ -1,19 +1,25 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Localization.Events;
+using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Localization;
 
 public class Language : AggregateRoot
 {
   public new LanguageId Id => new(base.Id);
+  public RealmId? RealmId => Id.RealmId;
+  public Guid EntityId => Id.EntityId;
 
   public bool IsDefault { get; private set; }
 
   private Locale? _locale = null;
   public Locale Locale => _locale ?? throw new InvalidOperationException("The language has not been initialized.");
 
-  public Language(Locale locale, bool isDefault = false, ActorId? actorId = null, LanguageId? languageId = null)
-    : base(languageId?.StreamId)
+  public Language() : base()
+  {
+  }
+
+  public Language(Locale locale, bool isDefault = false, ActorId? actorId = null, LanguageId? languageId = null) : base(languageId?.StreamId)
   {
     Raise(new LanguageCreated(isDefault, locale), actorId);
   }
@@ -24,5 +30,29 @@ public class Language : AggregateRoot
     _locale = @event.Locale;
   }
 
-  public override string ToString() => $"{_locale} | {base.ToString()}";
+  public void SetDefault(bool isDefault = true, ActorId? actorId = null)
+  {
+    if (IsDefault != isDefault)
+    {
+      Raise(new LanguageSetDefault(isDefault), actorId);
+    }
+  }
+  protected virtual void Handle(LanguageSetDefault @event)
+  {
+    IsDefault = @event.IsDefault;
+  }
+
+  public void SetLocale(Locale locale, ActorId? actorId = null)
+  {
+    if (Locale != locale)
+    {
+      Raise(new LanguageLocaleChanged(locale), actorId);
+    }
+  }
+  protected virtual void Handle(LanguageLocaleChanged @event)
+  {
+    _locale = @event.Locale;
+  }
+
+  public override string ToString() => $"{Locale} | {base.ToString()}";
 }

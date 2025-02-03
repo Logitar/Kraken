@@ -1,5 +1,4 @@
-﻿
-using Logitar.Kraken.Core.Localization.Events;
+﻿using Logitar.Kraken.Core.Localization.Events;
 
 namespace Logitar.Kraken.Core.Localization;
 
@@ -16,7 +15,7 @@ internal class LanguageManager : ILanguageManager
 
   public async Task SaveAsync(Language language, CancellationToken cancellationToken)
   {
-    bool hasLocaleChanged = language.Changes.Any(change => change is LanguageCreated);
+    bool hasLocaleChanged = language.Changes.Any(change => change is LanguageCreated || change is LanguageLocaleChanged);
     if (hasLocaleChanged)
     {
       LanguageId? conflictId = await _languageQuerier.FindIdAsync(language.Locale, cancellationToken);
