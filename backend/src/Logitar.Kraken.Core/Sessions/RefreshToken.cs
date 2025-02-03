@@ -28,7 +28,7 @@ internal record RefreshToken
     string[] values = value.Split(Separator);
     if (values.Length != 3 || values.First() != Prefix)
     {
-      throw new ArgumentException($"The value '{value}' is not a valid X-API-Key.", nameof(value));
+      throw new ArgumentException($"The value '{value}' is not a valid refresh token.", nameof(value));
     }
 
     SessionId id = new(realmId, new Guid(Convert.FromBase64String(values[1].FromUriSafeBase64())));

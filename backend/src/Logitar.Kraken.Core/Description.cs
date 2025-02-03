@@ -4,8 +4,6 @@ namespace Logitar.Kraken.Core;
 
 public record Description
 {
-  public const int MaximumLength = byte.MaxValue;
-
   public string Value { get; }
 
   public Description(string value)
