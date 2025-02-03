@@ -1,29 +1,31 @@
 ﻿namespace Logitar.Kraken.Contracts.Localization;
 
-public record LocaleModel
+public class LocaleModel
 {
-  public int LCID { get; set; }
-  public string Code { get; set; } = string.Empty;
-  public string DisplayName { get; set; } = string.Empty;
-  public string EnglishName { get; set; } = string.Empty;
-  public string NativeName { get; set; } = string.Empty;
+  public int Id { get; set; }
+  public string Code { get; set; }
+  public string DisplayName { get; set; }
+  public string EnglishName { get; set; }
+  public string NativeName { get; set; }
 
   public LocaleModel() : this(string.Empty)
   {
   }
 
-  public LocaleModel(string code) : this(CultureInfo.GetCultureInfo(code))
+  public LocaleModel(string cultureName) : this(CultureInfo.GetCultureInfo(cultureName.Trim()))
   {
   }
 
   public LocaleModel(CultureInfo culture)
   {
-    LCID = culture.LCID;
+    Id = culture.LCID;
     Code = culture.Name;
     DisplayName = culture.DisplayName;
     EnglishName = culture.EnglishName;
     NativeName = culture.NativeName;
   }
 
+  public override bool Equals(object? obj) => obj is LocaleModel locale && locale.Id == Id;
+  public override int GetHashCode() => Id.GetHashCode();
   public override string ToString() => $"{DisplayName} ({Code})";
 }

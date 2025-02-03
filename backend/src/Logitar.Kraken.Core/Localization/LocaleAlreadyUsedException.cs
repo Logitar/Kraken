@@ -4,15 +4,20 @@ public class LocaleAlreadyUsedException : ConflictException
 {
   private const string ErrorMessage = "The specified locale is already used.";
 
-  public Guid LanguageId
+  public Guid? RealmId
   {
-    get => (Guid)Data[nameof(LanguageId)]!;
-    private set => Data[nameof(LanguageId)] = value;
+    get => (Guid?)Data[nameof(RealmId)];
+    private set => Data[nameof(RealmId)] = value;
   }
   public Guid ConflictId
   {
     get => (Guid)Data[nameof(ConflictId)]!;
     private set => Data[nameof(ConflictId)] = value;
+  }
+  public Guid LanguageId
+  {
+    get => (Guid)Data[nameof(LanguageId)]!;
+    private set => Data[nameof(LanguageId)] = value;
   }
   public string Locale
   {
@@ -30,7 +35,7 @@ public class LocaleAlreadyUsedException : ConflictException
     get
     {
       Error error = new(this.GetErrorCode(), ErrorMessage);
-      error.Data[nameof(LanguageId)] = LanguageId;
+      error.Data[nameof(RealmId)] = RealmId;
       error.Data[nameof(ConflictId)] = ConflictId;
       error.Data[nameof(Locale)] = Locale;
       error.Data[nameof(PropertyName)] = PropertyName;
@@ -40,15 +45,17 @@ public class LocaleAlreadyUsedException : ConflictException
 
   public LocaleAlreadyUsedException(Language language, LanguageId conflictId) : base(BuildMessage(language, conflictId))
   {
-    LanguageId = language.Id.ToGuid();
-    ConflictId = conflictId.ToGuid();
+    RealmId = language.Id.RealmId?.ToGuid();
+    ConflictId = conflictId.EntityId;
+    LanguageId = language.Id.EntityId;
     Locale = language.Locale.ToString();
     PropertyName = nameof(language.Locale);
   }
 
   private static string BuildMessage(Language language, LanguageId conflictId) => new ErrorMessageBuilder(ErrorMessage)
-    .AddData(nameof(LanguageId), language.Id.ToGuid())
-    .AddData(nameof(ConflictId), conflictId.ToGuid())
+    .AddData(nameof(RealmId), conflictId.RealmId?.ToGuid(), "<null>")
+    .AddData(nameof(ConflictId), conflictId.EntityId)
+    .AddData(nameof(LanguageId), language.Id.EntityId)
     .AddData(nameof(Locale), language.Locale)
     .AddData(nameof(PropertyName), nameof(language.Locale))
     .Build();
