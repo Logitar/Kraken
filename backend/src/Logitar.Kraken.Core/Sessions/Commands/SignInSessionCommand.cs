@@ -23,7 +23,6 @@ public record SignInSessionCommand(SignInSessionPayload Payload) : Activity, IRe
 internal class SignInSessionCommandHandler : IRequestHandler<SignInSessionCommand, SessionModel>
 {
   private readonly IApplicationContext _applicationContext;
-  private readonly IMediator _mediator;
   private readonly IPasswordManager _passwordManager;
   private readonly ISessionQuerier _sessionQuerier;
   private readonly ISessionRepository _sessionRepository;
@@ -31,14 +30,12 @@ internal class SignInSessionCommandHandler : IRequestHandler<SignInSessionComman
 
   public SignInSessionCommandHandler(
     IApplicationContext applicationContext,
-    IMediator mediator,
     IPasswordManager passwordManager,
     ISessionQuerier sessionQuerier,
     ISessionRepository sessionRepository,
     IUserManager userManager)
   {
     _applicationContext = applicationContext;
-    _mediator = mediator;
     _passwordManager = passwordManager;
     _sessionQuerier = sessionQuerier;
     _sessionRepository = sessionRepository;

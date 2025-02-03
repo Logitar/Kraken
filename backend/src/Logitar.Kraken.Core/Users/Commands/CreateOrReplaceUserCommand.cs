@@ -33,7 +33,6 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
 {
   private readonly IAddressHelper _addressHelper;
   private readonly IApplicationContext _applicationContext;
-  private readonly IMediator _mediator;
   private readonly IPasswordManager _passwordManager;
   private readonly IRoleManager _roleManager;
   private readonly IUserManager _userManager;
@@ -43,7 +42,6 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
   public CreateOrReplaceUserCommandHandler(
     IAddressHelper addressHelper,
     IApplicationContext applicationContext,
-    IMediator mediator,
     IPasswordManager passwordManager,
     IRoleManager roleManager,
     IUserManager userManager,
@@ -52,7 +50,6 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
   {
     _addressHelper = addressHelper;
     _applicationContext = applicationContext;
-    _mediator = mediator;
     _passwordManager = passwordManager;
     _roleManager = roleManager;
     _userManager = userManager;
@@ -220,7 +217,7 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
 
   private async Task SetRolesAsync(CreateOrReplaceUserPayload payload, User reference, User user, ActorId? actorId, CancellationToken cancellationToken)
   {
-    IReadOnlyDictionary<RoleId, Role> roles = (await _roleManager.FindAsync(user.RealmId, payload.Roles, cancellationToken))
+    IReadOnlyDictionary<RoleId, Role> roles = (await _roleManager.FindAsync(payload.Roles, cancellationToken))
       .ToDictionary(x => x.Value.Id, x => x.Value);
 
     foreach (RoleId roleId in reference.Roles)
