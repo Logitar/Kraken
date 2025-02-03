@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Dictionaries.Queries;
 
-internal record SearchDictionariesQuery(SearchDictionariesPayload Payload) : Activity, IRequest<SearchResults<DictionaryModel>>;
+public record SearchDictionariesQuery(SearchDictionariesPayload Payload) : Activity, IRequest<SearchResults<DictionaryModel>>;
 
 internal class SearchDictionariesQueryHandler : IRequestHandler<SearchDictionariesQuery, SearchResults<DictionaryModel>>
 {

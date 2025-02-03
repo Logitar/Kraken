@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Dictionaries.Queries;
 
-internal record ReadDictionaryQuery(Guid? Id) : Activity, IRequest<DictionaryModel>;
+public record ReadDictionaryQuery(Guid? Id) : Activity, IRequest<DictionaryModel>;
 
 internal class ReadDictionaryQueryHandler : IRequestHandler<ReadDictionaryQuery, DictionaryModel?>
 {

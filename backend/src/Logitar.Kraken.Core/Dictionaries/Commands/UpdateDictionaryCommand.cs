@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Dictionaries.Commands;
 
-internal record UpdateDictionaryCommand(Guid Id, UpdateDictionaryPayload Payload) : Activity, IRequest<DictionaryModel?>;
+public record UpdateDictionaryCommand(Guid Id, UpdateDictionaryPayload Payload) : Activity, IRequest<DictionaryModel?>;
 
 internal class UpdateDictionaryCommandHandler : IRequestHandler<UpdateDictionaryCommand, DictionaryModel?>
 {
