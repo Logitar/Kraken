@@ -19,7 +19,7 @@ public class Content : AggregateRoot
 
   private ContentLocale? _invariant = null;
   private ContentStatus? _invariantStatus;
-  public ContentLocale Invariant => _invariant ?? throw new InvalidOperationException($"The {nameof(Invariant)} has not been initialized yet.");
+  public ContentLocale Invariant => _invariant ?? throw new InvalidOperationException("The content has not been initialized.");
 
   private readonly Dictionary<LanguageId, ContentLocale> _locales = [];
   private readonly Dictionary<LanguageId, ContentStatus> _localeStatuses = [];

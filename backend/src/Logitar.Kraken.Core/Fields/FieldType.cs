@@ -19,7 +19,7 @@ public class FieldType : AggregateRoot
   public Guid EntityId => Id.EntityId;
 
   private UniqueName? _uniqueName = null;
-  public UniqueName UniqueName => _uniqueName ?? throw new InvalidOperationException($"The {nameof(UniqueName)} has not been initialized yet.");
+  public UniqueName UniqueName => _uniqueName ?? throw new InvalidOperationException("The field type has not been initialized.");
   private DisplayName? _displayName = null;
   public DisplayName? DisplayName
   {
@@ -49,7 +49,7 @@ public class FieldType : AggregateRoot
 
   public DataType DataType { get; private set; }
   private FieldTypeProperties? _properties = null;
-  public FieldTypeProperties Properties => _properties ?? throw new InvalidOperationException($"The {nameof(Properties)} has not been initialized yet.");
+  public FieldTypeProperties Properties => _properties ?? throw new InvalidOperationException("The field type has not been initialized.");
 
   public FieldType() : base()
   {

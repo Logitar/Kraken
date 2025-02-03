@@ -30,7 +30,7 @@ public class ContentType : AggregateRoot
   }
 
   private Identifier? _uniqueName = null;
-  public Identifier UniqueName => _uniqueName ?? throw new InvalidOperationException($"The {nameof(UniqueName)} has not been initialized yet.");
+  public Identifier UniqueName => _uniqueName ?? throw new InvalidOperationException("The content type has not been initialized.");
   private DisplayName? _displayName = null;
   public DisplayName? DisplayName
   {

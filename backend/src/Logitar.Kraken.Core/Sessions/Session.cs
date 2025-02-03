@@ -25,7 +25,7 @@ public class Session : AggregateRoot, ICustomizable
   private readonly Dictionary<Identifier, string> _customAttributes = [];
   public IReadOnlyDictionary<Identifier, string> CustomAttributes => _customAttributes.AsReadOnly();
 
-  public Session(User user, Password? secret = null, ActorId? actorId = null, SessionId? id = null) : base(id?.StreamId)
+  public Session(User user, Password? secret = null, ActorId? actorId = null, SessionId? sessionId = null) : base(sessionId?.StreamId)
   {
     if (RealmId != user.RealmId)
     {
