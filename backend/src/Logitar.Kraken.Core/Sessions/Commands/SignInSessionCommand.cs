@@ -5,7 +5,6 @@ using Logitar.Kraken.Contracts.Sessions;
 using Logitar.Kraken.Core.Passwords;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Sessions.Validators;
-using Logitar.Kraken.Core.Settings;
 using Logitar.Kraken.Core.Users;
 using MediatR;
 
@@ -64,8 +63,7 @@ internal class SignInSessionCommandHandler : IRequestHandler<SignInSessionComman
       }
     }
 
-    IUserSettings userSettings = _applicationContext.UserSettings;
-    User user = await _userManager.FindAsync(userSettings, realmId, payload.UniqueName, nameof(payload.UniqueName), includeId: false, cancellationToken);
+    User user = await _userManager.FindAsync(realmId, payload.UniqueName, nameof(payload.UniqueName), includeId: false, cancellationToken);
 
     Password? secret = null;
     string? secretString = null;
@@ -83,7 +81,7 @@ internal class SignInSessionCommandHandler : IRequestHandler<SignInSessionComman
     }
     session.Update(actorId);
 
-    await _userManager.SaveAsync(userSettings, user, actorId, cancellationToken);
+    await _userManager.SaveAsync(user, actorId, cancellationToken);
     await _sessionRepository.SaveAsync(session, cancellationToken);
 
     SessionModel result = await _sessionQuerier.ReadAsync(session, cancellationToken);

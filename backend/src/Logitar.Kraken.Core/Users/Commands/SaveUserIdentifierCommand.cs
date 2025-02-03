@@ -45,7 +45,7 @@ internal class SaveUserIdentifierCommandHandler : IRequestHandler<SaveUserIdenti
     ActorId? actorId = _applicationContext.ActorId;
     user.SetCustomIdentifier(key, value, actorId);
 
-    await _userManager.SaveAsync(_applicationContext.UserSettings, user, actorId, cancellationToken);
+    await _userManager.SaveAsync(user, actorId, cancellationToken);
 
     return await _userQuerier.ReadAsync(user, cancellationToken);
   }

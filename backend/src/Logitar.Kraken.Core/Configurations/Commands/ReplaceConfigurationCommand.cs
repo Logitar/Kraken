@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Logitar.Kraken.Contracts.Configurations;
-using Logitar.Kraken.Core.Caching;
 using Logitar.Kraken.Core.Configurations.Validators;
 using Logitar.Kraken.Core.Settings;
 using Logitar.Kraken.Core.Tokens;
@@ -13,13 +12,11 @@ public record ReplaceConfigurationCommand(ReplaceConfigurationPayload Payload, l
 internal class ReplaceConfigurationCommandHandler : IRequestHandler<ReplaceConfigurationCommand, ConfigurationModel?>
 {
   private readonly IApplicationContext _applicationContext;
-  private readonly ICacheService _cacheService;
   private readonly IConfigurationRepository _configurationRepository;
 
-  public ReplaceConfigurationCommandHandler(IApplicationContext applicationContext, ICacheService cacheService, IConfigurationRepository configurationRepository)
+  public ReplaceConfigurationCommandHandler(IApplicationContext applicationContext, IConfigurationRepository configurationRepository)
   {
     _applicationContext = applicationContext;
-    _cacheService = cacheService;
     _configurationRepository = configurationRepository;
   }
 
@@ -61,6 +58,6 @@ internal class ReplaceConfigurationCommandHandler : IRequestHandler<ReplaceConfi
     configuration.Update(_applicationContext.ActorId);
     await _configurationRepository.SaveAsync(configuration, cancellationToken);
 
-    return _cacheService.Configuration ?? throw new InvalidOperationException("The configuration should be in the cache.");
+    return _applicationContext.Configuration;
   }
 }

@@ -5,7 +5,6 @@ using Logitar.Kraken.Contracts.Settings;
 using Logitar.Kraken.Core.Caching;
 using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
-using Logitar.Kraken.Core.Settings;
 using Logitar.Kraken.Core.Users;
 using Moq;
 
@@ -44,11 +43,7 @@ public class InitializeConfigurationCommandHandlerTests
     _passwordManager.Verify(x => x.ValidateAndCreate(It.IsAny<IPasswordSettings>(), command.Password), Times.Once());
     _configurationRepository.Verify(x => x.SaveAsync(It.IsAny<Configuration>(), _cancellationToken), Times.Once());
     _languageManager.Verify(x => x.SaveAsync(It.Is<Language>(y => y.IsDefault && y.Locale.Code == command.DefaultLocale), _cancellationToken), Times.Once());
-    _userManager.Verify(x => x.SaveAsync(
-      It.IsAny<IUserSettings>(),
-      It.Is<User>(y => y.UniqueName.Value == command.UniqueName && y.HasPassword),
-      It.IsAny<ActorId>(),
-      _cancellationToken), Times.Once());
+    _userManager.Verify(x => x.SaveAsync(It.Is<User>(y => y.UniqueName.Value == command.UniqueName && y.HasPassword), It.IsAny<ActorId>(), _cancellationToken), Times.Once());
   }
 
   [Fact(DisplayName = "It should only cache the configuration when it is already initialized.")]

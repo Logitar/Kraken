@@ -1,5 +1,4 @@
 ﻿using Logitar.Kraken.Contracts.Configurations;
-using Logitar.Kraken.Core.Caching;
 using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Queries;
@@ -8,16 +7,16 @@ public record ReadConfigurationQuery : IRequest<ConfigurationModel>;
 
 internal class ReadConfigurationQueryHandler : IRequestHandler<ReadConfigurationQuery, ConfigurationModel>
 {
-  private readonly ICacheService _cacheService;
+  private readonly IApplicationContext _applicationContext;
 
-  public ReadConfigurationQueryHandler(ICacheService cacheService)
+  public ReadConfigurationQueryHandler(IApplicationContext applicationContext)
   {
-    _cacheService = cacheService;
+    _applicationContext = applicationContext;
   }
 
   public Task<ConfigurationModel> Handle(ReadConfigurationQuery _, CancellationToken cancellationToken)
   {
-    ConfigurationModel configuration = _cacheService.Configuration ?? throw new InvalidOperationException("The configuration should be in the cache.");
+    ConfigurationModel configuration = _applicationContext.Configuration;
     return Task.FromResult(configuration);
   }
 }

@@ -104,7 +104,7 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
     await SetRolesAsync(payload, reference, user, actorId, cancellationToken);
 
     user.Update(actorId);
-    await _userManager.SaveAsync(userSettings, user, actorId, cancellationToken);
+    await _userManager.SaveAsync(user, actorId, cancellationToken);
 
     UserModel model = await _userQuerier.ReadAsync(user, cancellationToken);
     return new CreateOrReplaceUserResult(model, created);

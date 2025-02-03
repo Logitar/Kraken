@@ -58,7 +58,7 @@ internal class ResetUserPasswordCommandHandler : IRequestHandler<ResetUserPasswo
     Password password = _passwordManager.ValidateAndCreate(userSettings.Password, payload.Password);
     user.ResetPassword(password, actorId);
 
-    await _userManager.SaveAsync(userSettings, user, actorId, cancellationToken);
+    await _userManager.SaveAsync(user, actorId, cancellationToken);
 
     return await _userQuerier.ReadAsync(user, cancellationToken);
   }
