@@ -36,8 +36,8 @@ public class ApiKeyTests
     Assert.Empty(_apiKey.Changes);
   }
 
-  [Fact(DisplayName = "AddRole: it should throw InvalidRealmException when the role is in another tenant.")]
-  public void Given_DifferentTenants_When_AddRole_Then_InvalidRealmException()
+  [Fact(DisplayName = "AddRole: it should throw InvalidRealmException when the role is in another realm.")]
+  public void Given_DifferentRealms_When_AddRole_Then_InvalidRealmException()
   {
     Role role = new(new UniqueName(new UniqueNameSettings(), "manage_api"), actorId: null, new RoleId(RealmId.NewId(), Guid.NewGuid()));
 

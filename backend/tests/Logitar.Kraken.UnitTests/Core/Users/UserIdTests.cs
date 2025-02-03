@@ -21,10 +21,10 @@ public class UserIdTests
     Assert.Equal(entityId, id.EntityId);
   }
 
-  [Theory(DisplayName = "ctor: it should construct the correct ID from a tenant ID and an entity ID.")]
+  [Theory(DisplayName = "ctor: it should construct the correct ID from a realm ID and an entity ID.")]
   [InlineData(null)]
   [InlineData("RealmId")]
-  public void Given_TenantAndEntityId_When_ctor_Then_CorrectIdConstructed(string? realmIdValue)
+  public void Given_RealmAndEntityId_When_ctor_Then_CorrectIdConstructed(string? realmIdValue)
   {
     RealmId? realmId = realmIdValue == null ? null : new(realmIdValue);
     Guid entityId = Guid.NewGuid();
@@ -77,7 +77,7 @@ public class UserIdTests
     Assert.True(id1 == id2);
   }
 
-  [Theory(DisplayName = "NewId: it should generate a new random ID with or without a tenant ID.")]
+  [Theory(DisplayName = "NewId: it should generate a new random ID with or without a realm ID.")]
   [InlineData(null)]
   [InlineData("RealmId")]
   public void Given_RealmId_When_NewId_Then_NewRandomIdGenerated(string? realmIdValue)
