@@ -4,13 +4,11 @@ using Logitar.Kraken.Core.Localization.Commands;
 using Logitar.Kraken.Core.Localization.Queries;
 using Logitar.Kraken.Web.Models.Language;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/languages")]
 public class LanguageController : ControllerBase
 {

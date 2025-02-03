@@ -1,4 +1,6 @@
-﻿using Logitar.Kraken.Core.Roles;
+﻿using Logitar.Kraken.Core.Contents;
+using Logitar.Kraken.Core.Fields;
+using Logitar.Kraken.Core.Roles;
 
 namespace Logitar.Kraken.Core;
 
@@ -46,11 +48,19 @@ public class UniqueNameAlreadyUsedException : ConflictException
     }
   }
 
+  public UniqueNameAlreadyUsedException(ContentType contentType, ContentTypeId conflictId)
+    : this(contentType.RealmId?.ToGuid(), contentType.EntityId, conflictId.EntityId, contentType.UniqueName.Value, nameof(contentType.UniqueName))
+  {
+  }
+  public UniqueNameAlreadyUsedException(FieldType fieldType, FieldTypeId conflictId)
+    : this(fieldType.RealmId?.ToGuid(), fieldType.EntityId, conflictId.EntityId, fieldType.UniqueName.Value, nameof(fieldType.UniqueName))
+  {
+  }
   public UniqueNameAlreadyUsedException(Role role, RoleId conflictId)
     : this(role.RealmId?.ToGuid(), role.EntityId, conflictId.EntityId, role.UniqueName.Value, nameof(role.UniqueName))
   {
   }
-  private UniqueNameAlreadyUsedException(Guid? realmId, Guid entityId, Guid conflictId, string uniqueName, string propertyName)
+  public UniqueNameAlreadyUsedException(Guid? realmId, Guid entityId, Guid conflictId, string uniqueName, string propertyName)
     : base(BuildMessage(realmId, entityId, conflictId, uniqueName, propertyName))
   {
     RealmId = realmId;

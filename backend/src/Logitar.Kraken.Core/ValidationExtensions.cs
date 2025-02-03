@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Logitar.Kraken.Contracts.Settings;
+using Logitar.Kraken.Core.Fields.Validators;
 using Logitar.Kraken.Core.Validators;
 
 namespace Logitar.Kraken.Core;
@@ -9,6 +10,11 @@ public static class ValidationExtensions
   public static IRuleBuilderOptions<T, string> AllowedCharacters<T>(this IRuleBuilder<T, string> ruleBuilder, string? allowedCharacters)
   {
     return ruleBuilder.SetValidator(new AllowedCharactersValidator<T>(allowedCharacters));
+  }
+
+  public static IRuleBuilderOptions<T, string> ContentType<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MaximumLength(byte.MaxValue).SetValidator(new ContentTypeValidator<T>());
   }
 
   public static IRuleBuilderOptions<T, string> CustomIdentifier<T>(this IRuleBuilder<T, string> ruleBuilder)
@@ -101,6 +107,11 @@ public static class ValidationExtensions
   public static IRuleBuilderOptions<T, string> PersonName<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Users.PersonName.MaximumLength);
+  }
+
+  public static IRuleBuilderOptions<T, string> Placeholder<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MaximumLength(Fields.Placeholder.MaximumLength);
   }
 
   public static IRuleBuilderOptions<T, string> Slug<T>(this IRuleBuilder<T, string> ruleBuilder)
