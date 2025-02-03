@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Logitar.Kraken.Contracts.Settings;
-using Logitar.Kraken.Core.Fields.Validators;
 using Logitar.Kraken.Core.Validators;
 
 namespace Logitar.Kraken.Core;
@@ -24,7 +23,7 @@ public static class ValidationExtensions
 
   public static IRuleBuilderOptions<T, string> Description<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
-    return ruleBuilder.NotEmpty().MaximumLength(Core.Description.MaximumLength);
+    return ruleBuilder.NotEmpty();
   }
 
   public static IRuleBuilderOptions<T, string> DisplayName<T>(this IRuleBuilder<T, string> ruleBuilder)
