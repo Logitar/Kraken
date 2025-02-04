@@ -25,7 +25,7 @@ internal static class TokenHelper
     }
     else if (realm != null)
     {
-      return realm.Url ?? FormatAudienceOrIssuer("{BaseUrl}/realms/unique-slug:{UniqueSlug}", realm, baseUrl);
+      return realm.Url ?? FormatAudienceOrIssuer("{BaseUrl}/realms/slug:{UniqueSlug}", realm, baseUrl);
     }
 
     return baseUrl;
