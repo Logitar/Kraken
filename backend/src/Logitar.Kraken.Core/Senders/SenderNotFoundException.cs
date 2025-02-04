@@ -1,6 +1,6 @@
 ﻿namespace Logitar.Kraken.Core.Senders;
 
-public class SenderNotFoundException : Exception
+public class SenderNotFoundException : NotFoundException
 {
   private const string ErrorMessage = "The specified sender could not be found.";
 
@@ -18,6 +18,18 @@ public class SenderNotFoundException : Exception
   {
     get => (string)Data[nameof(PropertyName)]!;
     private set => Data[nameof(PropertyName)] = value;
+  }
+
+  public override Error Error
+  {
+    get
+    {
+      Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(RealmId)] = RealmId;
+      error.Data[nameof(SenderId)] = SenderId;
+      error.Data[nameof(PropertyName)] = PropertyName;
+      return error;
+    }
   }
 
   public SenderNotFoundException(SenderId senderId, string propertyName) : base(BuildMessage(senderId, propertyName))

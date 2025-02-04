@@ -3,7 +3,7 @@ using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Senders;
 
-public class NoDefaultSenderException : Exception
+public class NoDefaultSenderException : NotFoundException
 {
   private const string ErrorMessage = "The specified tenant has no default sender.";
 
@@ -16,6 +16,17 @@ public class NoDefaultSenderException : Exception
   {
     get => (SenderType)Data[nameof(Type)]!;
     private set => Data[nameof(Type)] = value;
+  }
+
+  public override Error Error
+  {
+    get
+    {
+      Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(RealmId)] = RealmId;
+      error.Data[nameof(Type)] = Type;
+      return error;
+    }
   }
 
   public NoDefaultSenderException(RealmId? realmId, SenderType type) : base(BuildMessage(realmId, type))

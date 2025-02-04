@@ -113,9 +113,9 @@ internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Use
 
   private void UpdateAuthenticationInformation(IUserSettings userSettings, UpdateUserPayload payload, User user, ActorId? actorId)
   {
-    UniqueName? uniqueName = UniqueName.TryCreate(userSettings.UniqueName, payload.UniqueName);
-    if (uniqueName != null)
+    if (!string.IsNullOrWhiteSpace(payload.UniqueName))
     {
+      UniqueName uniqueName = new(userSettings.UniqueName, payload.UniqueName);
       user.SetUniqueName(uniqueName, actorId);
     }
 
