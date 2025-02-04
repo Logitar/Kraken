@@ -111,7 +111,6 @@ public class ContentController : ControllerBase
       Uri location = new($"{Request.Scheme}://{Request.Host}/api/contents/{result.Content.Id}", UriKind.Absolute);
       return Created(location, result.Content);
     }
-
     return Ok(result.Content);
   }
 }

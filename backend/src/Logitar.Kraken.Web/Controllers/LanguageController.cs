@@ -86,7 +86,6 @@ public class LanguageController : ControllerBase
       Uri location = new($"{Request.Scheme}://{Request.Host}/api/languages/{result.Language.Id}", UriKind.Absolute);
       return Created(location, result.Language);
     }
-
     return Ok(result.Language);
   }
 }

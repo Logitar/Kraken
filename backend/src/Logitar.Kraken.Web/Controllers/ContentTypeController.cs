@@ -72,7 +72,6 @@ public class ContentTypeController : ControllerBase
       Uri location = new($"{Request.Scheme}://{Request.Host}/api/contents/types/{result.ContentType.Id}", UriKind.Absolute);
       return Created(location, result.ContentType);
     }
-
     return Ok(result.ContentType);
   }
 }

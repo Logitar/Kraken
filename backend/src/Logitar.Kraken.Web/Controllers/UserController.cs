@@ -128,7 +128,6 @@ public class UserController : ControllerBase
       Uri location = new($"{Request.Scheme}://{Request.Host}/api/users/{result.User.Id}", UriKind.Absolute);
       return Created(location, result.User);
     }
-
     return Ok(result.User);
   }
 }

@@ -72,7 +72,6 @@ public class FieldTypeController : ControllerBase
       Uri location = new($"{Request.Scheme}://{Request.Host}/api/fields/types/{result.FieldType.Id}", UriKind.Absolute);
       return Created(location, result.FieldType);
     }
-
     return Ok(result.FieldType);
   }
 }
