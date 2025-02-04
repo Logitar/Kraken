@@ -1,4 +1,5 @@
 ﻿using Logitar.Kraken.Core.Realms;
+using Logitar.Kraken.Core.Users;
 
 namespace Logitar.Kraken.Core.Passwords;
 
@@ -16,6 +17,7 @@ public interface IOneTimePasswordRepository
   Task<IReadOnlyCollection<OneTimePassword>> LoadAsync(IEnumerable<OneTimePasswordId> ids, bool? isDeleted, CancellationToken cancellationToken = default);
 
   Task<IReadOnlyCollection<OneTimePassword>> LoadAsync(RealmId? realmId, CancellationToken cancellationToken = default);
+  Task<IReadOnlyCollection<OneTimePassword>> LoadAsync(UserId? userId, CancellationToken cancellationToken = default);
 
   Task SaveAsync(OneTimePassword oneTimePassword, CancellationToken cancellationToken = default);
   Task SaveAsync(IEnumerable<OneTimePassword> oneTimePasswords, CancellationToken cancellationToken = default);

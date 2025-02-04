@@ -1,6 +1,7 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Passwords.Events;
 using Logitar.Kraken.Core.Realms;
+using Logitar.Kraken.Core.Users;
 
 namespace Logitar.Kraken.Core.Passwords;
 
@@ -14,7 +15,7 @@ public class OneTimePassword : AggregateRoot, ICustomizable
   public RealmId? RealmId => Id.RealmId;
   public Guid EntityId => Id.EntityId;
 
-  // ISSUE #48: https://github.com/Logitar/Kraken/issues/48
+  public UserId? UserId { get; private set; }
 
   public DateTime? ExpiresOn { get; private set; }
   public int? MaximumAttempts { get; private set; }
@@ -25,7 +26,7 @@ public class OneTimePassword : AggregateRoot, ICustomizable
   private readonly Dictionary<Identifier, string> _customAttributes = [];
   public IReadOnlyDictionary<Identifier, string> CustomAttributes => _customAttributes.AsReadOnly();
 
-  public OneTimePassword(Password password, DateTime? expiresOn = null, int? maximumAttempts = null, ActorId? actorId = null, OneTimePasswordId? oneTimePasswordId = null)
+  public OneTimePassword(Password password, DateTime? expiresOn = null, int? maximumAttempts = null, UserId? userId = null, ActorId? actorId = null, OneTimePasswordId? oneTimePasswordId = null)
     : base(oneTimePasswordId?.StreamId)
   {
     if (expiresOn.HasValue && expiresOn.Value.AsUniversalTime() <= DateTime.UtcNow)
@@ -37,11 +38,13 @@ public class OneTimePassword : AggregateRoot, ICustomizable
       throw new ArgumentOutOfRangeException(nameof(maximumAttempts), "There should be at least one attempt to validate the One-Time Password (OTP).");
     }
 
-    Raise(new OneTimePasswordCreated(password, expiresOn, maximumAttempts), actorId);
+    Raise(new OneTimePasswordCreated(password, expiresOn, maximumAttempts, userId), actorId);
   }
   protected virtual void Handle(OneTimePasswordCreated @event)
   {
     _password = @event.Password;
+
+    UserId = @event.UserId;
 
     ExpiresOn = @event.ExpiresOn;
     MaximumAttempts = @event.MaximumAttempts;

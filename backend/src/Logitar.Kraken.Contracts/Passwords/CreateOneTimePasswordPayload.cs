@@ -3,6 +3,7 @@
 public class CreateOneTimePasswordPayload
 {
   public Guid? Id { get; set; }
+  public string? User { get; set; }
 
   public string Characters { get; set; } = string.Empty;
   public int Length { get; set; }
