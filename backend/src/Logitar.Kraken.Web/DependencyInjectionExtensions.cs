@@ -25,6 +25,8 @@ public static class DependencyInjectionExtensions
     //services.AddSingleton(openAuthenticationSettings); // ISSUE #35: https://github.com/Logitar/Kraken/issues/35
 
     return services
+      .AddExceptionHandler<ExceptionHandler>()
+      .AddProblemDetails()
       .AddSingleton<IApplicationContext, HttpApplicationContext>()
       /*.AddTransient<IOpenAuthenticationService, OpenAuthenticationService>()*/; // ISSUE #35: https://github.com/Logitar/Kraken/issues/35
   }

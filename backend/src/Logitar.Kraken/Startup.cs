@@ -32,7 +32,6 @@ internal class Startup : StartupBase
     IHealthChecksBuilder healthChecks = services.AddHealthChecks();
 
     services.AddFeatureManagement();
-    services.AddProblemDetails();
   }
 
   public override void Configure(IApplicationBuilder builder)
@@ -52,7 +51,7 @@ internal class Startup : StartupBase
     application.UseHttpsRedirection();
     application.UseCors(application.Services.GetRequiredService<CorsSettings>());
     application.UseStaticFiles();
-    //application.UseExceptionHandler(); // ISSUE #33: https://github.com/Logitar/Kraken/issues/33
+    application.UseExceptionHandler();
     //application.UseSession(); // ISSUE #34: https://github.com/Logitar/Kraken/issues/34
     //application.UseMiddleware<RenewSession>(); // ISSUE #34: https://github.com/Logitar/Kraken/issues/34
     //application.UseMiddleware<RedirectNotFound>(); // ISSUE #37: https://github.com/Logitar/Kraken/issues/37
