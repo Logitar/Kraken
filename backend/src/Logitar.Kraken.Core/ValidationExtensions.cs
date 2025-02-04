@@ -134,6 +134,11 @@ public static class ValidationExtensions
     return ruleBuilder.NotEmpty().MaximumLength(Templates.Subject.MaximumLength);
   }
 
+  public static IRuleBuilderOptions<T, string> TemplateContentType<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MaximumLength(byte.MaxValue).SetValidator(new TemplateContentTypeValidator<T>());
+  }
+
   public static IRuleBuilderOptions<T, string> TimeZone<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Localization.TimeZone.MaximumLength).SetValidator(new TimeZoneValidator<T>());
