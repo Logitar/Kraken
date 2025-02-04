@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Senders.Queries;
 
-internal record ReadSenderQuery(Guid Id) : Activity, IRequest<SenderModel?>;
+public record ReadSenderQuery(Guid? Id, SenderType? Type) : Activity, IRequest<SenderModel?>;
 
 internal class ReadSenderQueryHandler : IRequestHandler<ReadSenderQuery, SenderModel?>
 {
@@ -16,6 +16,31 @@ internal class ReadSenderQueryHandler : IRequestHandler<ReadSenderQuery, SenderM
 
   public async Task<SenderModel?> Handle(ReadSenderQuery query, CancellationToken cancellationToken)
   {
-    return await _senderQuerier.ReadAsync(query.Id, cancellationToken);
+    Dictionary<Guid, SenderModel> senders = new(capacity: 2);
+
+    if (query.Id.HasValue)
+    {
+      SenderModel? sender = await _senderQuerier.ReadAsync(query.Id.Value, cancellationToken);
+      if (sender != null)
+      {
+        senders[sender.Id] = sender;
+      }
+    }
+
+    if (query.Type.HasValue)
+    {
+      SenderModel? sender = await _senderQuerier.ReadDefaultAsync(query.Type.Value, cancellationToken);
+      if (sender != null)
+      {
+        senders[sender.Id] = sender;
+      }
+    }
+
+    if (senders.Count > 1)
+    {
+      throw TooManyResultsException<SenderModel>.ExpectedSingle(senders.Count);
+    }
+
+    return senders.SingleOrDefault().Value;
   }
 }

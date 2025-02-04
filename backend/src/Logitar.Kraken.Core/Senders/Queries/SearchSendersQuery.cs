@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Senders.Queries;
 
-internal record SearchSendersQuery(SearchSendersPayload Payload) : Activity, IRequest<SearchResults<SenderModel>>;
+public record SearchSendersQuery(SearchSendersPayload Payload) : Activity, IRequest<SearchResults<SenderModel>>;
 
 internal class SearchSendersQueryHandler : IRequestHandler<SearchSendersQuery, SearchResults<SenderModel>>
 {
