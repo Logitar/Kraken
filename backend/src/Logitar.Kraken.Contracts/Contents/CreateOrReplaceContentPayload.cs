@@ -4,7 +4,7 @@ namespace Logitar.Kraken.Contracts.Contents;
 
 public record CreateOrReplaceContentPayload
 {
-  public Guid? ContentTypeId { get; set; }
+  public Guid? ContentTypeId { get; set; } // TODO(fpion): ContentType (Id or UniqueName)
 
   public string UniqueName { get; set; } = string.Empty;
   public string? DisplayName { get; set; }

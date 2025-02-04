@@ -54,6 +54,8 @@ public class ContentController : ControllerBase
   [HttpGet("types/{contentTypeId}/unique-name:{uniqueName}")]
   public async Task<ActionResult<ContentModel>> ReadAsync(Guid contentTypeId, string uniqueName, [FromQuery(Name = "language")] Guid? languageId, CancellationToken cancellationToken)
   {
+    // TODO(fpion): contentType (Id or UniqueName)
+    // TODO(fpion): language (Id or Locale code)
     ContentKey key = new(contentTypeId, languageId, uniqueName);
     ContentModel? content = await _mediator.Send(new ReadContentQuery(Id: null, key), cancellationToken);
     return content == null ? NotFound() : Ok(content);

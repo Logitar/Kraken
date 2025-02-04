@@ -14,6 +14,8 @@ public class OneTimePassword : AggregateRoot, ICustomizable
   public RealmId? RealmId => Id.RealmId;
   public Guid EntityId => Id.EntityId;
 
+  // TODO(fpion): UserId (optional)
+
   public DateTime? ExpiresOn { get; private set; }
   public int? MaximumAttempts { get; private set; }
 

@@ -24,6 +24,8 @@ public record PublishContentCommand : IRequest<ContentModel?>
   }
 }
 
+// TODO(fpion): Language (Id or Locale code)
+
 internal class PublishContentCommandHandler : IRequestHandler<PublishContentCommand, ContentModel?>
 {
   private readonly IApplicationContext _applicationContext;
