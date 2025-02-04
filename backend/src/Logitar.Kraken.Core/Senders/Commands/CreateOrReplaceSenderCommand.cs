@@ -57,7 +57,11 @@ internal class CreateOrReplaceSenderCommandHandler : IRequestHandler<CreateOrRep
       sender = new(email, phone, settings, actorId, senderId);
       created = true;
 
-      // TODO(fpion): set default if there are no other senders of this type
+      SenderId? defaultId = await _senderQuerier.FindDefaultIdAsync(sender.Type, cancellationToken);
+      if (defaultId == null)
+      {
+        sender.SetDefault(isDefault: true, actorId);
+      }
     }
 
     Sender reference = (command.Version.HasValue
