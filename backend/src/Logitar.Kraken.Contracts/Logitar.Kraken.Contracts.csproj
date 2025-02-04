@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Using Include="System.Globalization" />
+    <Using Include="System.Net.Mime" />
     <Using Include="System.Text" />
   </ItemGroup>
 
