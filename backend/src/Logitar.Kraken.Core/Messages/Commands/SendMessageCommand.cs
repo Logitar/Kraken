@@ -187,16 +187,15 @@ internal class SendMessageInternalCommandHandler : IRequestHandler<SendMessageCo
 
   private async Task<Sender> ResolveSenderAsync(RealmId? realmId, SendMessagePayload payload, CancellationToken cancellationToken)
   {
-    if (payload.SenderId.HasValue)
+    string sender = payload.Sender?.CleanTrim() ?? SenderType.Email.ToString();
+    if (Guid.TryParse(sender, out Guid entityId))
     {
-      SenderId senderId = new(realmId, payload.SenderId.Value);
-      return await _senderRepository.LoadAsync(senderId, cancellationToken)
-        ?? throw new SenderNotFoundException(senderId, nameof(payload.SenderId));
+      SenderId senderId = new(realmId, entityId);
+      return await _senderRepository.LoadAsync(senderId, cancellationToken) ?? throw new SenderNotFoundException(senderId, nameof(payload.Sender));
     }
 
-    SenderType senderType = SenderType.Email; // TODO(fpion): Email or Phone
-    return await _senderRepository.LoadDefaultAsync(realmId, senderType, cancellationToken)
-      ?? throw new NoDefaultSenderException(realmId, senderType);
+    _ = Enum.TryParse(sender, out SenderType senderType);
+    return await _senderRepository.LoadDefaultAsync(realmId, senderType, cancellationToken) ?? throw new NoDefaultSenderException(realmId, senderType);
   }
 
   private async Task<Template> ResolveTemplateAsync(RealmId? realmId, SendMessagePayload payload, SenderType senderType, CancellationToken cancellationToken)

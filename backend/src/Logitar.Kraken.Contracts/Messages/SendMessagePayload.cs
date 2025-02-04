@@ -2,7 +2,7 @@
 
 public record SendMessagePayload
 {
-  public Guid? SenderId { get; set; }
+  public string? Sender { get; set; }
   public string Template { get; set; } = string.Empty;
 
   public List<RecipientPayload> Recipients { get; set; } = [];
