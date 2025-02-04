@@ -13,7 +13,7 @@ internal class CreateOrReplaceFieldTypeValidator : AbstractValidator<CreateOrRep
 
     RuleFor(x => x).Must(x => GetDataTypes(x).Count == 1)
       .WithErrorCode("CreateOrReplaceFieldTypeValidator")
-      .WithMessage(x => $"Exactly one of the following must be specified: {string.Join(", ", nameof(x.Boolean), nameof(x.DateTime), nameof(x.Number), nameof(x.RichText), nameof(x.String))}.");
+      .WithMessage(x => $"Exactly one of the following must be specified: {string.Join(", ", nameof(x.Boolean), nameof(x.DateTime), nameof(x.Number), nameof(x.RelatedContent), nameof(x.RichText), nameof(x.Select), nameof(x.String), nameof(x.Tags))}.");
     When(x => x.Boolean != null, () => RuleFor(x => x.Boolean!).SetValidator(new BooleanPropertiesValidator()));
     When(x => x.DateTime != null, () => RuleFor(x => x.DateTime!).SetValidator(new DateTimePropertiesValidator()));
     When(x => x.Number != null, () => RuleFor(x => x.Number!).SetValidator(new NumberPropertiesValidator()));

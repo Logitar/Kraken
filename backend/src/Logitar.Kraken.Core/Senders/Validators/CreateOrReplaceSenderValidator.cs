@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Logitar.Kraken.Contracts.Senders;
+using Logitar.Kraken.Core.Senders.Settings;
 
 namespace Logitar.Kraken.Core.Senders.Validators;
 
@@ -7,49 +8,36 @@ internal class CreateOrReplaceSenderValidator : AbstractValidator<CreateOrReplac
 {
   public CreateOrReplaceSenderValidator()
   {
-    //SenderType type = provider.GetSenderType();
-    //switch (type)
-    //{
-    //  case SenderType.Email:
-    //    RuleFor(x => x.EmailAddress).NotNull();
-    //    When(x => x.EmailAddress != null, () => RuleFor(x => x.EmailAddress!).EmailAddressInput());
-    //    RuleFor(x => x.PhoneNumber).Empty();
-    //    When(x => !string.IsNullOrWhiteSpace(x.DisplayName), () => RuleFor(x => x.DisplayName!).DisplayName());
-    //    break;
-    //  case SenderType.Sms:
-    //    RuleFor(x => x.EmailAddress).Empty();
-    //    RuleFor(x => x.PhoneNumber).NotNull();
-    //    When(x => x.PhoneNumber != null, () => RuleFor(x => x.PhoneNumber!).PhoneNumber());
-    //    RuleFor(x => x.DisplayName).Empty();
-    //    break;
-    //  default:
-    //    throw new SenderTypeNotSupportedException(type);
-    //}
+    When(x => !string.IsNullOrWhiteSpace(x.EmailAddress), () => RuleFor(x => x.EmailAddress!).EmailAddressInput());
+    When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber), () => RuleFor(x => x.EmailAddress!).PhoneNumber());
+    When(x => !string.IsNullOrWhiteSpace(x.DisplayName), () => RuleFor(x => x.DisplayName!).DisplayName());
+    When(x => !string.IsNullOrWhiteSpace(x.Description), () => RuleFor(x => x.Description!).Description());
 
-    //When(x => !string.IsNullOrWhiteSpace(x.Description), () => RuleFor(x => x.Description!).Description());
+    RuleFor(x => x).Must(x => GetSenderProviders(x).Count == 1)
+      .WithErrorCode("CreateOrReplaceSenderValidator")
+      .WithMessage(x => $"Exactly one of the following must be specified: {string.Join(", ", nameof(x.Mailgun), nameof(x.SendGrid), nameof(x.Twilio))}.");
+    When(x => x.Mailgun != null, () => RuleFor(x => x.Mailgun!).SetValidator(new MailgunSettingsValidator()));
+    When(x => x.SendGrid != null, () => RuleFor(x => x.SendGrid!).SetValidator(new SendGridSettingsValidator()));
+    When(x => x.Twilio != null, () => RuleFor(x => x.Twilio!).SetValidator(new TwilioSettingsValidator()));
+  }
 
-    //switch (provider)
-    //{
-    //  case SenderProvider.Mailgun:
-    //    RuleFor(x => x.Mailgun).NotNull();
-    //    When(x => x.Mailgun != null, () => RuleFor(x => x.Mailgun!).SetValidator(new MailgunSettingsValidator()));
-    //    RuleFor(x => x.SendGrid).Null();
-    //    RuleFor(x => x.Twilio).Null();
-    //    break;
-    //  case SenderProvider.SendGrid:
-    //    RuleFor(x => x.Mailgun).Null();
-    //    RuleFor(x => x.SendGrid).NotNull();
-    //    When(x => x.SendGrid != null, () => RuleFor(x => x.SendGrid!).SetValidator(new SendGridSettingsValidator()));
-    //    RuleFor(x => x.Twilio).Null();
-    //    break;
-    //  case SenderProvider.Twilio:
-    //    RuleFor(x => x.Mailgun).Null();
-    //    RuleFor(x => x.SendGrid).Null();
-    //    RuleFor(x => x.Twilio).NotNull();
-    //    When(x => x.Twilio != null, () => RuleFor(x => x.Twilio!).SetValidator(new TwilioSettingsValidator()));
-    //    break;
-    //  default:
-    //    throw new SenderProviderNotSupportedException(provider);
-    //} // TODO(fpion): implement
+  private static IReadOnlyCollection<SenderProvider> GetSenderProviders(CreateOrReplaceSenderPayload payload)
+  {
+    List<SenderProvider> dataTypes = new(capacity: 3);
+
+    if (payload.Mailgun != null)
+    {
+      dataTypes.Add(SenderProvider.Mailgun);
+    }
+    if (payload.SendGrid != null)
+    {
+      dataTypes.Add(SenderProvider.SendGrid);
+    }
+    if (payload.Twilio != null)
+    {
+      dataTypes.Add(SenderProvider.Twilio);
+    }
+
+    return dataTypes.AsReadOnly();
   }
 }

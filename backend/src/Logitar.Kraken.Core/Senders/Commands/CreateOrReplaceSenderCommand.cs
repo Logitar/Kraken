@@ -2,7 +2,6 @@
 using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Senders;
 using Logitar.Kraken.Core.Realms;
-using Logitar.Kraken.Core.Senders.SendGrid;
 using Logitar.Kraken.Core.Senders.Settings;
 using Logitar.Kraken.Core.Senders.Validators;
 using Logitar.Kraken.Core.Users;
@@ -57,6 +56,8 @@ internal class CreateOrReplaceSenderCommandHandler : IRequestHandler<CreateOrRep
 
       sender = new(email, phone, settings, actorId, senderId);
       created = true;
+
+      // TODO(fpion): set default if there are no other senders of this type
     }
 
     Sender reference = (command.Version.HasValue

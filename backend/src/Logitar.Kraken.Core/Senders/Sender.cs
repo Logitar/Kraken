@@ -2,7 +2,6 @@
 using Logitar.Kraken.Contracts.Senders;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Senders.Events;
-using Logitar.Kraken.Core.Senders.SendGrid;
 using Logitar.Kraken.Core.Senders.Settings;
 using Logitar.Kraken.Core.Users;
 

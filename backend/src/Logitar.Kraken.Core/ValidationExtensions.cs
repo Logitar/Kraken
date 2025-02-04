@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Logitar.Kraken.Contracts.Settings;
+using Logitar.Kraken.Core.Users;
 using Logitar.Kraken.Core.Validators;
 
 namespace Logitar.Kraken.Core;
@@ -29,6 +30,11 @@ public static class ValidationExtensions
   public static IRuleBuilderOptions<T, string> DisplayName<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Core.DisplayName.MaximumLength);
+  }
+
+  public static IRuleBuilderOptions<T, string> EmailAddressInput<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MaximumLength(Email.MaximumLength).EmailAddress();
   }
 
   public static IRuleBuilderOptions<T, DateTime> Future<T>(this IRuleBuilder<T, DateTime> ruleBuilder, DateTime? moment = null)
@@ -106,6 +112,11 @@ public static class ValidationExtensions
   public static IRuleBuilderOptions<T, string> PersonName<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Users.PersonName.MaximumLength);
+  }
+
+  public static IRuleBuilderOptions<T, string> PhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MaximumLength(byte.MaxValue).SetValidator(new PhoneNumberValidator<T>());
   }
 
   public static IRuleBuilderOptions<T, string> Placeholder<T>(this IRuleBuilder<T, string> ruleBuilder)
