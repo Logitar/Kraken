@@ -2,9 +2,9 @@
 
 namespace Logitar.Kraken.Core.Messages;
 
-public class MissingRecipientContactsException : Exception
+public class MissingRecipientContactsException : BadRequestException
 {
-  private const string ErrorMessage = "The specified recipients are missing an email address.";
+  private const string ErrorMessage = "The specified recipients are missing an email address or a phone number.";
 
   public Guid? RealmId
   {
@@ -20,6 +20,18 @@ public class MissingRecipientContactsException : Exception
   {
     get => (string)Data[nameof(PropertyName)]!;
     private set => Data[nameof(PropertyName)] = value;
+  }
+
+  public override Error Error
+  {
+    get
+    {
+      Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(RealmId)] = RealmId;
+      error.Data[nameof(UserIds)] = UserIds;
+      error.Data[nameof(PropertyName)] = PropertyName;
+      return error;
+    }
   }
 
   public MissingRecipientContactsException(RealmId? realmId, IEnumerable<Guid> userIds, string propertyName) : base(BuildMessage(realmId, userIds, propertyName))
