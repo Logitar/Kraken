@@ -25,7 +25,7 @@ public record UnpublishContentCommand : IRequest<ContentModel?>
   }
 }
 
-// TODO(fpion): Language (Id or Locale code)
+// ISSUE #40: https://github.com/Logitar/Kraken/issues/40
 
 internal class UnpublishContentCommandHandler : IRequestHandler<UnpublishContentCommand, ContentModel?>
 {

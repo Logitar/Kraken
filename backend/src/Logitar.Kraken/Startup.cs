@@ -48,14 +48,14 @@ internal class Startup : StartupBase
     }
 
     application.UseHttpsRedirection();
-    //application.UseCors(application.Services.GetRequiredService<CorsSettings>()); // TODO(fpion): CORS
+    //application.UseCors(application.Services.GetRequiredService<CorsSettings>()); // ISSUE #32: https://github.com/Logitar/Kraken/issues/32
     application.UseStaticFiles();
-    //application.UseExceptionHandler(); // TODO(fpion): ExceptionHandler
-    //application.UseSession(); // TODO(fpion): Session
-    //application.UseMiddleware<RenewSession>(); // TODO(fpion): Session
-    //application.UseMiddleware<RedirectNotFound>(); // TODO(fpion): Frontend
-    //application.UseAuthentication(); // TODO(fpion): Authentication
-    //application.UseAuthorization(); // TODO(fpion): Authorization
+    //application.UseExceptionHandler(); // ISSUE #33: https://github.com/Logitar/Kraken/issues/33
+    //application.UseSession(); // ISSUE #34: https://github.com/Logitar/Kraken/issues/34
+    //application.UseMiddleware<RenewSession>(); // ISSUE #34: https://github.com/Logitar/Kraken/issues/34
+    //application.UseMiddleware<RedirectNotFound>(); // ISSUE #37: https://github.com/Logitar/Kraken/issues/37
+    //application.UseAuthentication(); // ISSUE #35: https://github.com/Logitar/Kraken/issues/35
+    //application.UseAuthorization(); // ISSUE #36: https://github.com/Logitar/Kraken/issues/36
 
     application.MapControllers();
     application.MapHealthChecks("/health");

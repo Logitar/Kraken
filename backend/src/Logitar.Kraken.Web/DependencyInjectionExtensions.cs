@@ -6,7 +6,7 @@ public static class DependencyInjectionExtensions
 {
   public static IServiceCollection AddLogitarKrakenWeb(this IServiceCollection services, IConfiguration configuration)
   {
-    services.AddControllersWithViews(/*options => options.Filters.Add<LoggingFilter>()*/) // TODO(fpion): Logging
+    services.AddControllersWithViews(/*options => options.Filters.Add<LoggingFilter>()*/) // ISSUE #41: https://github.com/Logitar/Kraken/issues/41
       .AddJsonOptions(options =>
       {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -14,16 +14,16 @@ public static class DependencyInjectionExtensions
       });
 
     //CookiesSettings cookiesSettings = configuration.GetSection(CookiesSettings.SectionKey).Get<CookiesSettings>() ?? new();
-    //services.AddSingleton(cookiesSettings); // TODO(fpion): Session
+    //services.AddSingleton(cookiesSettings); // ISSUE #34: https://github.com/Logitar/Kraken/issues/34
 
     //CorsSettings corsSettings = configuration.GetSection(CorsSettings.SectionKey).Get<CorsSettings>() ?? new();
-    //services.AddSingleton(corsSettings); // TODO(fpion): CORS
+    //services.AddSingleton(corsSettings); // ISSUE #32: https://github.com/Logitar/Kraken/issues/32
 
     //OpenAuthenticationSettings openAuthenticationSettings = configuration.GetSection(OpenAuthenticationSettings.SectionKey).Get<OpenAuthenticationSettings>() ?? new();
-    //services.AddSingleton(openAuthenticationSettings); // TODO(fpion): Authentication
+    //services.AddSingleton(openAuthenticationSettings); // ISSUE #35: https://github.com/Logitar/Kraken/issues/35
 
     return services
       .AddSingleton<IApplicationContext, HttpApplicationContext>()
-      /*.AddTransient<IOpenAuthenticationService, OpenAuthenticationService>()*/; // TODO(fpion): Authentication
+      /*.AddTransient<IOpenAuthenticationService, OpenAuthenticationService>()*/; // ISSUE #35: https://github.com/Logitar/Kraken/issues/35
   }
 }

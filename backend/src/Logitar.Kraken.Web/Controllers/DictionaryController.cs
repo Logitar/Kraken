@@ -41,7 +41,7 @@ public class DictionaryController : ControllerBase
   //  ReadDictionaryQuery query = new(Id: null, uniqueName);
   //  DictionaryModel? dictionary = await _mediator.Send(query, cancellationToken);
   //  return dictionary == null ? NotFound() : Ok(dictionary);
-  //} // TODO(fpion): implement
+  //} // ISSUE #43: https://github.com/Logitar/Kraken/issues/43
 
   [HttpPut("{id}")]
   public async Task<ActionResult<DictionaryModel>> ReplaceAsync(Guid id, [FromBody] CreateOrReplaceDictionaryPayload payload, long? version, CancellationToken cancellationToken)

@@ -60,7 +60,7 @@ internal class SignInSessionCommandHandler : IRequestHandler<SignInSessionComman
       }
     }
 
-    User user = await _userManager.FindAsync(realmId, payload.UniqueName, nameof(payload.UniqueName), includeId: false, cancellationToken);
+    User user = await _userManager.FindAsync(payload.UniqueName, nameof(payload.UniqueName), includeId: false, cancellationToken);
 
     Password? secret = null;
     string? secretString = null;

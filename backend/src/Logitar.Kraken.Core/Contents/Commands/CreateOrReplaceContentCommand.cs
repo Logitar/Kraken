@@ -19,7 +19,7 @@ public record CreateOrReplaceContentResult(ContentModel? Content = null, bool Cr
 /// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceContentCommand(Guid? ContentId, Guid? LanguageId, CreateOrReplaceContentPayload Payload) : IRequest<CreateOrReplaceContentResult>;
 
-// TODO(fpion): Language (Id or Locale code)
+// ISSUE #40: https://github.com/Logitar/Kraken/issues/40
 
 internal class CreateOrReplaceContentCommandHandler : IRequestHandler<CreateOrReplaceContentCommand, CreateOrReplaceContentResult>
 {

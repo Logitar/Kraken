@@ -20,7 +20,7 @@ internal class DictionaryManager : IDictionaryManager
       //if (conflict != null && !conflict.Equals(dictionary))
       //{
       //  throw new DictionaryAlreadyExistsException(dictionary, conflict.Id);
-      //} // TODO(fpion): implement
+      //} // ISSUE #42: https://github.com/Logitar/Kraken/issues/42
     }
 
     await _dictionaryRepository.SaveAsync(dictionary, cancellationToken);

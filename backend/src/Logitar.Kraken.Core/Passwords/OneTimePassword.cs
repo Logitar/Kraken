@@ -14,7 +14,7 @@ public class OneTimePassword : AggregateRoot, ICustomizable
   public RealmId? RealmId => Id.RealmId;
   public Guid EntityId => Id.EntityId;
 
-  // TODO(fpion): UserId (optional)
+  // ISSUE #48: https://github.com/Logitar/Kraken/issues/48
 
   public DateTime? ExpiresOn { get; private set; }
   public int? MaximumAttempts { get; private set; }

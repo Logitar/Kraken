@@ -15,7 +15,7 @@ internal class LanguageManager : ILanguageManager
 
   public Task<Language> FindAsync(string language, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException(); // TODO(fpion): implement
+    throw new NotImplementedException(); // ISSUE #45: https://github.com/Logitar/Kraken/issues/45
   }
 
   public async Task SaveAsync(Language language, CancellationToken cancellationToken)

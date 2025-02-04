@@ -95,7 +95,7 @@ public class User : AggregateRoot, ICustomizable
   }
 
   private DateTime? _birthdate = null;
-  public DateTime? Birthdate // TODO(fpion): should be in the past!
+  public DateTime? Birthdate // ISSUE #51: https://github.com/Logitar/Kraken/issues/51
   {
     get => _birthdate;
     set

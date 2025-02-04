@@ -34,7 +34,7 @@ internal class ReadDictionaryQueryHandler : IRequestHandler<ReadDictionaryQuery,
     //  {
     //    dictionaries[dictionary.Id] = dictionary;
     //  }
-    //} // TODO(fpion): implement
+    //} // ISSUE #43: https://github.com/Logitar/Kraken/issues/43
 
     if (dictionaries.Count > 1)
     {

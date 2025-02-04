@@ -95,8 +95,6 @@ internal class RoleManager : IRoleManager
       }
     }
 
-    // TODO(fpion): remove from API keys & Users when deleted
-
     await _roleRepository.SaveAsync(role, cancellationToken);
   }
 }
