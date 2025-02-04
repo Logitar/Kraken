@@ -2,6 +2,8 @@
 using Logitar.Kraken.Core;
 using Logitar.Kraken.Infrastructure;
 using Logitar.Kraken.Web;
+using Logitar.Kraken.Web.Extensions;
+using Logitar.Kraken.Web.Settings;
 using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
 
@@ -48,7 +50,7 @@ internal class Startup : StartupBase
     }
 
     application.UseHttpsRedirection();
-    //application.UseCors(application.Services.GetRequiredService<CorsSettings>()); // ISSUE #32: https://github.com/Logitar/Kraken/issues/32
+    application.UseCors(application.Services.GetRequiredService<CorsSettings>());
     application.UseStaticFiles();
     //application.UseExceptionHandler(); // ISSUE #33: https://github.com/Logitar/Kraken/issues/33
     //application.UseSession(); // ISSUE #34: https://github.com/Logitar/Kraken/issues/34
