@@ -36,6 +36,7 @@
   <ItemGroup>
     <Using Include="System.Globalization" />
     <Using Include="System.Reflection" />
+    <Using Include="System.Text" />
     <Using Include="System.Text.Json" />
     <Using Include="Xunit" />
   </ItemGroup>
