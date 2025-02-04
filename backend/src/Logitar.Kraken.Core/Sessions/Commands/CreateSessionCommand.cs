@@ -52,7 +52,7 @@ internal class CreateSessionCommandHandler : IRequestHandler<CreateSessionComman
       }
     }
 
-    User user = await _userManager.FindAsync(realmId, payload.User, nameof(payload.User), includeId: true, cancellationToken);
+    User user = await _userManager.FindAsync(payload.User, nameof(payload.User), includeId: true, cancellationToken);
 
     Password? secret = null;
     string? secretString = null;

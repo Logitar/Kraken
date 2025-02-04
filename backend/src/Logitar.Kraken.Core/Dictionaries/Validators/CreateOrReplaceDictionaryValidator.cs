@@ -7,7 +7,7 @@ internal class CreateOrReplaceDictionaryValidator : AbstractValidator<CreateOrRe
 {
   public CreateOrReplaceDictionaryValidator()
   {
-    // TODO(fpion): Language
+    // ISSUE #44: https://github.com/Logitar/Kraken/issues/44
     RuleForEach(x => x.Entries).SetValidator(new DictionaryEntryValidator());
   }
 }

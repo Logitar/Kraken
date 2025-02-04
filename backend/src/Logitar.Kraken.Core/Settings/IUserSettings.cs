@@ -7,5 +7,5 @@ public interface IUserSettings
   IUniqueNameSettings UniqueName { get; }
   IPasswordSettings Password { get; }
   public bool RequireUniqueEmail { get; }
-  public bool RequireConfirmedAccount { get; } // TODO(fpion): unused!
+  public bool RequireConfirmedAccount { get; } // ISSUE #49: https://github.com/Logitar/Kraken/issues/49
 }

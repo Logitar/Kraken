@@ -7,7 +7,7 @@ using Logitar.Kraken.Core.Settings;
 
 namespace Logitar.Kraken.Web;
 
-internal class HttpApplicationContext : IApplicationContext // TODO(fpion): Authentication
+internal class HttpApplicationContext : IApplicationContext // ISSUE #35: https://github.com/Logitar/Kraken/issues/35
 {
   public ActorId? ActorId => throw new NotImplementedException();
 

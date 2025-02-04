@@ -24,7 +24,7 @@ public record PublishContentCommand : IRequest<ContentModel?>
   }
 }
 
-// TODO(fpion): Language (Id or Locale code)
+// ISSUE #40: https://github.com/Logitar/Kraken/issues/40
 
 internal class PublishContentCommandHandler : IRequestHandler<PublishContentCommand, ContentModel?>
 {

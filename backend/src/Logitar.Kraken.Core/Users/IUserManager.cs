@@ -1,10 +1,9 @@
 ﻿using Logitar.EventSourcing;
-using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Users;
 
-public interface IUserManager // TODO(fpion): implement
+public interface IUserManager // ISSUE #50: https://github.com/Logitar/Kraken/issues/50
 {
-  Task<User> FindAsync(RealmId? realmId, string user, string propertyName, bool includeId, CancellationToken cancellationToken = default);
+  Task<User> FindAsync(string user, string propertyName, bool includeId, CancellationToken cancellationToken = default);
   Task SaveAsync(User user, ActorId? actorId = null, CancellationToken cancellationToken = default);
 }

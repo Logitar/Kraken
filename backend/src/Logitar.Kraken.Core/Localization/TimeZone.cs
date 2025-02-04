@@ -3,7 +3,7 @@ using NodaTime;
 
 namespace Logitar.Kraken.Core.Localization;
 
-public record TimeZone // TODO(fpion): rename
+public record TimeZone // ISSUE #46: https://github.com/Logitar/Kraken/issues/46
 {
   public const int MaximumLength = 32;
 

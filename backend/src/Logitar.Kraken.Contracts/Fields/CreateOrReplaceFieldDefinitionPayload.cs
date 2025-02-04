@@ -2,7 +2,7 @@
 
 public record CreateOrReplaceFieldDefinitionPayload
 {
-  public Guid? FieldTypeId { get; set; } // TODO(fpion): FieldType (Id or UniqueName
+  public Guid? FieldTypeId { get; set; } // ISSUE #39: https://github.com/Logitar/Kraken/issues/39
 
   public bool IsInvariant { get; set; }
   public bool IsRequired { get; set; }
