@@ -18,12 +18,12 @@ public interface IUserRepository
   Task<IReadOnlyCollection<User>> LoadAsync(IEnumerable<UserId> ids, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<User>> LoadAsync(IEnumerable<UserId> ids, bool? isDeleted, CancellationToken cancellationToken = default);
 
-  Task<User> LoadAsync(Session session, CancellationToken cancellationToken = default);
-  Task<User?> LoadAsync(RealmId? realmId, UniqueName uniqueName, CancellationToken cancellationToken = default);
-  Task<User?> LoadAsync(RealmId? realmId, Identifier identifierKey, CustomIdentifier identifierValue, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<User>> LoadAsync(RealmId? realmId, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<User>> LoadAsync(RealmId? realmId, IEmail email, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<User>> LoadAsync(RoleId roleId, CancellationToken cancellationToken = default);
+  Task<User?> LoadAsync(RealmId? realmId, Identifier identifierKey, CustomIdentifier identifierValue, CancellationToken cancellationToken = default);
+  Task<User?> LoadAsync(RealmId? realmId, UniqueName uniqueName, CancellationToken cancellationToken = default);
+  Task<User> LoadAsync(Session session, CancellationToken cancellationToken = default);
 
   Task SaveAsync(User user, CancellationToken cancellationToken = default);
   Task SaveAsync(IEnumerable<User> users, CancellationToken cancellationToken = default);

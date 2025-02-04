@@ -1,4 +1,7 @@
-﻿namespace Logitar.Kraken.Core.Dictionaries;
+﻿using Logitar.Kraken.Core.Localization;
+using Logitar.Kraken.Core.Realms;
+
+namespace Logitar.Kraken.Core.Dictionaries;
 
 public interface IDictionaryRepository
 {
@@ -12,6 +15,9 @@ public interface IDictionaryRepository
 
   Task<IReadOnlyCollection<Dictionary>> LoadAsync(IEnumerable<DictionaryId> ids, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<Dictionary>> LoadAsync(IEnumerable<DictionaryId> ids, bool? isDeleted, CancellationToken cancellationToken = default);
+
+  Task<Dictionary?> LoadAsync(RealmId? realmId, Locale locale, CancellationToken cancellationToken = default);
+  Task<IReadOnlyCollection<Dictionary>> LoadAsync(RealmId? realmId, CancellationToken cancellationToken = default);
 
   Task SaveAsync(Dictionary dictionary, CancellationToken cancellationToken = default);
   Task SaveAsync(IEnumerable<Dictionary> dictionaries, CancellationToken cancellationToken = default);

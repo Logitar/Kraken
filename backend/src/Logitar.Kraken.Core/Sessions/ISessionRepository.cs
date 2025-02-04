@@ -16,9 +16,8 @@ public interface ISessionRepository
   Task<IReadOnlyCollection<Session>> LoadAsync(IEnumerable<SessionId> ids, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<Session>> LoadAsync(IEnumerable<SessionId> ids, bool? isDeleted, CancellationToken cancellationToken = default);
 
-  Task<IReadOnlyCollection<Session>> LoadAsync(RealmId? realmId, CancellationToken cancellationToken = default);
-
   Task<IReadOnlyCollection<Session>> LoadActiveAsync(UserId userId, CancellationToken cancellationToken = default);
+  Task<IReadOnlyCollection<Session>> LoadAsync(RealmId? realmId, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<Session>> LoadAsync(UserId userId, CancellationToken cancellationToken = default);
 
   Task SaveAsync(Session session, CancellationToken cancellationToken = default);
