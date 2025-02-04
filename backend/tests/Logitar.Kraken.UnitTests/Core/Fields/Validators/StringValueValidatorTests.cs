@@ -1,7 +1,6 @@
 ﻿using Bogus;
 using Logitar.Kraken.Core.Fields.Properties;
 using Logitar.Security.Cryptography;
-using System.Text;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace Logitar.Kraken.Core.Fields.Validators;

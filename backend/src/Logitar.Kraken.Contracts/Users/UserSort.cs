@@ -4,6 +4,7 @@ public enum UserSort
 {
   AuthenticatedOn,
   Birthdate,
+  CreatedOn,
   DisabledOn,
   EmailAddress,
   FirstName,

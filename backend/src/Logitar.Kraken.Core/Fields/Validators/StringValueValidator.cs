@@ -1,6 +1,5 @@
 ﻿using FluentValidation.Results;
 using Logitar.Kraken.Contracts.Fields;
-using System.Text.RegularExpressions;
 
 namespace Logitar.Kraken.Core.Fields.Validators;
 

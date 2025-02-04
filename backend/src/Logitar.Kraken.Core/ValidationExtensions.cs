@@ -129,6 +129,11 @@ public static class ValidationExtensions
     return ruleBuilder.NotEmpty().MaximumLength(Realms.Slug.MaximumLength).SetValidator(new SlugValidator<T>());
   }
 
+  public static IRuleBuilderOptions<T, string> Subject<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MaximumLength(Templates.Subject.MaximumLength);
+  }
+
   public static IRuleBuilderOptions<T, string> TimeZone<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Localization.TimeZone.MaximumLength).SetValidator(new TimeZoneValidator<T>());

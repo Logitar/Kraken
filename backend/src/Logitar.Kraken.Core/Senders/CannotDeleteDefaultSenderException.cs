@@ -1,6 +1,6 @@
 ﻿namespace Logitar.Kraken.Core.Senders;
 
-public class CannotDeleteDefaultSenderException : Exception
+public class CannotDeleteDefaultSenderException : BadRequestException
 {
   private const string ErrorMessage = "The default sender cannot be deleted, unless its the only sender in its Realm.";
 
@@ -13,6 +13,17 @@ public class CannotDeleteDefaultSenderException : Exception
   {
     get => (Guid)Data[nameof(SenderId)]!;
     private set => Data[nameof(SenderId)] = value;
+  }
+
+  public override Error Error
+  {
+    get
+    {
+      Error error = new(this.GetErrorCode(), ErrorMessage);
+      error.Data[nameof(RealmId)] = RealmId;
+      error.Data[nameof(SenderId)] = SenderId;
+      return error;
+    }
   }
 
   public CannotDeleteDefaultSenderException(Sender sender) : base(BuildMessage(sender))

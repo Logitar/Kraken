@@ -2,10 +2,10 @@
 using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Fields;
 using Logitar.Kraken.Core.Contents;
-using Logitar.Kraken.Core.Fields.Properties; // NOTE(fpion): cannot be added to CSPROJ due to ContentType aggregate.
+using Logitar.Kraken.Core.Fields.Properties;
 using Logitar.Security.Cryptography;
 using Moq;
-using System.Net.Mime;
+using System.Net.Mime; // NOTE(fpion): cannot be added to CSPROJ due to ContentType aggregate.
 
 namespace Logitar.Kraken.Core.Fields.Commands;
 
