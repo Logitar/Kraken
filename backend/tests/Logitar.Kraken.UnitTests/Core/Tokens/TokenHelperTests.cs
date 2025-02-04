@@ -91,21 +91,15 @@ public class TokenHelperTests
     Assert.Equal(_baseUrl, TokenHelper.ResolveIssuer(issuer: null, realm: null, _baseUrl));
   }
 
-  [Theory(DisplayName = "ResolveIssuer: it should return the realm URL, or formatted slug.")]
-  [InlineData(false)]
-  [InlineData(true)]
-  public void Given_Realm_When_ResolveIssuer_Then_UrlOrSlug(bool hasUrl)
+  [Fact(DisplayName = "ResolveIssuer: it should return the realm formatted slug.")]
+  public void Given_Realm_When_ResolveIssuer_Then_UrlOrSlug()
   {
     RealmModel realm = new()
     {
-      UniqueSlug = "new-world"
+      UniqueSlug = "new-world",
+      Url = _baseUrl
     };
-    string issuer = $"{_baseUrl}/realms/slug:{realm.UniqueSlug}";
-    if (hasUrl)
-    {
-      realm.Url = _baseUrl;
-      issuer = _baseUrl;
-    }
+    string issuer = $"{_baseUrl}/kraken/realms/{realm.UniqueSlug}";
     Assert.Equal(issuer, TokenHelper.ResolveIssuer(issuer: null, realm, _baseUrl));
   }
 }
