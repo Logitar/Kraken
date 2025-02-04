@@ -27,6 +27,14 @@ public class SenderController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<SenderModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    DeleteSenderCommand command = new(id);
+    SenderModel? sender = await _mediator.Send(command, cancellationToken);
+    return sender == null ? NotFound() : Ok(sender);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<SenderModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
