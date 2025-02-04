@@ -11,7 +11,9 @@ internal class RecipientValidator : AbstractValidator<RecipientPayload>
   {
     RuleFor(x => x.Type).IsInEnum();
 
-    When(x => !string.IsNullOrWhiteSpace(x.Address), () => RuleFor(x => x.Address).EmailAddress());
+    When(x => !string.IsNullOrWhiteSpace(x.Address), () => RuleFor(x => x.Address!).EmailAddressInput());
+    When(x => !string.IsNullOrWhiteSpace(x.DisplayName), () => RuleFor(x => x.DisplayName!).DisplayName());
+    When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber), () => RuleFor(x => x.PhoneNumber!).PhoneNumber());
 
     switch (senderType)
     {
@@ -23,6 +25,7 @@ internal class RecipientValidator : AbstractValidator<RecipientPayload>
         break;
       case SenderType.Phone:
         RuleFor(x => x.Address).Empty();
+        RuleFor(x => x.DisplayName).Empty();
         RuleFor(x => x).Must(x => !string.IsNullOrWhiteSpace(x.PhoneNumber) || x.UserId.HasValue)
           .WithErrorCode(nameof(RecipientValidator))
           .WithMessage($"At least one of the following must be specified: {nameof(RecipientPayload.PhoneNumber)}, {nameof(RecipientPayload.UserId)}.");

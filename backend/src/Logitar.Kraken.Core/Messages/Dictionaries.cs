@@ -5,9 +5,14 @@ namespace Logitar.Kraken.Core.Messages;
 
 public record Dictionaries
 {
-  public Dictionary? Target { get; }
-  public Dictionary? Fallback { get; }
-  public Dictionary? Default { get; }
+  public Dictionary? DefaultDictionary { get; }
+  public Locale? DefaultLocale { get; }
+
+  public Dictionary? FallbackDictionary { get; }
+  public Locale? FallbackLocale { get; }
+
+  public Dictionary? TargetDictionary { get; }
+  public Locale? TargetLocale { get; }
 
   public Dictionaries()
   {
@@ -17,27 +22,30 @@ public record Dictionaries
   {
     if (targetLocale != null)
     {
+      TargetLocale = targetLocale;
       if (dictionaries.TryGetValue(targetLocale, out Dictionary? target))
       {
-        Target = target;
+        TargetDictionary = target;
       }
 
       if (!string.IsNullOrEmpty(targetLocale.Culture.Parent?.Name))
       {
         Locale fallbackLocale = new(targetLocale.Culture.Parent.Name);
+        FallbackLocale = fallbackLocale;
         if (dictionaries.TryGetValue(fallbackLocale, out Dictionary? fallback))
         {
-          Fallback = fallback;
+          FallbackDictionary = fallback;
         }
       }
     }
 
     if (defaultLocale != null && dictionaries.TryGetValue(defaultLocale, out Dictionary? @default))
     {
-      Default = @default;
+      DefaultLocale = defaultLocale;
+      DefaultDictionary = @default;
     }
   }
 
   public string Translate(string key) => Translate(new Identifier(key));
-  public string Translate(Identifier key) => Target?.Translate(key) ?? Fallback?.Translate(key) ?? Default?.Translate(key) ?? key.Value;
+  public string Translate(Identifier key) => TargetDictionary?.Translate(key) ?? FallbackDictionary?.Translate(key) ?? DefaultDictionary?.Translate(key) ?? key.Value;
 }
