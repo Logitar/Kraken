@@ -130,5 +130,5 @@ public class Template : AggregateRoot
     }
   }
 
-  public override string ToString() => $"{DisplayName?.Value ?? UniqueKey.Value}";
+  public override string ToString() => $"{DisplayName?.Value ?? UniqueKey.Value} | {base.ToString()}";
 }

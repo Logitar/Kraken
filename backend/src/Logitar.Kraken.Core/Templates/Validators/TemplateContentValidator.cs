@@ -7,7 +7,7 @@ internal class TemplateContentValidator : AbstractValidator<ITemplateContent>
 {
   public TemplateContentValidator()
   {
-    RuleFor(x => x.Type).ContentType();
+    RuleFor(x => x.Type).TemplateContentType();
     RuleFor(x => x.Text).NotEmpty();
   }
 }

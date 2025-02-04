@@ -28,6 +28,14 @@ public class TemplateController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<TemplateModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    DeleteTemplateCommand command = new(id);
+    TemplateModel? template = await _mediator.Send(command, cancellationToken);
+    return template == null ? NotFound() : Ok(template);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<TemplateModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
