@@ -68,7 +68,7 @@ public class Message : AggregateRoot
     }
     if (notInRealm.Count > 0)
     {
-      throw new NotImplementedException(); // TODO(fpion): throw new UsersNotInTenantException(notInRealm, tenantId);
+      throw new NotImplementedException();
     }
     else if (to == 0)
     {
@@ -77,11 +77,11 @@ public class Message : AggregateRoot
 
     if (RealmId != sender.RealmId)
     {
-      throw new NotImplementedException(); // TODO(fpion): throw new SenderNotInTenantException(sender, tenantId);
+      throw new NotImplementedException();
     }
     if (RealmId != template.RealmId)
     {
-      throw new NotImplementedException(); // TODO(fpion): throw new TemplateNotInTenantException(template, tenantId);
+      throw new NotImplementedException();
     }
 
     variables ??= new Dictionary<string, string>();
