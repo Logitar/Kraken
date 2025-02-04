@@ -19,6 +19,8 @@ public record CreateOrReplaceContentResult(ContentModel? Content = null, bool Cr
 /// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceContentCommand(Guid? ContentId, Guid? LanguageId, CreateOrReplaceContentPayload Payload) : IRequest<CreateOrReplaceContentResult>;
 
+// TODO(fpion): Language (Id or Locale code)
+
 internal class CreateOrReplaceContentCommandHandler : IRequestHandler<CreateOrReplaceContentCommand, CreateOrReplaceContentResult>
 {
   private readonly IApplicationContext _applicationContext;

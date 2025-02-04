@@ -25,6 +25,8 @@ public record UnpublishContentCommand : IRequest<ContentModel?>
   }
 }
 
+// TODO(fpion): Language (Id or Locale code)
+
 internal class UnpublishContentCommandHandler : IRequestHandler<UnpublishContentCommand, ContentModel?>
 {
   private readonly IApplicationContext _applicationContext;

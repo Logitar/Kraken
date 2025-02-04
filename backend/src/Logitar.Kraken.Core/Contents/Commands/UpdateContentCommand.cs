@@ -14,6 +14,8 @@ namespace Logitar.Kraken.Core.Contents.Commands;
 /// <exception cref="ValidationException"></exception>
 public record UpdateContentCommand(Guid ContentId, Guid? LanguageId, UpdateContentPayload Payload) : IRequest<ContentModel?>;
 
+// TODO(fpion): language (Id or Locale code)
+
 internal class UpdateContentCommandHandler : IRequestHandler<UpdateContentCommand, ContentModel?>
 {
   private readonly IApplicationContext _applicationContext;
