@@ -26,6 +26,7 @@ public class CustomizableExtensionsTests
       new CustomAttributeModel("EmployeeId", Guid.NewGuid().ToString())
     ];
     int result = user.SetCustomAttributes(customAttributes);
+    user.Update();
 
     Assert.Equal(3, result);
     Assert.Equal(2, user.CustomAttributes.Count);
