@@ -1,6 +1,4 @@
-﻿using Logitar.Kraken.Core.Templates;
-
-namespace Logitar.Kraken.Core.Dictionaries;
+﻿namespace Logitar.Kraken.Core.Dictionaries;
 
 public class LanguageAlreadyUsedException : ConflictException
 {
@@ -52,7 +50,7 @@ public class LanguageAlreadyUsedException : ConflictException
     DictionaryId = dictionary.EntityId;
     ConflictId = conflictId.EntityId;
     LanguageId = dictionary.LanguageId.EntityId;
-    PropertyName = nameof(Template.UniqueKey);
+    PropertyName = nameof(dictionary.LanguageId);
   }
 
   private static string BuildMessage(Dictionary dictionary, DictionaryId conflictId) => new ErrorMessageBuilder(ErrorMessage)
