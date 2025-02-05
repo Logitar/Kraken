@@ -45,7 +45,7 @@ public record Recipient
         .WithMessage(x => $"At least one of the following must be specified: {nameof(x.Address)}, {nameof(x.PhoneNumber)}.");
 
       When(x => x.Address != null, () => RuleFor(x => x.Address!).EmailAddressInput());
-      When(x => x.DisplayName != null, () => RuleFor(x => x.DisplayName).NotEmpty());
+      When(x => x.DisplayName != null, () => RuleFor(x => x.DisplayName!).DisplayName());
 
       When(x => x.PhoneNumber != null, () => RuleFor(x => x.PhoneNumber!).PhoneNumber());
 
