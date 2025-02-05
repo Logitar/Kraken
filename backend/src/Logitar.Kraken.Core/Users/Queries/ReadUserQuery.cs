@@ -1,5 +1,4 @@
 ﻿using Logitar.Kraken.Contracts;
-using Logitar.Kraken.Contracts.Realms;
 using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core.Settings;
 using MediatR;
@@ -21,7 +20,6 @@ internal class ReadUserQueryHandler : IRequestHandler<ReadUserQuery, UserModel?>
 
   public async Task<UserModel?> Handle(ReadUserQuery query, CancellationToken cancellationToken)
   {
-    RealmModel? realm = _applicationContext.Realm;
     IUserSettings userSettings = _applicationContext.UserSettings;
 
     Dictionary<Guid, UserModel> users = new(capacity: 3);

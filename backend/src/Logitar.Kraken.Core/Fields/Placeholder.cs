@@ -11,6 +11,7 @@ public partial record Placeholder
   public Placeholder(string value)
   {
     Value = value.Trim();
+    new Validator().ValidateAndThrow(this);
   }
 
   public static Placeholder? TryCreate(string? value) => string.IsNullOrWhiteSpace(value) ? null : new(value);
