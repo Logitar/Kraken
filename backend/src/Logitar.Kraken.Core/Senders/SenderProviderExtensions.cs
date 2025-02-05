@@ -15,5 +15,5 @@ public static class SenderProviderExtensions
   }
 
   public static bool IsEmailSender(this SenderProvider provider) => provider.GetSenderType() == SenderType.Email;
-  public static bool IsSmsSender(this SenderProvider provider) => provider.GetSenderType() == SenderType.Phone;
+  public static bool IsPhoneSender(this SenderProvider provider) => provider.GetSenderType() == SenderType.Phone;
 }

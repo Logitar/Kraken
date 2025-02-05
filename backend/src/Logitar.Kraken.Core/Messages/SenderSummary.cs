@@ -24,11 +24,6 @@ public record SenderSummary
     Provider = provider;
   }
 
-  public SenderSummary(SenderId id, bool isDefault, Email email, DisplayName? displayName, SenderProvider provider)
-    : this(id, isDefault, email, phone: null, displayName, provider)
-  {
-  }
-
   public SenderSummary(Sender sender) : this(sender.Id, sender.IsDefault, sender.Email, sender.Phone, sender.DisplayName, sender.Provider)
   {
   }

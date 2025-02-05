@@ -35,6 +35,14 @@ public class ApiKeyController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<ApiKeyModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    DeleteApiKeyCommand command = new(id);
+    ApiKeyModel? apiKey = await _mediator.Send(command, cancellationToken);
+    return apiKey == null ? NotFound() : Ok(apiKey);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<ApiKeyModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
