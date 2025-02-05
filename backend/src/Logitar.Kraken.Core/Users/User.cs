@@ -95,13 +95,18 @@ public class User : AggregateRoot, ICustomizable
   }
 
   private DateTime? _birthdate = null;
-  public DateTime? Birthdate // ISSUE #51: https://github.com/Logitar/Kraken/issues/51
+  public DateTime? Birthdate
   {
     get => _birthdate;
     set
     {
       if (_birthdate != value)
       {
+        if (value.HasValue && value.Value.AsUniversalTime() >= DateTime.UtcNow)
+        {
+          throw new ArgumentOutOfRangeException(nameof(Birthdate), "The value must be a date and time set in the past.");
+        }
+
         _birthdate = value;
         _updatedEvent.Birthdate = new Change<DateTime?>(value);
       }
