@@ -24,7 +24,7 @@ public class StringValueValidatorTests
   [Fact(DisplayName = "Validation should fail when the value does not match the pattern.")]
   public async Task Given_NotMatching_When_ValidateAsync_Then_FailureResult()
   {
-    string value = new(BuildHealthInsuranceNumber().Reverse().ToArray());
+    string value = new(_faker.Person.BuildHealthInsuranceNumber().Reverse().ToArray());
     ValidationResult result = await _validator.ValidateAsync(value, PropertyName, _cancellationToken);
     Assert.False(result.IsValid);
     Assert.Contains(result.Errors, e => e.ErrorCode == "RegularExpressionValidator" && e.ErrorMessage == $"The value must match the pattern '{_properties.Pattern}'."
@@ -54,39 +54,9 @@ public class StringValueValidatorTests
   [Fact(DisplayName = "Validation should succeed when the value is valid.")]
   public async Task Given_ValidValue_When_ValidateAsync_Then_SuccessResult()
   {
-    string value = BuildHealthInsuranceNumber(withSpaces: true);
+    string value = _faker.Person.BuildHealthInsuranceNumber(withSpaces: true);
     ValidationResult result = await _validator.ValidateAsync(value, PropertyName, _cancellationToken);
     Assert.True(result.IsValid);
-  }
-
-  private string BuildHealthInsuranceNumber(Person? person = null, bool withSpaces = false)
-  {
-    person ??= _faker.Person;
-
-    StringBuilder healthInsuranceNumber = new();
-    healthInsuranceNumber.Append(person.LastName[..3].ToUpperInvariant());
-    healthInsuranceNumber.Append(person.FirstName[..1].ToUpperInvariant());
-    if (withSpaces)
-    {
-      healthInsuranceNumber.Append(' ');
-    }
-    healthInsuranceNumber.Append((person.DateOfBirth.Year % 100).ToString("D2"));
-    switch (person.Gender)
-    {
-      case Bogus.DataSets.Name.Gender.Female:
-        healthInsuranceNumber.Append((person.DateOfBirth.Month + 50).ToString("D2"));
-        break;
-      default:
-        healthInsuranceNumber.Append(person.DateOfBirth.Month.ToString("D2"));
-        break;
-    }
-    if (withSpaces)
-    {
-      healthInsuranceNumber.Append(' ');
-    }
-    healthInsuranceNumber.Append(person.DateOfBirth.Day.ToString("D2"));
-    healthInsuranceNumber.Append(_faker.Random.Int(0, 99).ToString("D2"));
-    return healthInsuranceNumber.ToString();
   }
 
   private static bool HasProperty(object instance, string propertyName, object? propertyValue)
