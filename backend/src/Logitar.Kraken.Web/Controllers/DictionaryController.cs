@@ -27,6 +27,14 @@ public class DictionaryController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<DictionaryModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    DeleteDictionaryCommand command = new(id);
+    DictionaryModel? dictionary = await _mediator.Send(command, cancellationToken);
+    return dictionary == null ? NotFound() : Ok(dictionary);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<DictionaryModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
