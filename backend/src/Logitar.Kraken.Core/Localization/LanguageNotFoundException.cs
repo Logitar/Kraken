@@ -1,4 +1,6 @@
-﻿namespace Logitar.Kraken.Core.Localization;
+﻿using Logitar.Kraken.Core.Realms;
+
+namespace Logitar.Kraken.Core.Localization;
 
 public class LanguageNotFoundException : NotFoundException
 {
@@ -9,10 +11,10 @@ public class LanguageNotFoundException : NotFoundException
     get => (Guid?)Data[nameof(RealmId)];
     private set => Data[nameof(RealmId)] = value;
   }
-  public Guid LanguageId
+  public string Language
   {
-    get => (Guid)Data[nameof(LanguageId)]!;
-    private set => Data[nameof(LanguageId)] = value;
+    get => (string)Data[nameof(Language)]!;
+    private set => Data[nameof(Language)] = value;
   }
   public string PropertyName
   {
@@ -26,22 +28,25 @@ public class LanguageNotFoundException : NotFoundException
     {
       Error error = new(this.GetErrorCode(), ErrorMessage);
       error.Data.Add(nameof(RealmId), RealmId);
-      error.Data.Add(nameof(LanguageId), LanguageId);
+      error.Data.Add(nameof(Language), Language);
       error.Data.Add(nameof(PropertyName), PropertyName);
       return error;
     }
   }
 
-  public LanguageNotFoundException(LanguageId languageId, string propertyName) : base(BuildMessage(languageId, propertyName))
+  public LanguageNotFoundException(LanguageId languageId, string propertyName) : this(languageId.RealmId, languageId.EntityId.ToString(), propertyName)
   {
-    RealmId = languageId.RealmId?.ToGuid();
-    LanguageId = languageId.EntityId;
+  }
+  public LanguageNotFoundException(RealmId? realmId, string language, string propertyName) : base(BuildMessage(realmId, language, propertyName))
+  {
+    RealmId = realmId?.ToGuid();
+    Language = language;
     PropertyName = propertyName;
   }
 
-  private static string BuildMessage(LanguageId languageId, string propertyName) => new ErrorMessageBuilder()
-    .AddData(nameof(RealmId), languageId.RealmId?.ToGuid(), "<null>")
-    .AddData(nameof(LanguageId), languageId.EntityId)
+  private static string BuildMessage(RealmId? realmId, string language, string propertyName) => new ErrorMessageBuilder()
+    .AddData(nameof(RealmId), realmId?.ToGuid(), "<null>")
+    .AddData(nameof(Language), language)
     .AddData(nameof(PropertyName), propertyName)
     .Build();
 }
