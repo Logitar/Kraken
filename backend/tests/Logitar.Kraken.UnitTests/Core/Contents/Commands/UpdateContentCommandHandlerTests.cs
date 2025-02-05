@@ -68,7 +68,7 @@ public class UpdateContentCommandHandlerTests
     UpdateContentCommand command = new(content.EntityId, Guid.NewGuid(), payload);
     var exception = await Assert.ThrowsAsync<LanguageNotFoundException>(async () => await _handler.Handle(command, _cancellationToken));
     Assert.True(command.LanguageId.HasValue);
-    Assert.Equal(command.LanguageId.Value, exception.LanguageId);
+    Assert.Equal(command.LanguageId.Value.ToString(), exception.Language);
     Assert.Equal("LanguageId", exception.PropertyName);
   }
 
