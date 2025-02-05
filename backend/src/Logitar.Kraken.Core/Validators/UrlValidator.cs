@@ -24,7 +24,7 @@ internal class UrlValidator<T> : IPropertyValidator<T, string>
 
   public string GetDefaultMessageTemplate(string errorCode)
   {
-    return $"'{{PropertyName}}' must be a valid absolute Uniform Resource Locators (URL) using one of the following schemes: {string.Join(", ", _schemes)}.";
+    return $"'{{PropertyName}}' must be a valid absolute Uniform Resource Locator (URL) using one of the following schemes: {string.Join(", ", _schemes)}.";
   }
 
   public bool IsValid(ValidationContext<T> context, string value)
