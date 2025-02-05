@@ -36,6 +36,14 @@ public class UserController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<UserModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    DeleteUserCommand command = new(id);
+    UserModel? user = await _mediator.Send(command, cancellationToken);
+    return user == null ? NotFound() : Ok(user);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<UserModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
