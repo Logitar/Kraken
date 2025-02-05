@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Dictionaries.Queries;
 
-public record ReadDictionaryQuery(Guid? Id) : Activity, IRequest<DictionaryModel>;
+public record ReadDictionaryQuery(Guid? Id, string? Language) : Activity, IRequest<DictionaryModel>;
 
 internal class ReadDictionaryQueryHandler : IRequestHandler<ReadDictionaryQuery, DictionaryModel?>
 {
@@ -27,14 +27,14 @@ internal class ReadDictionaryQueryHandler : IRequestHandler<ReadDictionaryQuery,
       }
     }
 
-    //if (!string.IsNullOrWhiteSpace(query.Locale))
-    //{
-    //  DictionaryModel? dictionary = await _dictionaryQuerier.ReadAsync(query.Locale, cancellationToken);
-    //  if (dictionary != null)
-    //  {
-    //    dictionaries[dictionary.Id] = dictionary;
-    //  }
-    //} // ISSUE #43: https://github.com/Logitar/Kraken/issues/43
+    if (!string.IsNullOrWhiteSpace(query.Language))
+    {
+      DictionaryModel? dictionary = await _dictionaryQuerier.ReadAsync(query.Language, cancellationToken);
+      if (dictionary != null)
+      {
+        dictionaries[dictionary.Id] = dictionary;
+      }
+    }
 
     if (dictionaries.Count > 1)
     {

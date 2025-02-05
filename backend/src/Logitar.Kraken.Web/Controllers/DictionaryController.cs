@@ -38,18 +38,18 @@ public class DictionaryController : ControllerBase
   [HttpGet("{id}")]
   public async Task<ActionResult<DictionaryModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
-    ReadDictionaryQuery query = new(id);
+    ReadDictionaryQuery query = new(id, Language: null);
     DictionaryModel? dictionary = await _mediator.Send(query, cancellationToken);
     return dictionary == null ? NotFound() : Ok(dictionary);
   }
 
-  //[HttpGet("name:{uniqueName}")]
-  //public async Task<ActionResult<DictionaryModel>> ReadAsync(string uniqueName, CancellationToken cancellationToken)
-  //{
-  //  ReadDictionaryQuery query = new(Id: null, uniqueName);
-  //  DictionaryModel? dictionary = await _mediator.Send(query, cancellationToken);
-  //  return dictionary == null ? NotFound() : Ok(dictionary);
-  //} // ISSUE #43: https://github.com/Logitar/Kraken/issues/43
+  [HttpGet("language:{language}")]
+  public async Task<ActionResult<DictionaryModel>> ReadAsync(string language, CancellationToken cancellationToken)
+  {
+    ReadDictionaryQuery query = new(Id: null, language);
+    DictionaryModel? dictionary = await _mediator.Send(query, cancellationToken);
+    return dictionary == null ? NotFound() : Ok(dictionary);
+  }
 
   [HttpPut("{id}")]
   public async Task<ActionResult<DictionaryModel>> ReplaceAsync(Guid id, [FromBody] CreateOrReplaceDictionaryPayload payload, long? version, CancellationToken cancellationToken)
