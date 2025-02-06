@@ -1,4 +1,5 @@
-﻿using Logitar.Kraken.Core.Contents.Events;
+﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Core.Contents.Events;
 using Logitar.Kraken.Core.Localization;
 
 namespace Logitar.Kraken.Core.Contents;
@@ -14,6 +15,52 @@ public class ContentTests
   public ContentTests()
   {
     _content = new(_contentType, new ContentLocale(new UniqueName(Content.UniqueNameSettings, "acura-integra-type-s-hrc-prototype-debuts-at-monterey-car-week")));
+  }
+
+  [Fact(DisplayName = "Delete: it should delete the content.")]
+  public void Given_Content_When_Delete_Then_Deleted()
+  {
+    _content.Delete();
+    Assert.True(_content.IsDeleted);
+
+    _content.ClearChanges();
+    _content.Delete();
+    Assert.False(_content.HasChanges);
+    Assert.Empty(_content.Changes);
+  }
+
+  [Fact(DisplayName = "DeleteLocale: it should delete the locale and return true when it is found.")]
+  public void Given_LocaleFound_When_DeleteLocale_Then_DeletedAndFalseReturned()
+  {
+    Language english = new(new Locale("en"), isDefault: true);
+    _content.SetLocale(english, _content.Invariant);
+
+    Language french = new(new Locale("fr"), isDefault: true);
+    _content.SetLocale(french, _content.Invariant);
+
+    _content.ClearChanges();
+    Assert.True(_content.HasLocale(english));
+    Assert.True(_content.HasLocale(french));
+
+    ActorId actorId = ActorId.NewId();
+    _content.DeleteLocale(english, actorId);
+    _content.DeleteLocale(french.Id, actorId);
+
+    Assert.Empty(_content.Locales);
+    Assert.Contains(_content.Changes, change => change is ContentLocaleDeleted deleted && deleted.LanguageId == english.Id);
+    Assert.Contains(_content.Changes, change => change is ContentLocaleDeleted deleted && deleted.LanguageId == french.Id);
+  }
+
+  [Fact(DisplayName = "DeleteLocale: it should return false when the locale could not be found.")]
+  public void Given_NoLocale_When_DeleteLocale_Then_FalseReturned()
+  {
+    Language language = new(new Locale("en"), isDefault: true);
+
+    _content.ClearChanges();
+    Assert.False(_content.DeleteLocale(language));
+    Assert.False(_content.DeleteLocale(language.Id));
+    Assert.False(_content.HasChanges);
+    Assert.Empty(_content.Changes);
   }
 
   [Fact(DisplayName = "FindLocale: it should return the locale found.")]

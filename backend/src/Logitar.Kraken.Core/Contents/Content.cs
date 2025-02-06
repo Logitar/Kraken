@@ -40,6 +40,31 @@ public class Content : AggregateRoot
     _invariant = @event.Invariant;
   }
 
+  public void Delete(ActorId? actorId = null)
+  {
+    if (!IsDeleted)
+    {
+      Raise(new ContentDeleted(), actorId);
+    }
+  }
+
+  public bool DeleteLocale(Language language, ActorId? actorId = null) => DeleteLocale(language.Id, actorId);
+  public bool DeleteLocale(LanguageId languageId, ActorId? actorId = null)
+  {
+    if (!HasLocale(languageId))
+    {
+      return false;
+    }
+
+    Raise(new ContentLocaleDeleted(languageId), actorId);
+    return true;
+  }
+  protected virtual void Handle(ContentLocaleDeleted @event)
+  {
+    _locales.Remove(@event.LanguageId);
+    _localeStatuses.Remove(@event.LanguageId);
+  }
+
   public ContentLocale FindLocale(Language language) => FindLocale(language.Id);
   public ContentLocale FindLocale(LanguageId languageId)
   {
