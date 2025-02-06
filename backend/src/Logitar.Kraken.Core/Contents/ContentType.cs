@@ -89,6 +89,25 @@ public class ContentType : AggregateRoot
   public FieldDefinition FindField(Guid id) => TryGetField(id) ?? throw new InvalidOperationException($"The field 'Id={id}' could not be found.");
   public FieldDefinition FindField(Identifier uniqueName) => TryGetField(uniqueName) ?? throw new InvalidOperationException($"The field 'UniqueName={uniqueName}' could not be found.");
 
+  public bool RemoveField(Guid id, ActorId? actorId = null)
+  {
+    if (TryGetField(id) == null)
+    {
+      return false;
+    }
+    Raise(new ContentTypeFieldDefinitionRemoved(id), actorId);
+    return true;
+  }
+  protected virtual void Handle(ContentTypeFieldDefinitionRemoved @event)
+  {
+    if (_fieldsById.Remove(@event.FieldId, out int index))
+    {
+      FieldDefinition fieldDefinition = _fieldDefinitions.ElementAt(index);
+      _fieldDefinitions.RemoveAt(index);
+      _fieldsByUniqueName.Remove(fieldDefinition.UniqueName);
+    }
+  }
+
   public void SetField(FieldDefinition fieldDefinition, ActorId? actorId = null)
   {
     if (IsInvariant && !fieldDefinition.IsInvariant)
