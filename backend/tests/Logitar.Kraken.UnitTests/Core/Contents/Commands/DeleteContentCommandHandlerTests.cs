@@ -87,7 +87,7 @@ public class DeleteContentCommandHandlerTests
     Assert.Equal(_french.EntityId, Assert.Single(content.Locales).Language?.Id);
 
     Assert.Equal(_french.Id, Assert.Single(_content.Locales).Key);
-    Assert.Contains(_content.Changes, change => change is ContentLocaleDeleted deleted && deleted.LanguageId == _english.Id && deleted.ActorId == _actorId);
+    Assert.Contains(_content.Changes, change => change is ContentLocaleRemoved deleted && deleted.LanguageId == _english.Id && deleted.ActorId == _actorId);
 
     _contentRepository.Verify(x => x.SaveAsync(_content, _cancellationToken), Times.Once());
   }

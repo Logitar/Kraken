@@ -44,7 +44,7 @@ internal class DeleteContentCommandHandler : IRequestHandler<DeleteContentComman
     else
     {
       Language language = await _languageManager.FindAsync(command.Language, cancellationToken);
-      if (!content.DeleteLocale(language, actorId))
+      if (!content.RemoveLocale(language, actorId))
       {
         return null;
       }
