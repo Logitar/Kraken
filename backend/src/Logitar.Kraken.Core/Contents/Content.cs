@@ -48,18 +48,18 @@ public class Content : AggregateRoot
     }
   }
 
-  public bool DeleteLocale(Language language, ActorId? actorId = null) => DeleteLocale(language.Id, actorId);
-  public bool DeleteLocale(LanguageId languageId, ActorId? actorId = null)
+  public bool RemoveLocale(Language language, ActorId? actorId = null) => RemoveLocale(language.Id, actorId);
+  public bool RemoveLocale(LanguageId languageId, ActorId? actorId = null)
   {
     if (!HasLocale(languageId))
     {
       return false;
     }
 
-    Raise(new ContentLocaleDeleted(languageId), actorId);
+    Raise(new ContentLocaleRemoved(languageId), actorId);
     return true;
   }
-  protected virtual void Handle(ContentLocaleDeleted @event)
+  protected virtual void Handle(ContentLocaleRemoved @event)
   {
     _locales.Remove(@event.LanguageId);
     _localeStatuses.Remove(@event.LanguageId);

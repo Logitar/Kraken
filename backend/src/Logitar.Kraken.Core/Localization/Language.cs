@@ -30,6 +30,14 @@ public class Language : AggregateRoot
     _locale = @event.Locale;
   }
 
+  public void Delete(ActorId? actorId = null)
+  {
+    if (!IsDeleted)
+    {
+      Raise(new LanguageDeleted(), actorId);
+    }
+  }
+
   public void SetDefault(bool isDefault = true, ActorId? actorId = null)
   {
     if (IsDefault != isDefault)

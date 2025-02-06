@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Contents.Events;
 
-public record ContentLocaleDeleted(LanguageId LanguageId) : DomainEvent, INotification;
+public record ContentLocaleRemoved(LanguageId LanguageId) : DomainEvent, INotification;
