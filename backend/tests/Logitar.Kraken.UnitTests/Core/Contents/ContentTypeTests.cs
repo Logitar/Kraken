@@ -8,6 +8,20 @@ namespace Logitar.Kraken.Core.Contents;
 [Trait(Traits.Category, Categories.Unit)]
 public class ContentTypeTests
 {
+  [Fact(DisplayName = "Delete: it should delete the content.")]
+  public void Given_Content_When_Delete_Then_Deleted()
+  {
+    ContentType contentType = new(new Identifier("BlogArticle"), isInvariant: false);
+
+    contentType.Delete();
+    Assert.True(contentType.IsDeleted);
+
+    contentType.ClearChanges();
+    contentType.Delete();
+    Assert.False(contentType.HasChanges);
+    Assert.Empty(contentType.Changes);
+  }
+
   [Fact(DisplayName = "SetField: it should not do anything when the field definition had no change.")]
   public void Given_FieldDefinitionNoChange_When_SetField_Then_NoChange()
   {

@@ -78,6 +78,14 @@ public class ContentType : AggregateRoot
     _uniqueName = @event.UniqueName;
   }
 
+  public void Delete(ActorId? actorId = null)
+  {
+    if (!IsDeleted)
+    {
+      Raise(new ContentTypeDeleted(), actorId);
+    }
+  }
+
   public FieldDefinition FindField(Guid id) => TryGetField(id) ?? throw new InvalidOperationException($"The field 'Id={id}' could not be found.");
   public FieldDefinition FindField(Identifier uniqueName) => TryGetField(uniqueName) ?? throw new InvalidOperationException($"The field 'UniqueName={uniqueName}' could not be found.");
 

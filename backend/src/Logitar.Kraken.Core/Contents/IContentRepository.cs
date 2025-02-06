@@ -15,6 +15,7 @@ public interface IContentRepository
   Task<IReadOnlyCollection<Content>> LoadAsync(IEnumerable<ContentId> ids, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<Content>> LoadAsync(bool? isDeleted, IEnumerable<ContentId> ids, CancellationToken cancellationToken = default);
 
+  Task<IReadOnlyCollection<Content>> LoadAsync(ContentTypeId contentTypeId, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<Content>> LoadAsync(RealmId? realmId, CancellationToken cancellationToken = default);
 
   Task SaveAsync(Content contentType, CancellationToken cancellationToken = default);
