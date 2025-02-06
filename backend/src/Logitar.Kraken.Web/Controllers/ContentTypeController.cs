@@ -26,6 +26,13 @@ public class ContentTypeController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<ContentTypeModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    ContentTypeModel? contentType = await _mediator.Send(new DeleteContentTypeCommand(id), cancellationToken);
+    return contentType == null ? NotFound() : Ok(contentType);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<ContentTypeModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {

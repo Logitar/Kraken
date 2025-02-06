@@ -30,6 +30,13 @@ public class ContentController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<ContentModel>> DeleteAsync(Guid id, string? language, CancellationToken cancellationToken)
+  {
+    ContentModel? content = await _mediator.Send(new DeleteContentCommand(id, language), cancellationToken);
+    return content == null ? NotFound() : Ok(content);
+  }
+
   [HttpPatch("{contentId}/publish/all")]
   public async Task<ActionResult<ContentModel>> PublishAllAsync(Guid contentId, CancellationToken cancellationToken)
   {
