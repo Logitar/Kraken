@@ -27,6 +27,14 @@ public class RoleController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<RoleModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    DeleteRoleCommand query = new(id);
+    RoleModel? role = await _mediator.Send(query, cancellationToken);
+    return role == null ? NotFound() : Ok(role);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<RoleModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
