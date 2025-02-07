@@ -19,6 +19,10 @@ public class Dictionary : AggregateRoot
   private readonly Dictionary<Identifier, string> _entries = [];
   public IReadOnlyDictionary<Identifier, string> Entries => _entries.AsReadOnly();
 
+  public Dictionary() : base()
+  {
+  }
+
   public Dictionary(Language language, ActorId? actorId = null, DictionaryId? dictionaryId = null) : base(dictionaryId?.StreamId)
   {
     if (RealmId != language.RealmId)
