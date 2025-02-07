@@ -7,7 +7,7 @@ public class RealmIdConverterTests
 {
   private readonly JsonSerializerOptions _serializerOptions = new();
 
-  private readonly RealmId _realmId = new();
+  private readonly RealmId _realmId = RealmId.NewId();
 
   public RealmIdConverterTests()
   {

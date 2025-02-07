@@ -7,7 +7,6 @@ namespace Logitar.Kraken.Core.Realms.Events;
 
 public record RealmUpdated : DomainEvent, INotification
 {
-  public Slug? UniqueSlug { get; set; }
   public Change<DisplayName>? DisplayName { get; set; }
   public Change<Description>? Description { get; set; }
 
@@ -20,7 +19,7 @@ public record RealmUpdated : DomainEvent, INotification
   public bool? RequireConfirmedAccount { get; set; }
 
   [JsonIgnore]
-  public bool HasChanges => UniqueSlug != null || DisplayName != null || Description != null
+  public bool HasChanges => DisplayName != null || Description != null
     || Secret != null || Url != null
     || UniqueNameSettings != null || PasswordSettings != null || RequireUniqueEmail != null || RequireConfirmedAccount != null;
 }

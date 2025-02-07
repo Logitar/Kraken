@@ -173,10 +173,6 @@ public class Realm : AggregateRoot
   }
   protected virtual void Handle(RealmUpdated @event)
   {
-    if (@event.UniqueSlug != null)
-    {
-      _uniqueSlug = @event.UniqueSlug;
-    }
     if (@event.DisplayName != null)
     {
       _displayName = @event.DisplayName.Value;

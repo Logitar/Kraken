@@ -13,7 +13,9 @@ public class EventSerializer : EventSourcing.Infrastructure.EventSerializer
     SerializerOptions.Converters.Add(new DisplayNameConverter());
     SerializerOptions.Converters.Add(new JwtSecretConverter());
     SerializerOptions.Converters.Add(new RealmIdConverter());
+    SerializerOptions.Converters.Add(new RoleIdConverter());
     SerializerOptions.Converters.Add(new SlugConverter());
+    SerializerOptions.Converters.Add(new UniqueNameConverter());
     SerializerOptions.Converters.Add(new UrlConverter());
   }
 }

@@ -109,10 +109,6 @@ public class Role : AggregateRoot, ICustomizable
   }
   protected virtual void Handle(RoleUpdated @event)
   {
-    if (@event.UniqueName != null)
-    {
-      _uniqueName = @event.UniqueName;
-    }
     if (@event.DisplayName != null)
     {
       _displayName = @event.DisplayName.Value;
