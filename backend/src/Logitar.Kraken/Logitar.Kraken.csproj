@@ -18,6 +18,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="secrets.example.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="secrets.example.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
@@ -31,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Logitar.Kraken.EntityFrameworkCore.Relational\Logitar.Kraken.EntityFrameworkCore.Relational.csproj" />
+    <ProjectReference Include="..\Logitar.Kraken.EntityFrameworkCore.SqlServer\Logitar.Kraken.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\Logitar.Kraken.Web\Logitar.Kraken.Web.csproj" />
   </ItemGroup>
 
