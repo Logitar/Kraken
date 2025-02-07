@@ -7,7 +7,7 @@ public interface IMessageRepository
   Task<Message?> LoadAsync(MessageId id, CancellationToken cancellationToken = default);
   Task<Message?> LoadAsync(MessageId id, long? version, CancellationToken cancellationToken = default);
   Task<Message?> LoadAsync(MessageId id, bool? isDeleted, CancellationToken cancellationToken = default);
-  Task<Message?> LoadAsync(MessageId id, bool? isDeleted, long? version, CancellationToken cancellationToken = default);
+  Task<Message?> LoadAsync(MessageId id, long? version, bool? isDeleted, CancellationToken cancellationToken = default);
 
   Task<IReadOnlyCollection<Message>> LoadAsync(CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<Message>> LoadAsync(bool? isDeleted, CancellationToken cancellationToken = default);

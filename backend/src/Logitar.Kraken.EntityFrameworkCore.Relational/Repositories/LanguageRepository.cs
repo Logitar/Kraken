@@ -9,11 +9,11 @@ namespace Logitar.Kraken.EntityFrameworkCore.Relational.Repositories;
 
 internal class LanguageRepository : Repository, ILanguageRepository
 {
-  private readonly DbSet<LanguageEntity> _sessions;
+  private readonly DbSet<LanguageEntity> _languages;
 
   public LanguageRepository(KrakenContext context, IEventStore eventStore) : base(eventStore)
   {
-    _sessions = context.Languages;
+    _languages = context.Languages;
   }
 
   public async Task<Language?> LoadAsync(LanguageId id, CancellationToken cancellationToken)
@@ -56,7 +56,7 @@ internal class LanguageRepository : Repository, ILanguageRepository
     Guid? id = realmId?.ToGuid();
     string codeNormalized = Helper.Normalize(locale);
 
-    string? streamId = await _sessions.AsNoTracking()
+    string? streamId = await _languages.AsNoTracking()
       .Include(x => x.Realm)
       .Where(x => (id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null) && x.CodeNormalized == codeNormalized)
       .Select(x => x.StreamId)
@@ -69,7 +69,7 @@ internal class LanguageRepository : Repository, ILanguageRepository
   {
     Guid? id = realmId?.ToGuid();
 
-    string[] streamIds = await _sessions.AsNoTracking()
+    string[] streamIds = await _languages.AsNoTracking()
       .Include(x => x.Realm)
       .Where(x => id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null)
       .Select(x => x.StreamId)
@@ -83,7 +83,7 @@ internal class LanguageRepository : Repository, ILanguageRepository
   {
     Guid? id = realmId?.ToGuid();
 
-    string? streamId = await _sessions.AsNoTracking()
+    string? streamId = await _languages.AsNoTracking()
       .Include(x => x.Realm)
       .Where(x => (id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null) && x.IsDefault)
       .Select(x => x.StreamId)

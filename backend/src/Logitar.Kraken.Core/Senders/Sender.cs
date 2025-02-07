@@ -87,6 +87,10 @@ public class Sender : AggregateRoot
   private SenderSettings? _settings = null;
   public SenderSettings Settings => _settings ?? throw new InvalidOperationException("The sender has not been initialized.");
 
+  public Sender() : base()
+  {
+  }
+
   public Sender(Email? email, Phone? phone, SenderSettings settings, ActorId? actorId = null, SenderId? senderId = null) : base(senderId?.StreamId)
   {
     SenderProvider provider = settings.Provider;
