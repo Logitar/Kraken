@@ -44,6 +44,10 @@ public class Role : AggregateRoot, ICustomizable
   private readonly Dictionary<Identifier, string> _customAttributes = [];
   public IReadOnlyDictionary<Identifier, string> CustomAttributes => _customAttributes.AsReadOnly();
 
+  public Role() : base()
+  {
+  }
+
   public Role(UniqueName uniqueName, ActorId? actorId = null, RoleId? roleId = null) : base(roleId?.StreamId)
   {
     Raise(new RoleCreated(uniqueName), actorId);

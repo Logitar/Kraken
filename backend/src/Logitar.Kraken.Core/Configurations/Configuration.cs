@@ -68,6 +68,10 @@ public class Configuration : AggregateRoot
     }
   }
 
+  public Configuration() : base()
+  {
+  }
+
   private Configuration(JwtSecret secret, UniqueNameSettings uniqueNameSettings, PasswordSettings passwordSettings, LoggingSettings loggingSettings, ActorId actorId, ConfigurationId configurationId)
     : base(configurationId.StreamId)
   {

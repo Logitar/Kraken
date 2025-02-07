@@ -78,6 +78,10 @@ public class ApiKey : AggregateRoot, ICustomizable
   private readonly HashSet<RoleId> _roles = [];
   public IReadOnlyCollection<RoleId> Roles => _roles.ToList().AsReadOnly();
 
+  public ApiKey() : base()
+  {
+  }
+
   public ApiKey(Password secret, DisplayName name, ActorId? actorId = null, ApiKeyId? apiKeyId = null) : base(apiKeyId?.StreamId)
   {
     Raise(new ApiKeyCreated(secret, name), actorId);

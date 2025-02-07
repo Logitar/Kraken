@@ -8,9 +8,9 @@ namespace Logitar.Kraken.Core.Users;
 public interface IUserRepository
 {
   Task<User?> LoadAsync(UserId id, CancellationToken cancellationToken = default);
-  Task<User?> LoadAsync(UserId id, long? version, CancellationToken cancellationToken = default);
   Task<User?> LoadAsync(UserId id, bool? isDeleted, CancellationToken cancellationToken = default);
-  Task<User?> LoadAsync(UserId id, bool? isDeleted, long? version, CancellationToken cancellationToken = default);
+  Task<User?> LoadAsync(UserId id, long? version, CancellationToken cancellationToken = default);
+  Task<User?> LoadAsync(UserId id, long? version, bool? isDeleted, CancellationToken cancellationToken = default);
 
   Task<IReadOnlyCollection<User>> LoadAsync(CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<User>> LoadAsync(bool? isDeleted, CancellationToken cancellationToken = default);

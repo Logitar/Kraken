@@ -6,9 +6,9 @@ namespace Logitar.Kraken.Core.ApiKeys;
 public interface IApiKeyRepository
 {
   Task<ApiKey?> LoadAsync(ApiKeyId id, CancellationToken cancellationToken = default);
-  Task<ApiKey?> LoadAsync(ApiKeyId id, long? version, CancellationToken cancellationToken = default);
   Task<ApiKey?> LoadAsync(ApiKeyId id, bool? isDeleted, CancellationToken cancellationToken = default);
-  Task<ApiKey?> LoadAsync(ApiKeyId id, bool? isDeleted, long? version, CancellationToken cancellationToken = default);
+  Task<ApiKey?> LoadAsync(ApiKeyId id, long? version, CancellationToken cancellationToken = default);
+  Task<ApiKey?> LoadAsync(ApiKeyId id, long? version, bool? isDeleted, CancellationToken cancellationToken = default);
 
   Task<IReadOnlyCollection<ApiKey>> LoadAsync(CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<ApiKey>> LoadAsync(bool? isDeleted, CancellationToken cancellationToken = default);

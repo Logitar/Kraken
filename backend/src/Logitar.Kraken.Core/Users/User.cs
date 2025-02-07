@@ -203,6 +203,10 @@ public class User : AggregateRoot, ICustomizable
   private readonly HashSet<RoleId> _roles = [];
   public IReadOnlyCollection<RoleId> Roles => _roles.ToList().AsReadOnly();
 
+  public User() : base()
+  {
+  }
+
   public User(UniqueName uniqueName, ActorId? actorId = null, UserId? userId = null) : base(userId?.StreamId)
   {
     Raise(new UserCreated(uniqueName), actorId);
