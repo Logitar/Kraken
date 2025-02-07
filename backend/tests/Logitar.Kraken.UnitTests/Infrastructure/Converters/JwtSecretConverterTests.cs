@@ -3,13 +3,13 @@
 namespace Logitar.Kraken.Infrastructure.Converters;
 
 [Trait(Traits.Category, Categories.Unit)]
-public class JwtSecretTests
+public class JwtSecretConverterTests
 {
   private readonly JsonSerializerOptions _serializerOptions = new();
 
   private readonly JwtSecret _secret = new("agwWZrQ9vEfYtncb8xXAMRJUH57m2Kzy");
 
-  public JwtSecretTests()
+  public JwtSecretConverterTests()
   {
     _serializerOptions.Converters.Add(new JwtSecretConverter());
   }

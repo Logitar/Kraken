@@ -3,13 +3,13 @@
 namespace Logitar.Kraken.Infrastructure.Converters;
 
 [Trait(Traits.Category, Categories.Unit)]
-public class ConfigurationIdTests
+public class ConfigurationIdConverterTests
 {
   private readonly JsonSerializerOptions _serializerOptions = new();
 
   private readonly ConfigurationId _configurationId = new();
 
-  public ConfigurationIdTests()
+  public ConfigurationIdConverterTests()
   {
     _serializerOptions.Converters.Add(new ConfigurationIdConverter());
   }
