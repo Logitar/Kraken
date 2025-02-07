@@ -6,9 +6,9 @@ namespace Logitar.Kraken.Core.Sessions;
 public interface ISessionRepository
 {
   Task<Session?> LoadAsync(SessionId id, CancellationToken cancellationToken = default);
-  Task<Session?> LoadAsync(SessionId id, long? version, CancellationToken cancellationToken = default);
   Task<Session?> LoadAsync(SessionId id, bool? isDeleted, CancellationToken cancellationToken = default);
-  Task<Session?> LoadAsync(SessionId id, bool? isDeleted, long? version, CancellationToken cancellationToken = default);
+  Task<Session?> LoadAsync(SessionId id, long? version, CancellationToken cancellationToken = default);
+  Task<Session?> LoadAsync(SessionId id, long? version, bool? isDeleted, CancellationToken cancellationToken = default);
 
   Task<IReadOnlyCollection<Session>> LoadAsync(CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<Session>> LoadAsync(bool? isDeleted, CancellationToken cancellationToken = default);
