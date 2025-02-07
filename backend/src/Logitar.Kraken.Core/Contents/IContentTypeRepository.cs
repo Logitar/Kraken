@@ -1,4 +1,5 @@
-﻿using Logitar.Kraken.Core.Realms;
+﻿using Logitar.Kraken.Core.Fields;
+using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Contents;
 
@@ -17,6 +18,7 @@ public interface IContentTypeRepository
 
   Task<ContentType?> LoadAsync(RealmId? realmId, UniqueName uniqueName, CancellationToken cancellationToken = default);
   Task<ContentType> LoadAsync(Content content, CancellationToken cancellationToken = default);
+  Task<IReadOnlyCollection<ContentType>> LoadAsync(FieldTypeId fieldTypeId, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<ContentType>> LoadAsync(RealmId? realmId, CancellationToken cancellationToken = default);
 
   Task SaveAsync(ContentType contentType, CancellationToken cancellationToken = default);

@@ -95,6 +95,14 @@ public class FieldType : AggregateRoot
     DataType = @event.DataType;
   }
 
+  public void Delete(ActorId? actorId = null)
+  {
+    if (!IsDeleted)
+    {
+      Raise(new FieldTypeDeleted(), actorId);
+    }
+  }
+
   public void SetProperties(BooleanProperties properties, ActorId? actorId = null)
   {
     if (DataType != properties.DataType)

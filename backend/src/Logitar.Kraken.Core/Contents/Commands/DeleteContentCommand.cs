@@ -34,7 +34,7 @@ internal class DeleteContentCommandHandler : IRequestHandler<DeleteContentComman
     {
       return null;
     }
-    ContentModel model = await _contentQuerier.ReadAsync(content, cancellationToken);
+    ContentModel result = await _contentQuerier.ReadAsync(content, cancellationToken);
 
     ActorId? actorId = _applicationContext.ActorId;
     if (string.IsNullOrWhiteSpace(command.Language))
@@ -49,15 +49,15 @@ internal class DeleteContentCommandHandler : IRequestHandler<DeleteContentComman
         return null;
       }
 
-      int index = model.Locales.FindIndex(locale => locale.Language?.Id == language.EntityId);
+      int index = result.Locales.FindIndex(locale => locale.Language?.Id == language.EntityId);
       if (index >= 0)
       {
-        model.Locales.RemoveAt(index);
+        result.Locales.RemoveAt(index);
       }
     }
 
     await _contentRepository.SaveAsync(content, cancellationToken);
 
-    return model;
+    return result;
   }
 }

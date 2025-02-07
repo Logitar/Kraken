@@ -11,8 +11,8 @@ public class StringPropertiesTests
   {
     StringPropertiesModel model = new()
     {
-      MinimumLength = 1,
-      MaximumLength = 100,
+      MinimumLength = 12,
+      MaximumLength = 14,
       Pattern = "[A-Z]{4}\\s?[0-9]{4}\\s?[0-9]{4}"
     };
     StringProperties properties = new(model);
@@ -24,8 +24,8 @@ public class StringPropertiesTests
   [Fact(DisplayName = "It should construct the correct instance with arguments.")]
   public void Given_Arguments_When_ctor_Then_Constructed()
   {
-    int minimumLength = 1;
-    int maximumLength = 100;
+    int minimumLength = 12;
+    int maximumLength = 14;
     string pattern = "[A-Z]{4}\\s?[0-9]{4}\\s?[0-9]{4}";
     StringProperties properties = new(minimumLength, maximumLength, pattern);
     Assert.Equal(minimumLength, properties.MinimumLength);

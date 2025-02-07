@@ -1,6 +1,7 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Contents.Events;
 using Logitar.Kraken.Core.Localization;
+using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Contents;
 
@@ -29,38 +30,24 @@ public class ContentTests
     Assert.Empty(_content.Changes);
   }
 
-  [Fact(DisplayName = "RemoveLocale: it should delete the locale and return true when it is found.")]
-  public void Given_LocaleFound_When_RemoveLocale_Then_DeletedAndFalseReturned()
+  [Fact(DisplayName = "It should construct the correct instance.")]
+  public void Given_Arguments_When_ctor_Then_Constructed()
   {
-    Language english = new(new Locale("en"), isDefault: true);
-    _content.SetLocale(english, _content.Invariant);
-
-    Language french = new(new Locale("fr"), isDefault: true);
-    _content.SetLocale(french, _content.Invariant);
-
-    _content.ClearChanges();
-    Assert.True(_content.HasLocale(english));
-    Assert.True(_content.HasLocale(french));
-
     ActorId actorId = ActorId.NewId();
-    _content.RemoveLocale(english, actorId);
-    _content.RemoveLocale(french.Id, actorId);
+    RealmId realmId = RealmId.NewId();
+    Guid entityId = Guid.NewGuid();
+    ContentId id = new(realmId, entityId);
 
-    Assert.Empty(_content.Locales);
-    Assert.Contains(_content.Changes, change => change is ContentLocaleRemoved deleted && deleted.LanguageId == english.Id);
-    Assert.Contains(_content.Changes, change => change is ContentLocaleRemoved deleted && deleted.LanguageId == french.Id);
-  }
+    Content content = new(_contentType, _content.Invariant, actorId, id);
 
-  [Fact(DisplayName = "RemoveLocale: it should return false when the locale could not be found.")]
-  public void Given_NoLocale_When_RemoveLocale_Then_FalseReturned()
-  {
-    Language language = new(new Locale("en"), isDefault: true);
-
-    _content.ClearChanges();
-    Assert.False(_content.RemoveLocale(language));
-    Assert.False(_content.RemoveLocale(language.Id));
-    Assert.False(_content.HasChanges);
-    Assert.Empty(_content.Changes);
+    Assert.Equal(actorId, content.CreatedBy);
+    Assert.Equal(actorId, content.UpdatedBy);
+    Assert.Equal(id, content.Id);
+    Assert.Equal(realmId, content.RealmId);
+    Assert.Equal(entityId, content.EntityId);
+    Assert.Equal(_contentType.Id, content.ContentTypeId);
+    Assert.Same(_content.Invariant, content.Invariant);
+    Assert.Empty(content.Locales);
   }
 
   [Fact(DisplayName = "FindLocale: it should return the locale found.")]
@@ -194,6 +181,40 @@ public class ContentTests
   public void Given_NoLocale_When_PublishLocale_Then_FalseReturned()
   {
     Assert.False(_content.PublishLocale(_english));
+  }
+
+  [Fact(DisplayName = "RemoveLocale: it should delete the locale and return true when it is found.")]
+  public void Given_LocaleFound_When_RemoveLocale_Then_DeletedAndFalseReturned()
+  {
+    Language english = new(new Locale("en"), isDefault: true);
+    _content.SetLocale(english, _content.Invariant);
+
+    Language french = new(new Locale("fr"), isDefault: true);
+    _content.SetLocale(french, _content.Invariant);
+
+    _content.ClearChanges();
+    Assert.True(_content.HasLocale(english));
+    Assert.True(_content.HasLocale(french));
+
+    ActorId actorId = ActorId.NewId();
+    _content.RemoveLocale(english, actorId);
+    _content.RemoveLocale(french.Id, actorId);
+
+    Assert.Empty(_content.Locales);
+    Assert.Contains(_content.Changes, change => change is ContentLocaleRemoved deleted && deleted.LanguageId == english.Id);
+    Assert.Contains(_content.Changes, change => change is ContentLocaleRemoved deleted && deleted.LanguageId == french.Id);
+  }
+
+  [Fact(DisplayName = "RemoveLocale: it should return false when the locale could not be found.")]
+  public void Given_NoLocale_When_RemoveLocale_Then_FalseReturned()
+  {
+    Language language = new(new Locale("en"), isDefault: true);
+
+    _content.ClearChanges();
+    Assert.False(_content.RemoveLocale(language));
+    Assert.False(_content.RemoveLocale(language.Id));
+    Assert.False(_content.HasChanges);
+    Assert.Empty(_content.Changes);
   }
 
   [Fact(DisplayName = "SetInvariant: it should not do anything when the invariant has no change.")]

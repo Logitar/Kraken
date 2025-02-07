@@ -26,6 +26,13 @@ public class LanguageController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<LanguageModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    LanguageModel? language = await _mediator.Send(new DeleteLanguageCommand(id), cancellationToken);
+    return language == null ? NotFound() : Ok(language);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<LanguageModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {

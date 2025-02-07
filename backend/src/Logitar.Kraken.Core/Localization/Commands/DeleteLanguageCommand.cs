@@ -38,7 +38,7 @@ internal class DeleteLanguageCommandHandler : IRequestHandler<DeleteLanguageComm
     {
       return null;
     }
-    LanguageModel model = await _languageQuerier.ReadAsync(language, cancellationToken);
+    LanguageModel result = await _languageQuerier.ReadAsync(language, cancellationToken);
 
     ActorId? actorId = _applicationContext.ActorId;
 
@@ -59,6 +59,6 @@ internal class DeleteLanguageCommandHandler : IRequestHandler<DeleteLanguageComm
     language.Delete(actorId);
     await _languageRepository.SaveAsync(language, cancellationToken);
 
-    return model;
+    return result;
   }
 }
