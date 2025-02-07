@@ -3,7 +3,7 @@ using Logitar.Kraken.Contracts.Users;
 
 namespace Logitar.Kraken.Core.Users.Validators;
 
-public class PhoneValidator : AbstractValidator<IPhone>
+internal class PhoneValidator : AbstractValidator<IPhone>
 {
   public PhoneValidator()
   {

@@ -3,7 +3,7 @@ using Logitar.Kraken.Contracts.Senders;
 
 namespace Logitar.Kraken.Core.Senders.Settings;
 
-public class MailgunSettingsValidator : AbstractValidator<IMailgunSettings>
+internal class MailgunSettingsValidator : AbstractValidator<IMailgunSettings>
 {
   public MailgunSettingsValidator()
   {
