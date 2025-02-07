@@ -9,6 +9,7 @@ public class EventSerializer : EventSourcing.Infrastructure.EventSerializer
     base.RegisterConverters();
 
     SerializerOptions.Converters.Add(new ConfigurationIdConverter());
+    SerializerOptions.Converters.Add(new ContentIdConverter());
     SerializerOptions.Converters.Add(new ContentTypeIdConverter());
     SerializerOptions.Converters.Add(new DescriptionConverter());
     SerializerOptions.Converters.Add(new DictionaryIdConverter());
