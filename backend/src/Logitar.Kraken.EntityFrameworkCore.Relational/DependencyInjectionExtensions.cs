@@ -1,7 +1,9 @@
 ﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
 using Logitar.Kraken.Core.ApiKeys;
 using Logitar.Kraken.Core.Configurations;
+using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
+using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Roles;
 using Logitar.Kraken.Core.Sessions;
 using Logitar.Kraken.Core.Users;
@@ -31,7 +33,9 @@ public static class DependencyInjectionExtensions
     return services
       .AddScoped<IApiKeyRepository, ApiKeyRepository>()
       .AddScoped<IConfigurationRepository, ConfigurationRepository>()
+      .AddScoped<ILanguageRepository, LanguageRepository>()
       .AddScoped<IOneTimePasswordRepository, OneTimePasswordRepository>()
+      .AddScoped<IRealmRepository, RealmRepository>()
       .AddScoped<IRoleRepository, RoleRepository>()
       .AddScoped<ISessionRepository, SessionRepository>()
       .AddScoped<IUserRepository, UserRepository>();
