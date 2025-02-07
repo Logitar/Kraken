@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Logitar.Kraken.Infrastructure.Commands;
+namespace Logitar.Kraken.EntityFrameworkCore.Relational.Commands;
 
 public record MigrateDatabaseCommand : IRequest;
 

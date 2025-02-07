@@ -15,7 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Logitar.EventSourcing.EntityFrameworkCore.Relational" Version="7.0.1" />
+    <PackageReference Include="Logitar.EventSourcing.Infrastructure" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.1" />
   </ItemGroup>
 
@@ -26,7 +27,6 @@
   <ItemGroup>
     <Using Include="System.Diagnostics.CodeAnalysis" />
     <Using Include="System.IdentityModel.Tokens.Jwt" />
-    <Using Include="System.Reflection" />
     <Using Include="System.Security.Claims" />
     <Using Include="System.Text" />
     <Using Include="System.Text.Json" />

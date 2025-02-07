@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.Web", "src\L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken", "src\Logitar.Kraken\Logitar.Kraken.csproj", "{F47B0C96-AC0B-4186-888F-53CD4397219B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logitar.Kraken.EntityFrameworkCore.Relational", "src\Logitar.Kraken.EntityFrameworkCore.Relational\Logitar.Kraken.EntityFrameworkCore.Relational.csproj", "{613C4639-52F3-4FA1-9FAE-135D55B3ECEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{F47B0C96-AC0B-4186-888F-53CD4397219B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47B0C96-AC0B-4186-888F-53CD4397219B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47B0C96-AC0B-4186-888F-53CD4397219B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{613C4639-52F3-4FA1-9FAE-135D55B3ECEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{613C4639-52F3-4FA1-9FAE-135D55B3ECEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{613C4639-52F3-4FA1-9FAE-135D55B3ECEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{613C4639-52F3-4FA1-9FAE-135D55B3ECEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Logitar.Kraken.Infrastructure;
+namespace Logitar.Kraken.EntityFrameworkCore.Relational;
 
 public class KrakenContext : DbContext
 {
