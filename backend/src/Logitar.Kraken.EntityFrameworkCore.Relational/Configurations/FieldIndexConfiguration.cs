@@ -15,6 +15,9 @@ public sealed class FieldIndexConfiguration : IEntityTypeConfiguration<FieldInde
     builder.ToTable(KrakenDb.FieldIndex.Table.Table ?? string.Empty, KrakenDb.FieldIndex.Table.Schema);
     builder.HasKey(x => x.FieldIndexId);
 
+    builder.HasIndex(x => x.RealmId);
+    builder.HasIndex(x => x.RealmUid);
+    builder.HasIndex(x => x.RealmSlug);
     builder.HasIndex(x => x.ContentTypeId);
     builder.HasIndex(x => x.ContentTypeUid);
     builder.HasIndex(x => x.ContentTypeName);
@@ -48,6 +51,9 @@ public sealed class FieldIndexConfiguration : IEntityTypeConfiguration<FieldInde
     builder.Property(x => x.ContentLocaleName).HasMaxLength(UniqueName.MaximumLength);
     builder.Property(x => x.String).HasMaxLength(FieldIndexEntity.MaximumLength);
 
+    builder.HasOne(x => x.Realm).WithMany(x => x.FieldIndex)
+      .HasPrincipalKey(x => x.RealmId).HasForeignKey(x => x.RealmId)
+      .OnDelete(DeleteBehavior.Cascade);
     builder.HasOne(x => x.ContentType).WithMany(x => x.FieldIndex)
       .HasPrincipalKey(x => x.ContentTypeId).HasForeignKey(x => x.ContentTypeId)
       .OnDelete(DeleteBehavior.Cascade);
@@ -66,7 +72,5 @@ public sealed class FieldIndexConfiguration : IEntityTypeConfiguration<FieldInde
     builder.HasOne(x => x.ContentLocale).WithMany(x => x.FieldIndex)
       .HasPrincipalKey(x => x.ContentLocaleId).HasForeignKey(x => x.ContentLocaleId)
       .OnDelete(DeleteBehavior.Cascade);
-
-    // TODO(fpion): Realm?
   }
 }

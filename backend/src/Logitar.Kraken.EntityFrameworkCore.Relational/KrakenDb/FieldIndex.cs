@@ -25,6 +25,9 @@ public static class FieldIndex
   public static readonly ColumnId LanguageId = new(nameof(FieldIndexEntity.LanguageId), Table);
   public static readonly ColumnId LanguageIsDefault = new(nameof(FieldIndexEntity.LanguageIsDefault), Table);
   public static readonly ColumnId LanguageUid = new(nameof(FieldIndexEntity.LanguageUid), Table);
+  public static readonly ColumnId RealmId = new(nameof(FieldIndexEntity.RealmId), Table);
+  public static readonly ColumnId RealmSlug = new(nameof(FieldIndexEntity.RealmSlug), Table);
+  public static readonly ColumnId RealmUid = new(nameof(FieldIndexEntity.RealmUid), Table);
   public static readonly ColumnId Revision = new(nameof(FieldIndexEntity.Revision), Table);
   public static readonly ColumnId Status = new(nameof(FieldIndexEntity.Status), Table);
 

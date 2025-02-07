@@ -14,6 +14,8 @@ public sealed class PublishedContentConfiguration : IEntityTypeConfiguration<Pub
     builder.ToTable(KrakenDb.PublishedContents.Table.Table ?? string.Empty, KrakenDb.PublishedContents.Table.Schema);
     builder.HasKey(x => x.ContentLocaleId);
 
+    builder.HasIndex(x => x.RealmUid);
+    builder.HasIndex(x => x.RealmSlug);
     builder.HasIndex(x => x.ContentUid);
     builder.HasIndex(x => x.ContentTypeUid);
     builder.HasIndex(x => x.ContentTypeName);
@@ -38,6 +40,9 @@ public sealed class PublishedContentConfiguration : IEntityTypeConfiguration<Pub
       .HasPrincipalKey<ContentLocaleEntity>(x => x.ContentLocaleId)
       .HasForeignKey<PublishedContentEntity>(x => x.ContentLocaleId)
       .OnDelete(DeleteBehavior.Cascade);
+    builder.HasOne(x => x.Realm).WithMany(x => x.PublishedContents)
+      .HasPrincipalKey(x => x.RealmId).HasForeignKey(x => x.RealmId)
+      .OnDelete(DeleteBehavior.Cascade);
     builder.HasOne(x => x.Content).WithMany(x => x.PublishedContents)
       .HasPrincipalKey(x => x.ContentId).HasForeignKey(x => x.ContentId)
       .OnDelete(DeleteBehavior.Restrict);
@@ -47,7 +52,5 @@ public sealed class PublishedContentConfiguration : IEntityTypeConfiguration<Pub
     builder.HasOne(x => x.Language).WithMany(x => x.PublishedContents)
       .HasPrincipalKey(x => x.LanguageId).HasForeignKey(x => x.LanguageId)
       .OnDelete(DeleteBehavior.Restrict);
-
-    // TODO(fpion): Realm?
   }
 }

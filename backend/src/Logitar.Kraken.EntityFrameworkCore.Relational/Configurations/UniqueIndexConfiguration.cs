@@ -15,6 +15,9 @@ public sealed class UniqueIndexConfiguration : IEntityTypeConfiguration<UniqueIn
     builder.ToTable(KrakenDb.UniqueIndex.Table.Table ?? string.Empty, KrakenDb.UniqueIndex.Table.Schema);
     builder.HasKey(x => x.UniqueIndexId);
 
+    builder.HasIndex(x => x.RealmId);
+    builder.HasIndex(x => x.RealmUid);
+    builder.HasIndex(x => x.RealmSlug);
     builder.HasIndex(x => x.ContentTypeId);
     builder.HasIndex(x => x.ContentTypeUid);
     builder.HasIndex(x => x.ContentTypeName);
@@ -49,6 +52,9 @@ public sealed class UniqueIndexConfiguration : IEntityTypeConfiguration<UniqueIn
     builder.Property(x => x.Key).HasMaxLength(UniqueIndexEntity.MaximumLength + 22 + 1); // NOTE(fpion): 22 base64 characters in a Guid and 1 separator character.
     builder.Property(x => x.ContentLocaleName).HasMaxLength(UniqueName.MaximumLength);
 
+    builder.HasOne(x => x.Realm).WithMany(x => x.UniqueIndex)
+      .HasPrincipalKey(x => x.RealmId).HasForeignKey(x => x.RealmId)
+      .OnDelete(DeleteBehavior.Cascade);
     builder.HasOne(x => x.ContentType).WithMany(x => x.UniqueIndex)
       .HasPrincipalKey(x => x.ContentTypeId).HasForeignKey(x => x.ContentTypeId)
       .OnDelete(DeleteBehavior.Cascade);
@@ -67,7 +73,5 @@ public sealed class UniqueIndexConfiguration : IEntityTypeConfiguration<UniqueIn
     builder.HasOne(x => x.ContentLocale).WithMany(x => x.UniqueIndex)
       .HasPrincipalKey(x => x.ContentLocaleId).HasForeignKey(x => x.ContentLocaleId)
       .OnDelete(DeleteBehavior.Cascade);
-
-    // TODO(fpion): Realm?
   }
 }

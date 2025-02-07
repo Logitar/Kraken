@@ -10,6 +10,11 @@ public sealed class UniqueIndexEntity
 
   public int UniqueIndexId { get; private set; }
 
+  public RealmEntity? Realm { get; private set; }
+  public int? RealmId { get; private set; }
+  public Guid RealmUid { get; private set; }
+  public string RealmSlug { get; private set; } = string.Empty;
+
   public ContentTypeEntity? ContentType { get; private set; }
   public int ContentTypeId { get; private set; }
   public Guid ContentTypeUid { get; private set; }
@@ -56,6 +61,7 @@ public sealed class UniqueIndexEntity
   public string ContentLocaleName { get; private set; } = string.Empty;
 
   public UniqueIndexEntity(
+    RealmEntity? realm,
     ContentTypeEntity contentType,
     LanguageEntity? language,
     FieldTypeEntity fieldType,
@@ -65,6 +71,14 @@ public sealed class UniqueIndexEntity
     ContentStatus status,
     string value)
   {
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+      RealmSlug = realm.UniqueSlugNormalized;
+    }
+
     ContentType = contentType;
     ContentTypeId = contentType.ContentTypeId;
     ContentTypeUid = contentType.Id;

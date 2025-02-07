@@ -21,7 +21,8 @@ public sealed class DictionaryConfiguration : AggregateConfiguration<DictionaryE
       .HasPrincipalKey(x => x.RealmId).HasForeignKey(x => x.RealmId)
       .OnDelete(DeleteBehavior.Restrict);
     builder.HasOne(x => x.Language).WithOne(x => x.Dictionary)
-      .HasPrincipalKey<LanguageEntity>(x => x.LanguageId).HasForeignKey<DictionaryEntity>(x => x.LanguageId)
+      .HasPrincipalKey<LanguageEntity>(x => x.LanguageId)
+      .HasForeignKey<DictionaryEntity>(x => x.LanguageId)
       .OnDelete(DeleteBehavior.Restrict);
   }
 }

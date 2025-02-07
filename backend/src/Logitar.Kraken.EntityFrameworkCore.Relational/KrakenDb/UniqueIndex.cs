@@ -25,6 +25,9 @@ public static class UniqueIndex
   public static readonly ColumnId LanguageId = new(nameof(UniqueIndexEntity.LanguageId), Table);
   public static readonly ColumnId LanguageIsDefault = new(nameof(UniqueIndexEntity.LanguageIsDefault), Table);
   public static readonly ColumnId LanguageUid = new(nameof(UniqueIndexEntity.LanguageUid), Table);
+  public static readonly ColumnId RealmId = new(nameof(UniqueIndexEntity.RealmId), Table);
+  public static readonly ColumnId RealmSlug = new(nameof(UniqueIndexEntity.RealmSlug), Table);
+  public static readonly ColumnId RealmUid = new(nameof(UniqueIndexEntity.RealmUid), Table);
   public static readonly ColumnId Revision = new(nameof(UniqueIndexEntity.Revision), Table);
   public static readonly ColumnId Status = new(nameof(UniqueIndexEntity.Status), Table);
   public static readonly ColumnId UniqueIndexId = new(nameof(UniqueIndexEntity.UniqueIndexId), Table);

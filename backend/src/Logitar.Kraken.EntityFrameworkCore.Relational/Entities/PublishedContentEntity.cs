@@ -9,6 +9,11 @@ public sealed class PublishedContentEntity
   public ContentLocaleEntity? ContentLocale { get; private set; }
   public int ContentLocaleId { get; private set; }
 
+  public RealmEntity? Realm { get; private set; }
+  public int RealmId { get; private set; }
+  public Guid RealmUid { get; private set; }
+  public string RealmSlug { get; private set; } = string.Empty;
+
   public ContentEntity? Content { get; private set; }
   public int ContentId { get; private set; }
   public Guid ContentUid { get; private set; }
@@ -48,6 +53,15 @@ public sealed class PublishedContentEntity
     Content = content;
     ContentId = content.ContentId;
     ContentUid = content.Id;
+
+    if (content.RealmId.HasValue)
+    {
+      RealmEntity realm = content.Realm ?? throw new ArgumentException("The realm is required.", nameof(contentLocale));
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+      RealmSlug = realm.UniqueSlugNormalized;
+    }
 
     ContentTypeEntity contentType = content.ContentType ?? throw new ArgumentException("The content type is required.", nameof(contentLocale));
     ContentType = contentType;

@@ -38,14 +38,17 @@ public sealed class RealmEntity : AggregateEntity
   public List<ContentEntity> Contents { get; private set; } = [];
   public List<ContentTypeEntity> ContentTypes { get; private set; } = [];
   public List<DictionaryEntity> Dictionaries { get; private set; } = [];
+  public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
   public List<FieldTypeEntity> FieldTypes { get; private set; } = [];
   public List<LanguageEntity> Languages { get; private set; } = [];
   public List<MessageEntity> Messages { get; private set; } = [];
   public List<OneTimePasswordEntity> OneTimePasswords { get; private set; } = [];
+  public List<PublishedContentEntity> PublishedContents { get; private set; } = [];
   public List<RoleEntity> Roles { get; private set; } = [];
   public List<SenderEntity> Senders { get; private set; } = [];
   public List<SessionEntity> Sessions { get; private set; } = [];
   public List<TemplateEntity> Templates { get; private set; } = [];
+  public List<UniqueIndexEntity> UniqueIndex { get; private set; } = [];
   public List<UserEntity> Users { get; private set; } = [];
   public List<UserIdentifierEntity> UserIdentifiers { get; private set; } = [];
 
