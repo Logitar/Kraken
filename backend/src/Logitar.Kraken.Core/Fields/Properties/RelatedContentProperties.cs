@@ -5,6 +5,7 @@ namespace Logitar.Kraken.Core.Fields.Properties;
 
 public record RelatedContentProperties : FieldTypeProperties, IRelatedContentProperties
 {
+  [JsonIgnore]
   public override DataType DataType { get; } = DataType.RelatedContent;
 
   public ContentTypeId ContentTypeId { get; }

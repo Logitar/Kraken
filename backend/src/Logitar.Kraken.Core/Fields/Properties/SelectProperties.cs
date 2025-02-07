@@ -4,6 +4,7 @@ namespace Logitar.Kraken.Core.Fields.Properties;
 
 public record SelectProperties : FieldTypeProperties, ISelectProperties
 {
+  [JsonIgnore]
   public override DataType DataType { get; } = DataType.Select;
 
   public bool IsMultiple { get; }

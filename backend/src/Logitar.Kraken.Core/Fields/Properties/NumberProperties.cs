@@ -6,6 +6,7 @@ namespace Logitar.Kraken.Core.Fields.Properties;
 
 public record NumberProperties : FieldTypeProperties, INumberProperties
 {
+  [JsonIgnore]
   public override DataType DataType { get; } = DataType.Number;
 
   public double? MinimumValue { get; }
