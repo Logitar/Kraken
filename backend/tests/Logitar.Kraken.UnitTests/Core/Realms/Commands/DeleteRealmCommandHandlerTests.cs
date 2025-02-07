@@ -67,6 +67,20 @@ public class DeleteRealmCommandHandlerTests
   {
     _realmRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync(_realm);
 
+    _apiKeyRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _contentRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _contentTypeRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _dictionaryRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _fieldTypeRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _languageRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _messageRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _oneTimePasswordRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _roleRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _senderRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _sessionRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _templateRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+    _userRepository.Setup(x => x.LoadAsync(_realm.Id, _cancellationToken)).ReturnsAsync([]);
+
     RealmModel model = new();
     _realmQuerier.Setup(x => x.ReadAsync(_realm, _cancellationToken)).ReturnsAsync(model);
 
