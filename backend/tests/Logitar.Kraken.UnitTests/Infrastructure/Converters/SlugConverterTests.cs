@@ -12,7 +12,6 @@ public class SlugConverterTests
   public SlugConverterTests()
   {
     _serializerOptions.Converters.Add(new SlugConverter());
-    _serializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
   }
 
   [Fact(DisplayName = "It should deserialize the correct value.")]
