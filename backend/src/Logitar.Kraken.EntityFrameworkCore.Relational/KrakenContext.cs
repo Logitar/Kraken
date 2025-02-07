@@ -9,6 +9,7 @@ public class KrakenContext : DbContext
   {
   }
 
+  #region Identity
   public DbSet<ApiKeyEntity> ApiKeys => Set<ApiKeyEntity>();
   public DbSet<ApiKeyRoleEntity> ApiKeyRoles => Set<ApiKeyRoleEntity>();
   public DbSet<BlacklistedTokenEntity> TokenBlacklist => Set<BlacklistedTokenEntity>();
@@ -19,6 +20,12 @@ public class KrakenContext : DbContext
   public DbSet<UserEntity> Users => Set<UserEntity>();
   public DbSet<UserIdentifierEntity> UserIdentifiers => Set<UserIdentifierEntity>();
   public DbSet<UserRoleEntity> UserRoles => Set<UserRoleEntity>();
+  #endregion
+
+  #region Localization
+  public DbSet<DictionaryEntity> Dictionaries => Set<DictionaryEntity>();
+  public DbSet<LanguageEntity> Languages => Set<LanguageEntity>();
+  #endregion
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {

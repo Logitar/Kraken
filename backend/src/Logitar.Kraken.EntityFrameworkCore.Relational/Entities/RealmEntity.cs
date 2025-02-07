@@ -35,6 +35,8 @@ public sealed class RealmEntity : AggregateEntity
   public bool RequireConfirmedAccount { get; private set; }
 
   public List<ApiKeyEntity> ApiKeys { get; private set; } = [];
+  public List<DictionaryEntity> Dictionaries { get; private set; } = [];
+  public List<LanguageEntity> Languages { get; private set; } = [];
   public List<OneTimePasswordEntity> OneTimePasswords { get; private set; } = [];
   public List<RoleEntity> Roles { get; private set; } = [];
   public List<SessionEntity> Sessions { get; private set; } = [];
