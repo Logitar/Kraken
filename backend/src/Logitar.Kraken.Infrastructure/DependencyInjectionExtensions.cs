@@ -2,6 +2,7 @@
 using Logitar.EventSourcing.Infrastructure;
 using Logitar.Kraken.Core.Caching;
 using Logitar.Kraken.Infrastructure.Caching;
+using Logitar.Kraken.Infrastructure.Converters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -18,6 +19,7 @@ public static class DependencyInjectionExtensions
       .AddMemoryCache()
       .AddSingleton<ICacheService, CacheService>()
       .AddSingleton<IEventSerializer, EventSerializer>()
+      .AddSingleton<PasswordConverter>()
       .AddScoped<IEventBus, EventBus>()
       .AddQueriers()
       .AddRepositories();
