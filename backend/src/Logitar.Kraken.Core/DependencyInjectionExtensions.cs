@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Resources;
+using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Contents;
 using Logitar.Kraken.Core.Dictionaries;
 using Logitar.Kraken.Core.Fields;
@@ -15,6 +16,7 @@ public static class DependencyInjectionExtensions
   public static IServiceCollection AddLogitarKrakenCore(this IServiceCollection services)
   {
     return services
+      .AddLogitarEventSourcing()
       .AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
       .AddManagers();
   }
