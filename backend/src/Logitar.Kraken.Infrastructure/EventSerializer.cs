@@ -10,6 +10,7 @@ public class EventSerializer : EventSourcing.Infrastructure.EventSerializer
 
     SerializerOptions.Converters.Add(new ConfigurationIdConverter());
     SerializerOptions.Converters.Add(new DescriptionConverter());
+    SerializerOptions.Converters.Add(new DictionaryIdConverter());
     SerializerOptions.Converters.Add(new DisplayNameConverter());
     SerializerOptions.Converters.Add(new JwtSecretConverter());
     SerializerOptions.Converters.Add(new LanguageIdConverter());
