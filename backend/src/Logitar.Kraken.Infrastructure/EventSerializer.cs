@@ -23,5 +23,6 @@ public class EventSerializer : EventSourcing.Infrastructure.EventSerializer
     SerializerOptions.Converters.Add(new TemplateIdConverter());
     SerializerOptions.Converters.Add(new UniqueNameConverter());
     SerializerOptions.Converters.Add(new UrlConverter());
+    SerializerOptions.Converters.Add(new MessageIdConverter());
   }
 }
