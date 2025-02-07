@@ -22,9 +22,20 @@ public class KrakenContext : DbContext
   public DbSet<UserRoleEntity> UserRoles => Set<UserRoleEntity>();
   #endregion
 
+  #region Kraken
+  public DbSet<RealmEntity> Realms => Set<RealmEntity>();
+  #endregion
+
   #region Localization
   public DbSet<DictionaryEntity> Dictionaries => Set<DictionaryEntity>();
   public DbSet<LanguageEntity> Languages => Set<LanguageEntity>();
+  #endregion
+
+  #region Messaging
+  public DbSet<MessageEntity> Messages => Set<MessageEntity>();
+  public DbSet<RecipientEntity> Recipients => Set<RecipientEntity>();
+  public DbSet<SenderEntity> Senders => Set<SenderEntity>();
+  public DbSet<TemplateEntity> Templates => Set<TemplateEntity>();
   #endregion
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
