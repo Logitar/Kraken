@@ -6,8 +6,7 @@ public class IdentifierConverter : JsonConverter<Identifier>
 {
   public override Identifier? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
   {
-    string? value = reader.GetString();
-    return Identifier.TryCreate(value);
+    return Identifier.TryCreate(reader.GetString());
   }
 
   public override Identifier ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

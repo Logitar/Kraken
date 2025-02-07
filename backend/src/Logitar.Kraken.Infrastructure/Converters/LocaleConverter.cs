@@ -6,8 +6,7 @@ internal class LocaleConverter : JsonConverter<Locale>
 {
   public override Locale? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
   {
-    string? value = reader.GetString();
-    return Locale.TryCreate(value);
+    return Locale.TryCreate(reader.GetString());
   }
 
   public override void Write(Utf8JsonWriter writer, Locale locale, JsonSerializerOptions options)
