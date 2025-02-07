@@ -9,12 +9,16 @@ public class EventSerializer : EventSourcing.Infrastructure.EventSerializer
     base.RegisterConverters();
 
     SerializerOptions.Converters.Add(new ConfigurationIdConverter());
+    SerializerOptions.Converters.Add(new ContentTypeIdConverter());
     SerializerOptions.Converters.Add(new DescriptionConverter());
     SerializerOptions.Converters.Add(new DictionaryIdConverter());
     SerializerOptions.Converters.Add(new DisplayNameConverter());
+    SerializerOptions.Converters.Add(new FieldTypeIdConverter());
     SerializerOptions.Converters.Add(new JwtSecretConverter());
     SerializerOptions.Converters.Add(new LanguageIdConverter());
     SerializerOptions.Converters.Add(new LocaleConverter());
+    SerializerOptions.Converters.Add(new MessageIdConverter());
+    SerializerOptions.Converters.Add(new PlaceholderConverter());
     SerializerOptions.Converters.Add(new RealmIdConverter());
     SerializerOptions.Converters.Add(new RoleIdConverter());
     SerializerOptions.Converters.Add(new SenderIdConverter());
@@ -23,7 +27,5 @@ public class EventSerializer : EventSourcing.Infrastructure.EventSerializer
     SerializerOptions.Converters.Add(new TemplateIdConverter());
     SerializerOptions.Converters.Add(new UniqueNameConverter());
     SerializerOptions.Converters.Add(new UrlConverter());
-    SerializerOptions.Converters.Add(new MessageIdConverter());
-    SerializerOptions.Converters.Add(new FieldTypeIdConverter());
   }
 }
