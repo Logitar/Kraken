@@ -6,6 +6,7 @@ namespace Logitar.Kraken.Core.Fields.Properties;
 
 public record RichTextProperties : FieldTypeProperties, IRichTextProperties
 {
+  [JsonIgnore]
   public override DataType DataType { get; } = DataType.RichText;
 
   public string ContentType { get; }

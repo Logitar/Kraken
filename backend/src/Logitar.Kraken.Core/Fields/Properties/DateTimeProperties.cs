@@ -6,6 +6,7 @@ namespace Logitar.Kraken.Core.Fields.Properties;
 
 public record DateTimeProperties : FieldTypeProperties, IDateTimeProperties
 {
+  [JsonIgnore]
   public override DataType DataType { get; } = DataType.DateTime;
 
   public DateTime? MinimumValue { get; }

@@ -6,6 +6,7 @@ namespace Logitar.Kraken.Core.Fields.Properties;
 
 public record StringProperties : FieldTypeProperties, IStringProperties
 {
+  [JsonIgnore]
   public override DataType DataType { get; } = DataType.String;
 
   public int? MinimumLength { get; }
