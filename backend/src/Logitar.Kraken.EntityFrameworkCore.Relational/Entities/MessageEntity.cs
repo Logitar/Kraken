@@ -2,7 +2,6 @@
 using Logitar.Kraken.Contracts.Senders;
 using Logitar.Kraken.Core.Messages;
 using Logitar.Kraken.Core.Messages.Events;
-using System.Text.Json;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 

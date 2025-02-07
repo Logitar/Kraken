@@ -2,7 +2,6 @@
 using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.ApiKeys;
 using Logitar.Kraken.Core.ApiKeys.Events;
-using System.Text.Json;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 

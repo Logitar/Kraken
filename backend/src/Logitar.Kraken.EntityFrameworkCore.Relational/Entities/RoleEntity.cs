@@ -2,7 +2,6 @@
 using Logitar.Kraken.Core.Roles;
 using Logitar.Kraken.Core.Roles.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
-using System.Text.Json;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 

@@ -9,6 +9,12 @@ public class KrakenContext : DbContext
   {
   }
 
+  #region Cms
+  public DbSet<ContentTypeEntity> ContentTypes => Set<ContentTypeEntity>();
+  public DbSet<FieldDefinitionEntity> FieldDefinitions => Set<FieldDefinitionEntity>();
+  public DbSet<FieldTypeEntity> FieldTypes => Set<FieldTypeEntity>();
+  #endregion
+
   #region Identity
   public DbSet<ApiKeyEntity> ApiKeys => Set<ApiKeyEntity>();
   public DbSet<ApiKeyRoleEntity> ApiKeyRoles => Set<ApiKeyRoleEntity>();

@@ -1,7 +1,6 @@
 ﻿using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Passwords;
 using Logitar.Kraken.Core.Passwords.Events;
-using System.Text.Json;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 

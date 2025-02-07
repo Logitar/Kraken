@@ -1,7 +1,6 @@
 ﻿using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Dictionaries;
 using Logitar.Kraken.Core.Dictionaries.Events;
-using System.Text.Json;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 

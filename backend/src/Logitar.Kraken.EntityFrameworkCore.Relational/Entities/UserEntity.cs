@@ -3,7 +3,6 @@ using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Users;
 using Logitar.Kraken.Core.Users.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
-using System.Text.Json;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
