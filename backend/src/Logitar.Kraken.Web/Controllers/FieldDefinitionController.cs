@@ -24,6 +24,13 @@ public class FieldDefinitionController : ControllerBase
     return contentType == null ? NotFound() : Ok(contentType);
   }
 
+  [HttpDelete("{fieldId}")]
+  public async Task<ActionResult<ContentTypeModel>> RemoveFieldAsync(Guid contentTypeId, Guid fieldId, CancellationToken cancellationToken)
+  {
+    ContentTypeModel? contentType = await _mediator.Send(new RemoveFieldDefinitionCommand(contentTypeId, fieldId), cancellationToken);
+    return contentType == null ? NotFound() : Ok(contentType);
+  }
+
   [HttpPut("{fieldId}")]
   public async Task<ActionResult<ContentTypeModel>> ReplaceFieldAsync(Guid contentTypeId, Guid fieldId, [FromBody] CreateOrReplaceFieldDefinitionPayload payload, CancellationToken cancellationToken)
   {

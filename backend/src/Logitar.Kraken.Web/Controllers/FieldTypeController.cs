@@ -26,6 +26,13 @@ public class FieldTypeController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<FieldTypeModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    FieldTypeModel? fieldType = await _mediator.Send(new DeleteFieldTypeCommand(id), cancellationToken);
+    return fieldType == null ? NotFound() : Ok(fieldType);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<FieldTypeModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {

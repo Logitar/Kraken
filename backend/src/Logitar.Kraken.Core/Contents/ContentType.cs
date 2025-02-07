@@ -89,6 +89,7 @@ public class ContentType : AggregateRoot
   public FieldDefinition FindField(Guid id) => TryGetField(id) ?? throw new InvalidOperationException($"The field 'Id={id}' could not be found.");
   public FieldDefinition FindField(Identifier uniqueName) => TryGetField(uniqueName) ?? throw new InvalidOperationException($"The field 'UniqueName={uniqueName}' could not be found.");
 
+  public bool RemoveField(FieldDefinition fieldDefinition, ActorId? actorId = null) => RemoveField(fieldDefinition.Id, actorId);
   public bool RemoveField(Guid id, ActorId? actorId = null)
   {
     if (TryGetField(id) == null)
@@ -100,11 +101,10 @@ public class ContentType : AggregateRoot
   }
   protected virtual void Handle(ContentTypeFieldDefinitionRemoved @event)
   {
-    if (_fieldsById.Remove(@event.FieldId, out int index))
+    if (_fieldsById.TryGetValue(@event.FieldId, out int index))
     {
-      FieldDefinition fieldDefinition = _fieldDefinitions.ElementAt(index);
       _fieldDefinitions.RemoveAt(index);
-      _fieldsByUniqueName.Remove(fieldDefinition.UniqueName);
+      ReindexFields();
     }
   }
 
@@ -139,24 +139,13 @@ public class ContentType : AggregateRoot
   {
     if (_fieldsById.TryGetValue(@event.FieldDefinition.Id, out int index))
     {
-      FieldDefinition existingField = _fieldDefinitions.ElementAt(index);
       _fieldDefinitions[index] = @event.FieldDefinition;
-
-      if (!existingField.UniqueName.Equals(@event.FieldDefinition.UniqueName))
-      {
-        _fieldsByUniqueName.Remove(existingField.UniqueName);
-        _fieldsByUniqueName[@event.FieldDefinition.UniqueName] = index;
-      }
     }
     else
     {
-      index = _fieldDefinitions.Count;
-
       _fieldDefinitions.Add(@event.FieldDefinition);
-
-      _fieldsById[@event.FieldDefinition.Id] = index;
-      _fieldsByUniqueName[@event.FieldDefinition.UniqueName] = index;
     }
+    ReindexFields();
   }
 
   public void SetUniqueName(Identifier uniqueName, ActorId? actorId = null)
@@ -200,4 +189,16 @@ public class ContentType : AggregateRoot
   }
 
   public override string ToString() => $"{DisplayName?.Value ?? UniqueName.Value} | {base.ToString()}";
+
+  private void ReindexFields()
+  {
+    _fieldsById.Clear();
+    _fieldsByUniqueName.Clear();
+    for (int index = 0; index < _fieldDefinitions.Count; index++)
+    {
+      FieldDefinition fieldDefinition = _fieldDefinitions[index];
+      _fieldsById[fieldDefinition.Id] = index;
+      _fieldsByUniqueName[fieldDefinition.UniqueName] = index;
+    }
+  }
 }

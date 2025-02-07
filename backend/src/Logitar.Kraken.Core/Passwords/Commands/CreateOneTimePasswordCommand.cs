@@ -68,8 +68,8 @@ internal class CreateOneTimePasswordCommandHandler : IRequestHandler<CreateOneTi
     oneTimePassword.Update(actorId);
     await _oneTimePasswordRepository.SaveAsync(oneTimePassword, cancellationToken);
 
-    OneTimePasswordModel model = await _oneTimePasswordQuerier.ReadAsync(oneTimePassword, cancellationToken);
-    model.Password = passwordString;
-    return model;
+    OneTimePasswordModel result = await _oneTimePasswordQuerier.ReadAsync(oneTimePassword, cancellationToken);
+    result.Password = passwordString;
+    return result;
   }
 }
