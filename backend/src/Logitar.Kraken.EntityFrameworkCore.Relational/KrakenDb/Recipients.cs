@@ -16,6 +16,7 @@ public static class Recipients
   public static readonly ColumnId UserEmailAddress = new(nameof(RecipientEntity.UserEmailAddress), Table);
   public static readonly ColumnId UserFullName = new(nameof(RecipientEntity.UserFullName), Table);
   public static readonly ColumnId UserId = new(nameof(RecipientEntity.UserId), Table);
+  public static readonly ColumnId UserPhoneNumber = new(nameof(RecipientEntity.UserPhoneNumber), Table);
   public static readonly ColumnId UserPicture = new(nameof(RecipientEntity.UserPicture), Table);
   public static readonly ColumnId UserUniqueName = new(nameof(RecipientEntity.UserUniqueName), Table);
 }

@@ -31,8 +31,8 @@ public sealed class FieldDefinitionEntity
   public string? Description { get; private set; }
   public string? Placeholder { get; private set; }
 
-  //public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
-  //public List<UniqueIndexEntity> UniqueIndex { get; private set; } = [];
+  public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
+  public List<UniqueIndexEntity> UniqueIndex { get; private set; } = [];
 
   public FieldDefinitionEntity(ContentTypeEntity contentType, FieldTypeEntity fieldType, int order, ContentTypeFieldDefinitionChanged @event)
   {
@@ -66,5 +66,9 @@ public sealed class FieldDefinitionEntity
     Placeholder = field.Placeholder?.Value;
   }
 
-  // TODO(fpion): Equals, GetHashCode, ToString
+  public override bool Equals(object? obj) => obj is FieldDefinitionEntity fieldDefinition
+    && fieldDefinition.ContentTypeId == ContentTypeId
+    && fieldDefinition.Id == Id;
+  public override int GetHashCode() => HashCode.Combine(ContentTypeId, Id);
+  public override string ToString() => $"{DisplayName ?? UniqueName} | {GetType()} (ContentTypeId={ContentTypeId}, Id={Id})";
 }

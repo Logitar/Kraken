@@ -27,6 +27,7 @@ public sealed class RecipientConfiguration : IEntityTypeConfiguration<RecipientE
     builder.Property(x => x.PhoneNumber).HasMaxLength(Phone.NumberMaximumLength);
     builder.Property(x => x.UserUniqueName).HasMaxLength(UniqueName.MaximumLength);
     builder.Property(x => x.UserEmailAddress).HasMaxLength(Email.MaximumLength);
+    builder.Property(x => x.PhoneNumber).HasMaxLength(Phone.NumberMaximumLength);
     builder.Property(x => x.UserFullName).HasMaxLength(UserConfiguration.FullNameMaximumLength);
     builder.Property(x => x.UserPicture).HasMaxLength(Url.MaximumLength);
 

@@ -21,6 +21,7 @@ public sealed class RecipientEntity
   public int? UserId { get; private set; }
   public string? UserUniqueName { get; private set; }
   public string? UserEmailAddress { get; private set; }
+  public string? UserPhoneNumber { get; private set; }
   public string? UserFullName { get; private set; }
   public string? UserPicture { get; private set; }
 
@@ -42,6 +43,7 @@ public sealed class RecipientEntity
       UserId = user.UserId;
       UserUniqueName = user.UniqueName;
       UserEmailAddress = user.EmailAddress;
+      UserPhoneNumber = user.PhoneNumber;
       UserFullName = user.FullName;
       UserPicture = user.Picture;
     }
@@ -51,5 +53,7 @@ public sealed class RecipientEntity
   {
   }
 
-  // TODO(fpion): Equals, GetHashCode, ToString
+  public override bool Equals(object? obj) => obj is RecipientEntity recipient && recipient.RecipientId == RecipientId;
+  public override int GetHashCode() => RecipientId.GetHashCode();
+  public override string ToString() => $"{GetType()} (RecipientId={RecipientId})";
 }

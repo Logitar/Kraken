@@ -29,8 +29,8 @@ public sealed class FieldTypeEntity : AggregateEntity
   public string? Properties { get; private set; }
 
   public List<FieldDefinitionEntity> FieldDefinitions { get; private set; } = [];
-  //public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
-  //public List<UniqueIndexEntity> UniqueIndex { get; private set; } = [];
+  public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
+  public List<UniqueIndexEntity> UniqueIndex { get; private set; } = [];
 
   public FieldTypeEntity(RealmEntity? realm, FieldTypeCreated @event) : base(@event)
   {

@@ -10,9 +10,14 @@ public class KrakenContext : DbContext
   }
 
   #region Cms
+  public DbSet<ContentEntity> Contents => Set<ContentEntity>();
+  public DbSet<ContentLocaleEntity> ContentLocales => Set<ContentLocaleEntity>();
   public DbSet<ContentTypeEntity> ContentTypes => Set<ContentTypeEntity>();
   public DbSet<FieldDefinitionEntity> FieldDefinitions => Set<FieldDefinitionEntity>();
+  public DbSet<FieldIndexEntity> FieldIndex => Set<FieldIndexEntity>();
   public DbSet<FieldTypeEntity> FieldTypes => Set<FieldTypeEntity>();
+  public DbSet<PublishedContentEntity> PublishedContents => Set<PublishedContentEntity>();
+  public DbSet<UniqueIndexEntity> UniqueIndex => Set<UniqueIndexEntity>();
   #endregion
 
   #region Identity

@@ -35,6 +35,7 @@ public sealed class RealmEntity : AggregateEntity
   public bool RequireConfirmedAccount { get; private set; }
 
   public List<ApiKeyEntity> ApiKeys { get; private set; } = [];
+  public List<ContentEntity> Contents { get; private set; } = [];
   public List<ContentTypeEntity> ContentTypes { get; private set; } = [];
   public List<DictionaryEntity> Dictionaries { get; private set; } = [];
   public List<FieldTypeEntity> FieldTypes { get; private set; } = [];

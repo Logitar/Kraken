@@ -118,37 +118,28 @@ public sealed class SenderEntity : AggregateEntity
     Settings = settings.Count < 1 ? null : JsonSerializer.Serialize(settings);
   }
 
-  //public override string ToString()
-  //{
-  //  StringBuilder sender = new();
-  //  switch (Type)
-  //  {
-  //    case SenderType.Email:
-  //      if (Email == null)
-  //      {
-  //        throw new InvalidOperationException("The email has not been initialized.");
-  //      }
-  //      if (DisplayName == null)
-  //      {
-  //        sender.Append(Email.Address);
-  //      }
-  //      else
-  //      {
-  //        sender.Append(DisplayName.Value).Append(" <").Append(Email.Address).Append('>');
-  //      }
-  //      break;
-  //    case SenderType.Phone:
-  //      if (Phone == null)
-  //      {
-  //        throw new InvalidOperationException("The phone has not been initialized.");
-  //      }
-  //      sender.Append(Phone.FormatToE164());
-  //      break;
-  //    default:
-  //      throw new SenderTypeNotSupportedException(Type);
-  //  }
-  //  sender.Append(" | ");
-  //  sender.Append(base.ToString());
-  //  return sender.ToString();
-  //} // TODO(fpion): implement
+  public override string ToString()
+  {
+    StringBuilder sender = new();
+    switch (Type)
+    {
+      case SenderType.Email:
+        if (DisplayName == null)
+        {
+          sender.Append(EmailAddress);
+
+        }
+        else
+        {
+          sender.Append(DisplayName).Append(" <").Append(EmailAddress).Append('>');
+        }
+        break;
+      case SenderType.Phone:
+        sender.Append(PhoneNumber);
+        break;
+        throw new SenderTypeNotSupportedException(Type);
+    }
+    sender.Append(" | ").Append(base.ToString());
+    return sender.ToString();
+  }
 }

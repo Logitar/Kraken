@@ -27,10 +27,10 @@ public sealed class LanguageEntity : AggregateEntity
   public string NativeName { get; private set; } = string.Empty;
 
   public DictionaryEntity? Dictionary { get; private set; }
-  //public List<ContentLocaleEntity> ContentLocales { get; private set; } = [];
-  //public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
-  //public List<PublishedContentEntity> PublishedContents { get; private set; } = [];
-  //public List<UniqueIndexEntity> UniqueIndex { get; private set; } = [];
+  public List<ContentLocaleEntity> ContentLocales { get; private set; } = [];
+  public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
+  public List<PublishedContentEntity> PublishedContents { get; private set; } = [];
+  public List<UniqueIndexEntity> UniqueIndex { get; private set; } = [];
 
   public LanguageEntity(RealmEntity? realm, LanguageCreated @event) : base(@event)
   {
