@@ -4,7 +4,7 @@ using Logitar.Kraken.Core.Passwords;
 
 namespace Logitar.Kraken.Infrastructure.Passwords;
 
-public class PasswordManager : IPasswordManager
+public class PasswordManager : IPasswordManager // ISSUE #93: https://github.com/Logitar/Kraken/issues/93
 {
   public Password Create(IPasswordSettings settings, string password)
   {
