@@ -5,7 +5,7 @@ namespace Logitar.Kraken.EntityFrameworkCore.Relational;
 
 public interface IQueryHelper
 {
-  void ApplyTextSearch(IQueryBuilder query, TextSearch search, params ColumnId[] columns);
+  IQueryBuilder ApplyTextSearch(IQueryBuilder query, TextSearch search, params ColumnId[] columns);
 
   IQueryBuilder From(TableId table);
 }

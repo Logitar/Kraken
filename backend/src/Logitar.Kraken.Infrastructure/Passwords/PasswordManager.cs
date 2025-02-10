@@ -4,7 +4,7 @@ using Logitar.Kraken.Core.Passwords;
 
 namespace Logitar.Kraken.Infrastructure.Passwords;
 
-public class PasswordManager : IPasswordManager // TODO(fpion): implement
+public class PasswordManager : IPasswordManager
 {
   public Password Create(IPasswordSettings settings, string password)
   {
