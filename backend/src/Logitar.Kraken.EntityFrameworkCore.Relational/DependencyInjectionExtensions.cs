@@ -13,6 +13,7 @@ using Logitar.Kraken.Core.Senders;
 using Logitar.Kraken.Core.Sessions;
 using Logitar.Kraken.Core.Templates;
 using Logitar.Kraken.Core.Users;
+using Logitar.Kraken.EntityFrameworkCore.Relational.Queriers;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,7 +32,23 @@ public static class DependencyInjectionExtensions
 
   private static IServiceCollection AddQueriers(this IServiceCollection services)
   {
-    return services;
+    return services
+      .AddScoped<IApiKeyQuerier, ApiKeyQuerier>()
+      .AddScoped<IConfigurationQuerier, ConfigurationQuerier>()
+      .AddScoped<IContentQuerier, ContentQuerier>()
+      .AddScoped<IContentTypeQuerier, ContentTypeQuerier>()
+      .AddScoped<IDictionaryQuerier, DictionaryQuerier>()
+      .AddScoped<IFieldTypeQuerier, FieldTypeQuerier>()
+      .AddScoped<ILanguageQuerier, LanguageQuerier>()
+      .AddScoped<IMessageQuerier, MessageQuerier>()
+      .AddScoped<IOneTimePasswordQuerier, OneTimePasswordQuerier>()
+      .AddScoped<IPublishedContentQuerier, PublishedContentQuerier>()
+      .AddScoped<IRealmQuerier, RealmQuerier>()
+      .AddScoped<IRoleQuerier, RoleQuerier>()
+      .AddScoped<ISenderQuerier, SenderQuerier>()
+      .AddScoped<ISessionQuerier, SessionQuerier>()
+      .AddScoped<ITemplateQuerier, TemplateQuerier>()
+      .AddScoped<IUserQuerier, UserQuerier>();
   }
 
   private static IServiceCollection AddRepositories(this IServiceCollection services)
