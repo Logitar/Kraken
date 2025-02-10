@@ -1,6 +1,0 @@
-﻿using Logitar.EventSourcing;
-using MediatR;
-
-namespace Logitar.Kraken.Core.Sessions.Events;
-
-public record SessionSignedOut : DomainEvent, INotification;
