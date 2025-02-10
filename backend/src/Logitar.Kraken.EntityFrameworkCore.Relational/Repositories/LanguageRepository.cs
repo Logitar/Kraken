@@ -57,8 +57,8 @@ internal class LanguageRepository : Repository, ILanguageRepository
     string codeNormalized = Helper.Normalize(locale);
 
     string? streamId = await _languages.AsNoTracking()
-      .Include(x => x.Realm)
-      .Where(x => (id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null) && x.CodeNormalized == codeNormalized)
+      .WhereRealm(realmId)
+      .Where(x => x.CodeNormalized == codeNormalized)
       .Select(x => x.StreamId)
       .SingleOrDefaultAsync(cancellationToken);
 
@@ -70,8 +70,7 @@ internal class LanguageRepository : Repository, ILanguageRepository
     Guid? id = realmId?.ToGuid();
 
     string[] streamIds = await _languages.AsNoTracking()
-      .Include(x => x.Realm)
-      .Where(x => id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null)
+      .WhereRealm(realmId)
       .Select(x => x.StreamId)
       .Distinct()
       .ToArrayAsync(cancellationToken);
@@ -84,8 +83,8 @@ internal class LanguageRepository : Repository, ILanguageRepository
     Guid? id = realmId?.ToGuid();
 
     string? streamId = await _languages.AsNoTracking()
-      .Include(x => x.Realm)
-      .Where(x => (id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null) && x.IsDefault)
+      .WhereRealm(realmId)
+      .Where(x => x.IsDefault)
       .Select(x => x.StreamId)
       .SingleOrDefaultAsync(cancellationToken);
 

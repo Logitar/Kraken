@@ -58,8 +58,8 @@ internal class DictionaryRepository : Repository, IDictionaryRepository
 
     string? streamId = await _dictionaries.AsNoTracking()
       .Include(x => x.Language)
-      .Include(x => x.Realm)
-      .Where(x => (realmId.HasValue ? x.Realm!.Id == realmId.Value : x.RealmId == null) && x.Language!.Id == id)
+      .WhereRealm(languageId.RealmId)
+      .Where(x => x.Language!.Id == id)
       .Select(x => x.StreamId)
       .SingleOrDefaultAsync(cancellationToken);
 
@@ -71,8 +71,7 @@ internal class DictionaryRepository : Repository, IDictionaryRepository
     Guid? id = realmId?.ToGuid();
 
     string[] streamIds = await _dictionaries.AsNoTracking()
-      .Include(x => x.Realm)
-      .Where(x => id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null)
+      .WhereRealm(realmId)
       .Select(x => x.StreamId)
       .Distinct()
       .ToArrayAsync(cancellationToken);

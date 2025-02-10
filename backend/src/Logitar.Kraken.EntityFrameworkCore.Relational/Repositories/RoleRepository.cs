@@ -61,8 +61,8 @@ internal class RoleRepository : Repository, IRoleRepository
 
     string[] streamIds = await _roles.AsNoTracking()
       .Include(x => x.ApiKeys)
-      .Include(x => x.Realm)
-      .Where(x => (realmId.HasValue ? x.Realm!.Id == realmId.Value : x.RealmId == null) && x.ApiKeys.Any(apiKey => apiKey.Id == id))
+      .WhereRealm(apiKeyId.RealmId)
+      .Where(x => x.ApiKeys.Any(apiKey => apiKey.Id == id))
       .Select(x => x.StreamId)
       .Distinct()
       .ToArrayAsync(cancellationToken);
@@ -75,8 +75,7 @@ internal class RoleRepository : Repository, IRoleRepository
     Guid? id = realmId?.ToGuid();
 
     string[] streamIds = await _roles.AsNoTracking()
-      .Include(x => x.Realm)
-      .Where(x => id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null)
+      .WhereRealm(realmId)
       .Select(x => x.StreamId)
       .Distinct()
       .ToArrayAsync(cancellationToken);
@@ -90,9 +89,9 @@ internal class RoleRepository : Repository, IRoleRepository
     Guid id = userId.EntityId;
 
     string[] streamIds = await _roles.AsNoTracking()
-      .Include(x => x.Realm)
       .Include(x => x.Users)
-      .Where(x => (realmId.HasValue ? x.Realm!.Id == realmId.Value : x.RealmId == null) && x.Users.Any(user => user.Id == id))
+      .WhereRealm(userId.RealmId)
+      .Where(x => x.Users.Any(user => user.Id == id))
       .Select(x => x.StreamId)
       .Distinct()
       .ToArrayAsync(cancellationToken);
@@ -106,8 +105,8 @@ internal class RoleRepository : Repository, IRoleRepository
     string uniqueNameNormalized = Helper.Normalize(uniqueName);
 
     string? streamId = await _roles.AsNoTracking()
-      .Include(x => x.Realm)
-      .Where(x => (id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null) && x.UniqueNameNormalized == uniqueNameNormalized)
+      .WhereRealm(realmId)
+      .Where(x => x.UniqueNameNormalized == uniqueNameNormalized)
       .Select(x => x.StreamId)
       .SingleOrDefaultAsync(cancellationToken);
 

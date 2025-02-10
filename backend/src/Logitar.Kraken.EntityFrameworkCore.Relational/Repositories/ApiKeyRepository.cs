@@ -56,8 +56,7 @@ internal class ApiKeyRepository : Repository, IApiKeyRepository
     Guid? id = realmId?.ToGuid();
 
     string[] streamIds = await _apiKeys.AsNoTracking()
-      .Include(x => x.Realm)
-      .Where(x => id.HasValue ? x.Realm!.Id == id.Value : x.RealmId == null)
+      .WhereRealm(realmId)
       .Select(x => x.StreamId)
       .Distinct()
       .ToArrayAsync(cancellationToken);
@@ -71,9 +70,9 @@ internal class ApiKeyRepository : Repository, IApiKeyRepository
     Guid id = roleId.EntityId;
 
     string[] streamIds = await _apiKeys.AsNoTracking()
-      .Include(x => x.Realm)
       .Include(x => x.Roles)
-      .Where(x => (realmId.HasValue ? x.Realm!.Id == realmId.Value : x.RealmId == null) && x.Roles.Any(role => role.Id == id))
+      .WhereRealm(roleId.RealmId)
+      .Where(x => x.Roles.Any(role => role.Id == id))
       .Select(x => x.StreamId)
       .Distinct()
       .ToArrayAsync(cancellationToken);
