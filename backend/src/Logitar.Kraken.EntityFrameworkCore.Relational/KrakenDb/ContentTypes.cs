@@ -21,6 +21,7 @@ public static class ContentTypes
   public static readonly ColumnId Id = new(nameof(ContentTypeEntity.Id), Table);
   public static readonly ColumnId IsInvariant = new(nameof(ContentTypeEntity.IsInvariant), Table);
   public static readonly ColumnId RealmId = new(nameof(ContentTypeEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(ContentTypeEntity.RealmUid), Table);
   public static readonly ColumnId UniqueName = new(nameof(ContentTypeEntity.UniqueName), Table);
   public static readonly ColumnId UniqueNameNormalized = new(nameof(ContentTypeEntity.UniqueNameNormalized), Table);
 }

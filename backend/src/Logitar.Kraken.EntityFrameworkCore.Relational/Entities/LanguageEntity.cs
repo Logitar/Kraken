@@ -1,4 +1,5 @@
-﻿using Logitar.Kraken.Core.Localization;
+﻿using Logitar.Kraken.Contracts.Localization;
+using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Localization.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
 
@@ -61,6 +62,7 @@ public sealed class LanguageEntity : AggregateEntity, ISegregatedEntity
     IsDefault = @event.IsDefault;
   }
 
+  public LocaleModel GetLocale() => new(Code);
   public void SetLocale(LanguageLocaleChanged @event)
   {
     Update(@event);

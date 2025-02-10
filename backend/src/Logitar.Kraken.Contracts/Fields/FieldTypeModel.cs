@@ -1,4 +1,6 @@
-﻿namespace Logitar.Kraken.Contracts.Fields;
+﻿using Logitar.Kraken.Contracts.Realms;
+
+namespace Logitar.Kraken.Contracts.Fields;
 
 public class FieldTypeModel : AggregateModel
 {
@@ -15,4 +17,6 @@ public class FieldTypeModel : AggregateModel
   public SelectPropertiesModel? Select { get; set; }
   public StringPropertiesModel? String { get; set; }
   public TagsPropertiesModel? Tags { get; set; }
+
+  public RealmModel? Realm { get; set; }
 }

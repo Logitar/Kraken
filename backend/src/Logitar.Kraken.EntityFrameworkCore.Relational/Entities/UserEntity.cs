@@ -1,4 +1,7 @@
 ﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Contracts.Actors;
+using Logitar.Kraken.Contracts.Localization;
+using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Users;
 using Logitar.Kraken.Core.Users.Events;
@@ -207,6 +210,8 @@ public sealed class UserEntity : AggregateEntity, ISegregatedEntity
     DisabledOn = null;
   }
 
+  public LocaleModel? GetLocale() => Locale == null ? null : new(Locale);
+
   public void RemoveCustomIdentifier(UserIdentifierRemoved @event)
   {
     Update(@event);
@@ -229,6 +234,19 @@ public sealed class UserEntity : AggregateEntity, ISegregatedEntity
     }
   }
 
+  public AddressModel? GetAddress(ActorModel? verifiedBy)
+  {
+    if (AddressStreet == null || AddressLocality == null || AddressCountry == null || AddressFormatted == null)
+    {
+      return null;
+    }
+    return new AddressModel(AddressStreet, AddressLocality, AddressPostalCode, AddressRegion, AddressCountry, AddressFormatted)
+    {
+      IsVerified = IsAddressVerified,
+      VerifiedBy = verifiedBy,
+      VerifiedOn = AddressVerifiedOn?.AsUniversalTime()
+    };
+  }
   public void SetAddress(UserAddressChanged @event)
   {
     Update(@event);
@@ -268,6 +286,19 @@ public sealed class UserEntity : AggregateEntity, ISegregatedEntity
     }
   }
 
+  public EmailModel? GetEmail(ActorModel? verifiedBy)
+  {
+    if (EmailAddress == null)
+    {
+      return null;
+    }
+    return new EmailModel(EmailAddress)
+    {
+      IsVerified = IsEmailVerified,
+      VerifiedBy = verifiedBy,
+      VerifiedOn = EmailVerifiedOn?.AsUniversalTime()
+    };
+  }
   public void SetEmail(UserEmailChanged @event)
   {
     Update(@event);
@@ -304,6 +335,19 @@ public sealed class UserEntity : AggregateEntity, ISegregatedEntity
     PasswordChangedOn = @event.OccurredOn.AsUniversalTime();
   }
 
+  public PhoneModel? GetPhone(ActorModel? verifiedBy)
+  {
+    if (PhoneNumber == null || PhoneE164Formatted == null)
+    {
+      return null;
+    }
+    return new PhoneModel(PhoneCountryCode, PhoneNumber, PhoneExtension, PhoneE164Formatted)
+    {
+      IsVerified = IsPhoneVerified,
+      VerifiedBy = verifiedBy,
+      VerifiedOn = PhoneVerifiedOn?.AsUniversalTime()
+    };
+  }
   public void SetPhone(UserPhoneChanged @event)
   {
     Update(@event);

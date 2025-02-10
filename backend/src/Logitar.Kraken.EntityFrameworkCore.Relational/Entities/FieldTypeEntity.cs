@@ -1,5 +1,4 @@
-﻿using Logitar.EventSourcing;
-using Logitar.Kraken.Contracts.Fields;
+﻿using Logitar.Kraken.Contracts.Fields;
 using Logitar.Kraken.Core.Fields;
 using Logitar.Kraken.Core.Fields.Events;
 using Logitar.Kraken.Core.Fields.Properties;
@@ -7,12 +6,13 @@ using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class FieldTypeEntity : AggregateEntity
+public sealed class FieldTypeEntity : AggregateEntity, ISegregatedEntity
 {
   public int FieldTypeId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -34,8 +34,12 @@ public sealed class FieldTypeEntity : AggregateEntity
 
   public FieldTypeEntity(RealmEntity? realm, FieldTypeCreated @event) : base(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
 
     FieldTypeId fieldTypeId = new(@event.StreamId);
     Id = fieldTypeId.EntityId;
@@ -49,33 +53,102 @@ public sealed class FieldTypeEntity : AggregateEntity
   {
   }
 
+  public BooleanPropertiesModel? GetBooleanProperties()
+  {
+    if (Properties == null || DataType != DataType.Boolean)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<BooleanPropertiesModel>(Properties);
+  }
   public void SetProperties(FieldTypeBooleanPropertiesChanged @event)
   {
-    SetProperties(@event.Properties, @event);
+    Update(@event);
+
+    BooleanPropertiesModel properties = new(@event.Properties);
+    Properties = JsonSerializer.Serialize(properties);
+  }
+
+  public DateTimePropertiesModel? GetDateTimeProperties()
+  {
+    if (Properties == null || DataType != DataType.DateTime)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<DateTimePropertiesModel>(Properties);
   }
   public void SetProperties(FieldTypeDateTimePropertiesChanged @event)
   {
-    SetProperties(@event.Properties, @event);
+    Update(@event);
+
+    DateTimePropertiesModel properties = new(@event.Properties);
+    Properties = JsonSerializer.Serialize(properties);
+  }
+
+  public NumberPropertiesModel? GetNumberProperties()
+  {
+    if (Properties == null || DataType != DataType.Number)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<NumberPropertiesModel>(Properties);
   }
   public void SetProperties(FieldTypeNumberPropertiesChanged @event)
   {
-    SetProperties(@event.Properties, @event);
+    Update(@event);
+
+    NumberPropertiesModel properties = new(@event.Properties);
+    Properties = JsonSerializer.Serialize(properties);
+  }
+
+  public RelatedContentPropertiesModel? GetRelatedContentProperties()
+  {
+    if (Properties == null || DataType != DataType.RelatedContent)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<RelatedContentPropertiesModel>(Properties);
   }
   public void SetProperties(FieldTypeRelatedContentPropertiesChanged @event)
   {
+    Update(@event);
+
     RelatedContentPropertiesModel properties = new()
     {
       ContentTypeId = @event.Properties.ContentTypeId.EntityId,
       IsMultiple = @event.Properties.IsMultiple
     };
-    SetProperties(properties, @event);
+    Properties = JsonSerializer.Serialize(properties);
+  }
+
+  public RichTextPropertiesModel? GetRichTextProperties()
+  {
+    if (Properties == null || DataType != DataType.RichText)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<RichTextPropertiesModel>(Properties);
   }
   public void SetProperties(FieldTypeRichTextPropertiesChanged @event)
   {
-    SetProperties(@event.Properties, @event);
+    Update(@event);
+
+    RichTextPropertiesModel properties = new(@event.Properties);
+    Properties = JsonSerializer.Serialize(properties);
+  }
+
+  public SelectPropertiesModel? GetSelectProperties()
+  {
+    if (Properties == null || DataType != DataType.Select)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<SelectPropertiesModel>(Properties);
   }
   public void SetProperties(FieldTypeSelectPropertiesChanged @event)
   {
+    Update(@event);
+
     SelectPropertiesModel properties = new()
     {
       IsMultiple = @event.Properties.IsMultiple
@@ -84,20 +157,38 @@ public sealed class FieldTypeEntity : AggregateEntity
     {
       properties.Options.Add(new SelectOptionModel(option));
     }
-    SetProperties(properties, @event);
+    Properties = JsonSerializer.Serialize(properties);
+  }
+
+  public StringPropertiesModel? GetStringProperties()
+  {
+    if (Properties == null || DataType != DataType.String)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<StringPropertiesModel>(Properties);
   }
   public void SetProperties(FieldTypeStringPropertiesChanged @event)
   {
-    SetProperties(@event.Properties, @event);
+    Update(@event);
+
+    StringPropertiesModel properties = new(@event.Properties);
+    Properties = JsonSerializer.Serialize(properties);
+  }
+
+  public TagsPropertiesModel? GetTagsProperties()
+  {
+    if (Properties == null || DataType != DataType.Tags)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<TagsPropertiesModel>(Properties);
   }
   public void SetProperties(FieldTypeTagsPropertiesChanged @event)
   {
-    SetProperties(@event.Properties, @event);
-  }
-  private void SetProperties<T>(T properties, DomainEvent @event)
-  {
     Update(@event);
 
+    TagsPropertiesModel properties = new(@event.Properties);
     Properties = JsonSerializer.Serialize(properties);
   }
 

@@ -4,14 +4,14 @@ using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class PublishedContentEntity
+public sealed class PublishedContentEntity : ISegregatedEntity
 {
   public ContentLocaleEntity? ContentLocale { get; private set; }
   public int ContentLocaleId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
-  public int RealmId { get; private set; }
-  public Guid RealmUid { get; private set; }
+  public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
   public string RealmSlug { get; private set; } = string.Empty;
 
   public ContentEntity? Content { get; private set; }

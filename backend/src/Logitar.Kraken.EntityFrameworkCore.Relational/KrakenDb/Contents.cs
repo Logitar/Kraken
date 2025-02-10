@@ -18,4 +18,5 @@ public static class Contents
   public static readonly ColumnId ContentTypeId = new(nameof(ContentEntity.ContentTypeId), Table);
   public static readonly ColumnId Id = new(nameof(ContentEntity.Id), Table);
   public static readonly ColumnId RealmId = new(nameof(ContentEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(ContentEntity.RealmUid), Table);
 }

@@ -4,7 +4,7 @@ using Logitar.Kraken.Core.Fields;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class FieldIndexEntity
+public sealed class FieldIndexEntity : ISegregatedEntity
 {
   public const int MaximumLength = byte.MaxValue;
 
@@ -12,7 +12,7 @@ public sealed class FieldIndexEntity
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
-  public Guid RealmUid { get; private set; }
+  public Guid? RealmUid { get; private set; }
   public string RealmSlug { get; private set; } = string.Empty;
 
   public ContentTypeEntity? ContentType { get; private set; }

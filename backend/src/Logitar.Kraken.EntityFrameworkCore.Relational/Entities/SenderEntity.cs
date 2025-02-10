@@ -62,7 +62,14 @@ public sealed class SenderEntity : AggregateEntity, ISegregatedEntity
     IsDefault = @event.IsDefault;
   }
 
-  public MailgunSettingsModel GetMailgunSettings() => (Settings == null ? null : JsonSerializer.Deserialize<MailgunSettingsModel>(Settings)) ?? new();
+  public MailgunSettingsModel? GetMailgunSettings()
+  {
+    if (Settings == null || Provider != SenderProvider.Mailgun)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<MailgunSettingsModel>(Settings);
+  }
   public void SetMailgunSettings(SenderMailgunSettingsChanged @event)
   {
     Update(@event);
@@ -71,7 +78,14 @@ public sealed class SenderEntity : AggregateEntity, ISegregatedEntity
     Settings = JsonSerializer.Serialize(settings);
   }
 
-  public SendGridSettingsModel GetSendGridSettings() => (Settings == null ? null : JsonSerializer.Deserialize<SendGridSettingsModel>(Settings)) ?? new();
+  public SendGridSettingsModel? GetSendGridSettings()
+  {
+    if (Settings == null || Provider != SenderProvider.SendGrid)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<SendGridSettingsModel>(Settings);
+  }
   public void SetSendGridSettings(SenderSendGridSettingsChanged @event)
   {
     Update(@event);
@@ -80,7 +94,14 @@ public sealed class SenderEntity : AggregateEntity, ISegregatedEntity
     Settings = JsonSerializer.Serialize(settings);
   }
 
-  public TwilioSettingsModel GetTwilioSettings() => (Settings == null ? null : JsonSerializer.Deserialize<TwilioSettingsModel>(Settings)) ?? new();
+  public TwilioSettingsModel? GetTwilioSettings()
+  {
+    if (Settings == null || Provider != SenderProvider.Twilio)
+    {
+      return null;
+    }
+    return JsonSerializer.Deserialize<TwilioSettingsModel>(Settings);
+  }
   public void SetTwilioSettings(SenderTwilioSettingsChanged @event)
   {
     Update(@event);

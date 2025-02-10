@@ -3,7 +3,9 @@ using Logitar.Kraken.Contracts;
 using Logitar.Kraken.Contracts.Actors;
 using Logitar.Kraken.Contracts.ApiKeys;
 using Logitar.Kraken.Contracts.Configurations;
+using Logitar.Kraken.Contracts.Contents;
 using Logitar.Kraken.Contracts.Dictionaries;
+using Logitar.Kraken.Contracts.Fields;
 using Logitar.Kraken.Contracts.Localization;
 using Logitar.Kraken.Contracts.Messages;
 using Logitar.Kraken.Contracts.Passwords;
@@ -15,6 +17,7 @@ using Logitar.Kraken.Contracts.Settings;
 using Logitar.Kraken.Contracts.Templates;
 using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core.Configurations;
+using Logitar.Kraken.Core.Fields;
 using Logitar.Kraken.Core.Senders;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
@@ -81,6 +84,109 @@ internal class Mapper
     return destination;
   }
 
+  public ContentModel ToContent(ContentEntity source) => ToContent(source, GetRealm(source));
+  public ContentModel ToContent(ContentEntity source, RealmModel? realm)
+  {
+    if (source.ContentType == null)
+    {
+      throw new ArgumentException("The content type is required.", nameof(source));
+    }
+
+    ContentModel destination = new()
+    {
+      Id = source.Id,
+      ContentType = ToContentType(source.ContentType),
+      Realm = realm
+    };
+
+    foreach (ContentLocaleEntity locale in source.Locales)
+    {
+      ContentLocaleModel invariantOrLocale = ToContentLocale(locale, destination);
+      if (invariantOrLocale.Language == null)
+      {
+        destination.Invariant = invariantOrLocale;
+      }
+      else
+      {
+        destination.Locales.Add(invariantOrLocale);
+      }
+    }
+
+    MapAggregate(source, destination);
+
+    return destination;
+  }
+
+  public ContentLocaleModel ToContentLocale(ContentLocaleEntity source) => ToContentLocale(source, content: null);
+  public ContentLocaleModel ToContentLocale(ContentLocaleEntity source, ContentModel? content)
+  {
+    if (content == null)
+    {
+      if (source.Content == null)
+      {
+        throw new ArgumentException("The content is required.", nameof(source));
+      }
+
+      content = ToContent(source.Content);
+    }
+
+    ContentLocaleModel destination = new(content)
+    {
+      UniqueName = source.UniqueName,
+      DisplayName = source.DisplayName,
+      Description = source.Description,
+      Revision = source.Revision,
+      CreatedBy = TryGetActor(source.CreatedBy) ?? _system,
+      CreatedOn = source.CreatedOn.AsUniversalTime(),
+      UpdatedBy = TryGetActor(source.UpdatedBy) ?? _system,
+      UpdatedOn = source.UpdatedOn.AsUniversalTime(),
+      IsPublished = source.IsPublished,
+      PublishedRevision = source.PublishedRevision,
+      PublishedBy = TryGetActor(source.PublishedBy),
+      PublishedOn = source.PublishedOn?.AsUniversalTime()
+    };
+
+    if (source.Language != null)
+    {
+      destination.Language = ToLanguage(source.Language);
+    }
+    else if (source.LanguageId.HasValue)
+    {
+      throw new ArgumentException("The language is required.", nameof(source));
+    }
+
+    foreach (KeyValuePair<Guid, string> fieldValue in source.GetFieldValues())
+    {
+      destination.FieldValues.Add(new FieldValue(fieldValue));
+    }
+
+    return destination;
+  }
+
+  public ContentTypeModel ToContentType(ContentTypeEntity source) => ToContentType(source, GetRealm(source));
+  public ContentTypeModel ToContentType(ContentTypeEntity source, RealmModel? realm)
+  {
+    ContentTypeModel destination = new()
+    {
+      Id = source.Id,
+      IsInvariant = source.IsInvariant,
+      UniqueName = source.UniqueName,
+      DisplayName = source.DisplayName,
+      Description = source.Description,
+      FieldCount = source.FieldCount,
+      Realm = realm
+    };
+
+    foreach (FieldDefinitionEntity field in source.Fields)
+    {
+      destination.Fields.Add(ToFieldDefinition(field, realm));
+    }
+
+    MapAggregate(source, destination);
+
+    return destination;
+  }
+
   public DictionaryModel ToDictionary(DictionaryEntity source) => ToDictionary(source, GetRealm(source));
   public DictionaryModel ToDictionary(DictionaryEntity source, RealmModel? realm)
   {
@@ -107,6 +213,77 @@ internal class Mapper
     return destination;
   }
 
+  public FieldDefinitionModel ToFieldDefinition(FieldDefinitionEntity source, RealmModel? realm)
+  {
+    if (source.FieldType == null)
+    {
+      throw new ArgumentException("The field type is required.", nameof(source));
+    }
+
+    return new FieldDefinitionModel()
+    {
+      Id = source.Id,
+      Order = source.Order,
+      FieldType = ToFieldType(source.FieldType, realm),
+      IsInvariant = source.IsInvariant,
+      IsRequired = source.IsRequired,
+      IsIndexed = source.IsIndexed,
+      IsUnique = source.IsUnique,
+      UniqueName = source.UniqueName,
+      DisplayName = source.DisplayName,
+      Description = source.Description,
+      Placeholder = source.Placeholder
+    };
+  }
+
+  public FieldTypeModel ToFieldType(FieldTypeEntity source) => ToFieldType(source, GetRealm(source));
+  public FieldTypeModel ToFieldType(FieldTypeEntity source, RealmModel? realm)
+  {
+    FieldTypeModel destination = new()
+    {
+      Id = source.Id,
+      UniqueName = source.UniqueName,
+      DisplayName = source.DisplayName,
+      Description = source.Description,
+      DataType = source.DataType,
+      Realm = realm
+    };
+
+    switch (source.DataType)
+    {
+      case DataType.Boolean:
+        destination.Boolean = source.GetBooleanProperties();
+        break;
+      case DataType.DateTime:
+        destination.DateTime = source.GetDateTimeProperties();
+        break;
+      case DataType.Number:
+        destination.Number = source.GetNumberProperties();
+        break;
+      case DataType.RelatedContent:
+        destination.RelatedContent = source.GetRelatedContentProperties();
+        break;
+      case DataType.RichText:
+        destination.RichText = source.GetRichTextProperties();
+        break;
+      case DataType.Select:
+        destination.Select = source.GetSelectProperties();
+        break;
+      case DataType.String:
+        destination.String = source.GetStringProperties();
+        break;
+      case DataType.Tags:
+        destination.Tags = source.GetTagsProperties();
+        break;
+      default:
+        throw new DataTypeNotSupportedException(source.DataType);
+    }
+
+    MapAggregate(source, destination);
+
+    return destination;
+  }
+
   public LanguageModel ToLanguage(LanguageEntity source) => ToLanguage(source, GetRealm(source));
   public LanguageModel ToLanguage(LanguageEntity source, RealmModel? realm)
   {
@@ -114,7 +291,7 @@ internal class Mapper
     {
       Id = source.Id,
       IsDefault = source.IsDefault,
-      Locale = new LocaleModel(source.Code),
+      Locale = source.GetLocale(),
       Realm = realm
     };
 
@@ -135,7 +312,7 @@ internal class Mapper
       Sender = source.Sender == null ? ToSender(source) : ToSender(source.Sender, realm),
       Template = source.Template == null ? ToTemplate(source) : ToTemplate(source.Template, realm),
       IgnoreUserLocale = source.IgnoreUserLocale,
-      Locale = source.Locale == null ? null : new LocaleModel(source.Locale),
+      Locale = source.GetLocale(),
       IsDemo = source.IsDemo,
       Status = source.Status,
       Realm = realm
@@ -214,6 +391,27 @@ internal class Mapper
     return destination;
   }
 
+  public PublishedContentLocale ToPublishedContentLocale(PublishedContentEntity source, PublishedContent content, LanguageSummary? language)
+  {
+    PublishedContentLocale destination = new(content)
+    {
+      Language = language,
+      UniqueName = source.UniqueName,
+      DisplayName = source.DisplayName,
+      Description = source.Description,
+      Revision = source.Revision,
+      PublishedBy = TryGetActor(source.PublishedBy) ?? _system,
+      PublishedOn = source.PublishedOn.AsUniversalTime()
+    };
+
+    foreach (KeyValuePair<Guid, string> fieldValue in source.GetFieldValues())
+    {
+      destination.FieldValues.Add(new FieldValue(fieldValue));
+    }
+
+    return destination;
+  }
+
   public RealmModel ToRealm(RealmEntity source)
   {
     RealmModel destination = new()
@@ -283,11 +481,23 @@ internal class Mapper
       Description = source.Description,
       Type = source.Type,
       Provider = source.Provider,
-      Mailgun = source.GetMailgunSettings(),
-      SendGrid = source.GetSendGridSettings(),
-      Twilio = source.GetTwilioSettings(),
       Realm = realm
     };
+
+    switch (source.Provider)
+    {
+      case SenderProvider.Mailgun:
+        destination.Mailgun = source.GetMailgunSettings();
+        break;
+      case SenderProvider.SendGrid:
+        destination.SendGrid = source.GetSendGridSettings();
+        break;
+      case SenderProvider.Twilio:
+        destination.Twilio = source.GetTwilioSettings();
+        break;
+      default:
+        throw new SenderProviderNotSupportedException(source.Provider);
+    }
 
     MapAggregate(source, destination);
 
@@ -362,7 +572,29 @@ internal class Mapper
     {
       Id = source.Id,
       UniqueName = source.UniqueName,
-      // TODO(fpion): complete
+      HasPassword = source.HasPassword,
+      PasswordChangedBy = TryGetActor(source.PasswordChangedBy),
+      PasswordChangedOn = source.PasswordChangedOn?.AsUniversalTime(),
+      DisabledBy = TryGetActor(source.DisabledBy),
+      DisabledOn = source.DisabledOn?.AsUniversalTime(),
+      IsDisabled = source.IsDisabled,
+      Address = source.GetAddress(TryGetActor(source.AddressVerifiedBy)),
+      Email = source.GetEmail(TryGetActor(source.EmailVerifiedBy)),
+      Phone = source.GetPhone(TryGetActor(source.PhoneVerifiedBy)),
+      IsConfirmed = source.IsConfirmed,
+      FirstName = source.FirstName,
+      MiddleName = source.MiddleName,
+      LastName = source.LastName,
+      FullName = source.FullName,
+      Nickname = source.Nickname,
+      Birthdate = source.Birthdate?.AsUniversalTime(),
+      Gender = source.Gender,
+      Locale = source.GetLocale(),
+      TimeZone = source.TimeZone,
+      Picture = source.Picture,
+      Profile = source.Profile,
+      Website = source.Website,
+      AuthenticatedOn = source.AuthenticatedOn?.AsUniversalTime(),
       Realm = realm
     };
 

@@ -1,4 +1,5 @@
-﻿using Logitar.Kraken.Contracts.Messages;
+﻿using Logitar.Kraken.Contracts.Localization;
+using Logitar.Kraken.Contracts.Messages;
 using Logitar.Kraken.Contracts.Senders;
 using Logitar.Kraken.Contracts.Templates;
 using Logitar.Kraken.Core.Messages;
@@ -123,6 +124,8 @@ public sealed class MessageEntity : AggregateEntity, ISegregatedEntity
   }
 
   public TemplateContentModel GetBody() => new(BodyType, BodyText);
+
+  public LocaleModel? GetLocale() => Locale == null ? null : new(Locale);
 
   public Dictionary<string, string> GetVariables()
   {
