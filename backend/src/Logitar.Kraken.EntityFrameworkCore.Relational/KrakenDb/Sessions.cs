@@ -19,6 +19,7 @@ public static class Sessions
   public static readonly ColumnId IsActive = new(nameof(SessionEntity.IsActive), Table);
   public static readonly ColumnId IsPersistent = new(nameof(SessionEntity.IsPersistent), Table);
   public static readonly ColumnId RealmId = new(nameof(SessionEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(SessionEntity.RealmUid), Table);
   public static readonly ColumnId SecretHash = new(nameof(SessionEntity.SecretHash), Table);
   public static readonly ColumnId SessionId = new(nameof(SessionEntity.SessionId), Table);
   public static readonly ColumnId SignedOutBy = new(nameof(SessionEntity.SignedOutBy), Table);

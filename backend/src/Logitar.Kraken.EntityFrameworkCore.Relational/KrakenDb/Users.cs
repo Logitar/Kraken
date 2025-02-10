@@ -57,6 +57,7 @@ public static class Users
   public static readonly ColumnId Picture = new(nameof(UserEntity.Picture), Table);
   public static readonly ColumnId Profile = new(nameof(UserEntity.Profile), Table);
   public static readonly ColumnId RealmId = new(nameof(UserEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(UserEntity.RealmUid), Table);
   public static readonly ColumnId TimeZone = new(nameof(UserEntity.TimeZone), Table);
   public static readonly ColumnId UniqueName = new(nameof(UserEntity.UniqueName), Table);
   public static readonly ColumnId UniqueNameNormalized = new(nameof(UserEntity.UniqueNameNormalized), Table);

@@ -5,12 +5,13 @@ using Logitar.Kraken.Core.Sessions.Events;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class SessionEntity : AggregateEntity
+public sealed class SessionEntity : AggregateEntity, ISegregatedEntity
 {
   public int SessionId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -38,6 +39,7 @@ public sealed class SessionEntity : AggregateEntity
   {
     Realm = user.Realm;
     RealmId = user.RealmId;
+    RealmUid = user.RealmUid;
 
     SessionId sessionId = new(@event.StreamId);
     Id = sessionId.EntityId;
