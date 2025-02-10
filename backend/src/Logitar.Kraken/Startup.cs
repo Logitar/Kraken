@@ -37,7 +37,7 @@ internal class Startup : StartupBase
 
     services.AddFeatureManagement();
 
-    DatabaseProvider databaseProvider = _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer; // TODO(fpion): env var override
+    DatabaseProvider databaseProvider = _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer;
     switch (databaseProvider)
     {
       case DatabaseProvider.EntityFrameworkCoreSqlServer:

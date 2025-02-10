@@ -22,6 +22,6 @@ internal class ConfigurationRepository : Repository, IConfigurationRepository
   {
     await base.SaveAsync(configuration, cancellationToken);
 
-    // TODO(fpion): encache
+    // ISSUE #88: https://github.com/Logitar/Kraken/issues/88
   }
 }

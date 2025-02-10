@@ -1,1 +1,50 @@
 name: kraken
+services:
+  kraken_mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: Logitar.Kraken_mssql
+    restart: unless-stopped
+    user: root
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: H8A9VsMra2vqmpGE
+    ports:
+      - 1446:1433
+    volumes:
+      - mssql_backup:/var/opt/mssql/backup
+      - mssql_data:/var/opt/mssql/data
+      - mssql_log:/var/opt/mssql/log
+
+  kraken_postgres:
+    image: postgres
+    container_name: Logitar.Kraken_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: w7eZ5fSW6KQpdBX2
+    ports:
+      - 5446:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  kraken_backend:
+    build:
+      context: ./backend
+      dockerfile: /src/Logitar.Kraken/Dockerfile
+    image: kraken_backend
+    container_name: Logitar.Kraken_backend
+    depends_on:
+      - kraken_mssql
+      - kraken_postgres
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_Environment: Development
+      POSTGRESQLCONNSTR_Kraken: "User ID=postgres;Password=w7eZ5fSW6KQpdBX2;Host=kraken_postgres;Port=5432;Database=kraken;"
+      SQLCONNSTR_Kraken: "Server=kraken_mssql;Database=Kraken;User Id=SA;Password=H8A9VsMra2vqmpGE;Persist Security Info=False;Encrypt=False;"
+    ports:
+      - 8096:8080
+
+volumes:
+  mssql_backup:
+  mssql_data:
+  mssql_log:
+  postgres_data:

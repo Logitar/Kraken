@@ -14,14 +14,14 @@ public static class DependencyInjectionExtensions
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
       });
 
-    //CookiesSettings cookiesSettings = configuration.GetSection(CookiesSettings.SectionKey).Get<CookiesSettings>() ?? new(); // TODO(fpion): env var override
+    //CookiesSettings cookiesSettings = configuration.GetSection(CookiesSettings.SectionKey).Get<CookiesSettings>() ?? new();
     //services.AddSingleton(cookiesSettings); // ISSUE #34: https://github.com/Logitar/Kraken/issues/34
 
-    CorsSettings corsSettings = configuration.GetSection(CorsSettings.SectionKey).Get<CorsSettings>() ?? new(); // TODO(fpion): env var override
+    CorsSettings corsSettings = configuration.GetSection(CorsSettings.SectionKey).Get<CorsSettings>() ?? new();
     services.AddSingleton(corsSettings);
     services.AddCors();
 
-    //OpenAuthenticationSettings openAuthenticationSettings = configuration.GetSection(OpenAuthenticationSettings.SectionKey).Get<OpenAuthenticationSettings>() ?? new(); // TODO(fpion): env var override
+    //OpenAuthenticationSettings openAuthenticationSettings = configuration.GetSection(OpenAuthenticationSettings.SectionKey).Get<OpenAuthenticationSettings>() ?? new();
     //services.AddSingleton(openAuthenticationSettings); // ISSUE #35: https://github.com/Logitar/Kraken/issues/35
 
     return services
