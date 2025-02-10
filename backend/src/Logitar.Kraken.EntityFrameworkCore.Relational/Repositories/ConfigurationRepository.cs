@@ -18,8 +18,10 @@ internal class ConfigurationRepository : Repository, IConfigurationRepository
     return await LoadAsync<Configuration>(new ConfigurationId().StreamId, version, cancellationToken);
   }
 
-  public async Task SaveAsync(Configuration configuration, CancellationToken cancellationToken = default)
+  public async Task SaveAsync(Configuration configuration, CancellationToken cancellationToken)
   {
     await base.SaveAsync(configuration, cancellationToken);
+
+    // TODO(fpion): encache
   }
 }
