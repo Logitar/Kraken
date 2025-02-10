@@ -26,6 +26,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  kraken_backend:
+    build:
+      context: ./backend
+      dockerfile: /src/Logitar.Kraken/Dockerfile
+    image: kraken_backend
+    container_name: Logitar.Kraken_backend
+    depends_on:
+      - kraken_mssql
+      - kraken_postgres
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_Environment: Development
+    ports:
+      - 8096:8080
+
 volumes:
   mssql_backup:
   mssql_data:
