@@ -1,4 +1,6 @@
-﻿namespace Logitar.Kraken.Contracts.Contents;
+﻿using Logitar.Kraken.Contracts.Realms;
+
+namespace Logitar.Kraken.Contracts.Contents;
 
 public class ContentModel : AggregateModel
 {
@@ -6,6 +8,8 @@ public class ContentModel : AggregateModel
 
   public ContentLocaleModel Invariant { get; set; }
   public List<ContentLocaleModel> Locales { get; set; } = [];
+
+  public RealmModel? Realm { get; set; }
 
   public ContentModel()
   {

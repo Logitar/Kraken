@@ -26,6 +26,10 @@ public class OneTimePassword : AggregateRoot, ICustomizable
   private readonly Dictionary<Identifier, string> _customAttributes = [];
   public IReadOnlyDictionary<Identifier, string> CustomAttributes => _customAttributes.AsReadOnly();
 
+  public OneTimePassword() : base()
+  {
+  }
+
   public OneTimePassword(Password password, DateTime? expiresOn = null, int? maximumAttempts = null, UserId? userId = null, ActorId? actorId = null, OneTimePasswordId? oneTimePasswordId = null)
     : base(oneTimePasswordId?.StreamId)
   {

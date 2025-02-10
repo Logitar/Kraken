@@ -4,7 +4,7 @@ using NodaTime;
 
 namespace Logitar.Kraken.Core.Validators;
 
-public class TimeZoneValidator<T> : IPropertyValidator<T, string>
+internal class TimeZoneValidator<T> : IPropertyValidator<T, string>
 {
   public string Name { get; } = "TimeZoneValidator";
 

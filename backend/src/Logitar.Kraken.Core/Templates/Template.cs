@@ -68,6 +68,10 @@ public class Template : AggregateRoot
     }
   }
 
+  public Template() : base()
+  {
+  }
+
   public Template(Identifier uniqueKey, Subject subject, TemplateContent content, ActorId? actorId = null, TemplateId? templateId = null)
     : base(templateId?.StreamId)
   {

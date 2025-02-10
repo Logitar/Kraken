@@ -1,5 +1,8 @@
-﻿using Logitar.Kraken.Constants;
+﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
+using Logitar.Kraken.Constants;
 using Logitar.Kraken.Core;
+using Logitar.Kraken.EntityFrameworkCore.Relational;
+using Logitar.Kraken.EntityFrameworkCore.SqlServer;
 using Logitar.Kraken.Infrastructure;
 using Logitar.Kraken.Web;
 using Logitar.Kraken.Web.Extensions;
@@ -24,6 +27,7 @@ internal class Startup : StartupBase
 
     services.AddLogitarKrakenCore();
     services.AddLogitarKrakenInfrastructure();
+    services.AddLogitarKrakenEntityFrameworkCoreRelational();
     services.AddLogitarKrakenWeb(_configuration);
 
     services.AddOpenApi();
@@ -32,6 +36,18 @@ internal class Startup : StartupBase
     IHealthChecksBuilder healthChecks = services.AddHealthChecks();
 
     services.AddFeatureManagement();
+
+    DatabaseProvider databaseProvider = _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer;
+    switch (databaseProvider)
+    {
+      case DatabaseProvider.EntityFrameworkCoreSqlServer:
+        services.AddLogitarKrakenEntityFrameworkCoreSqlServer(_configuration);
+        healthChecks.AddDbContextCheck<EventContext>();
+        healthChecks.AddDbContextCheck<KrakenContext>();
+        break;
+      default:
+        throw new DatabaseProviderNotSupportedException(databaseProvider);
+    }
   }
 
   public override void Configure(IApplicationBuilder builder)

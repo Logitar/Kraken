@@ -3,7 +3,7 @@ using Logitar.Kraken.Contracts.Fields;
 
 namespace Logitar.Kraken.Core.Fields.Validators;
 
-public class RichTextPropertiesValidator : AbstractValidator<IRichTextProperties>
+internal class RichTextPropertiesValidator : AbstractValidator<IRichTextProperties>
 {
   public RichTextPropertiesValidator()
   {

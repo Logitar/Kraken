@@ -39,6 +39,10 @@ public class Message : AggregateRoot
   private readonly Dictionary<string, string> _resultData = [];
   public IReadOnlyDictionary<string, string> ResultData => _resultData.AsReadOnly();
 
+  public Message() : base()
+  {
+  }
+
   public Message(
     Subject subject,
     TemplateContent body,

@@ -3,7 +3,7 @@ using Logitar.Kraken.Contracts.Senders;
 
 namespace Logitar.Kraken.Core.Senders.Settings;
 
-public class TwilioSettingsValidator : AbstractValidator<ITwilioSettings>
+internal class TwilioSettingsValidator : AbstractValidator<ITwilioSettings>
 {
   public TwilioSettingsValidator()
   {

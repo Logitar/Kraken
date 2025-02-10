@@ -122,6 +122,10 @@ public class Realm : AggregateRoot
   public IUserSettings UserSettings => new UserSettings(UniqueNameSettings, PasswordSettings, RequireUniqueEmail, RequireConfirmedAccount);
   public IRoleSettings RoleSettings => new RoleSettings(UniqueNameSettings);
 
+  public Realm() : base()
+  {
+  }
+
   public Realm(Slug uniqueSlug, JwtSecret? secret = null, ActorId? actorId = null, RealmId? realmId = null) : base(realmId?.StreamId)
   {
     secret ??= JwtSecret.Generate();

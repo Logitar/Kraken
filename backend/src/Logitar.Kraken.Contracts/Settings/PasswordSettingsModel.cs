@@ -9,4 +9,24 @@ public record PasswordSettingsModel : IPasswordSettings
   public bool RequireUppercase { get; set; } = true;
   public bool RequireDigit { get; set; } = true;
   public string HashingStrategy { get; set; } = "PBKDF2";
+
+  public PasswordSettingsModel()
+  {
+  }
+
+  public PasswordSettingsModel(int requiredLength, int requiredUniqueChars, bool requireNonAlphanumeric, bool requireLowercase, bool requireUppercase, bool requireDigit, string hashingStrategy)
+  {
+    RequiredLength = requiredLength;
+    RequiredUniqueChars = requiredUniqueChars;
+    RequireNonAlphanumeric = requireNonAlphanumeric;
+    RequireLowercase = requireLowercase;
+    RequireUppercase = requireUppercase;
+    RequireDigit = requireDigit;
+    HashingStrategy = hashingStrategy;
+  }
+
+  public PasswordSettingsModel(IPasswordSettings password)
+    : this(password.RequiredLength, password.RequiredUniqueChars, password.RequireNonAlphanumeric, password.RequireLowercase, password.RequireUppercase, password.RequireDigit, password.HashingStrategy)
+  {
+  }
 }

@@ -1,6 +1,6 @@
 ﻿using Logitar.Kraken.Constants;
 using Logitar.Kraken.Core.Configurations.Commands;
-using Logitar.Kraken.Infrastructure.Commands;
+using Logitar.Kraken.EntityFrameworkCore.Relational.Commands;
 using MediatR;
 using Microsoft.FeatureManagement;
 

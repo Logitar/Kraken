@@ -1,8 +1,9 @@
-﻿using FluentValidation.Resources;
-using Logitar.EventSourcing;
+﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Contents;
 using Logitar.Kraken.Core.Dictionaries;
 using Logitar.Kraken.Core.Fields;
+using Logitar.Kraken.Core.Fields.Validators;
+using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Roles;
 using Logitar.Kraken.Core.Templates;
@@ -18,7 +19,9 @@ public static class DependencyInjectionExtensions
     return services
       .AddLogitarEventSourcing()
       .AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
-      .AddManagers();
+      .AddManagers()
+      .AddSingleton<IAddressHelper, AddressHelper>()
+      .AddTransient<IFieldValueValidatorFactory, FieldValueValidatorFactory>();
   }
 
   private static IServiceCollection AddManagers(this IServiceCollection services)
