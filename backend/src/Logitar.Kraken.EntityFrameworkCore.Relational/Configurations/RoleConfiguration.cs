@@ -15,6 +15,7 @@ public sealed class RoleConfiguration : AggregateConfiguration<RoleEntity>, IEnt
     builder.HasKey(x => x.RoleId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
     builder.HasIndex(x => x.UniqueName);
     builder.HasIndex(x => new { x.RealmId, x.UniqueNameNormalized }).IsUnique();

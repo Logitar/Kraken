@@ -20,4 +20,5 @@ public static class Dictionaries
   public static readonly ColumnId Id = new(nameof(DictionaryEntity.Id), Table);
   public static readonly ColumnId LanguageId = new(nameof(DictionaryEntity.LanguageId), Table);
   public static readonly ColumnId RealmId = new(nameof(DictionaryEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(DictionaryEntity.RealmUid), Table);
 }

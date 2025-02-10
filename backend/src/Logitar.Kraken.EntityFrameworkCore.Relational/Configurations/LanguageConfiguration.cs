@@ -16,6 +16,7 @@ public sealed class LanguageConfiguration : AggregateConfiguration<LanguageEntit
     builder.HasKey(x => x.LanguageId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
     builder.HasIndex(x => x.IsDefault);
     builder.HasIndex(x => x.LCID);

@@ -19,6 +19,7 @@ public static class Roles
   public static readonly ColumnId DisplayName = new(nameof(RoleEntity.DisplayName), Table);
   public static readonly ColumnId Id = new(nameof(RoleEntity.Id), Table);
   public static readonly ColumnId RealmId = new(nameof(RoleEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(RoleEntity.RealmUid), Table);
   public static readonly ColumnId RoleId = new(nameof(RoleEntity.RoleId), Table);
   public static readonly ColumnId UniqueName = new(nameof(RoleEntity.UniqueName), Table);
   public static readonly ColumnId UniqueNameNormalized = new(nameof(RoleEntity.UniqueNameNormalized), Table);

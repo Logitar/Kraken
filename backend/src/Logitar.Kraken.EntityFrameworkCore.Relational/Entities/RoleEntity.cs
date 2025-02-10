@@ -5,12 +5,13 @@ using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class RoleEntity : AggregateEntity
+public sealed class RoleEntity : AggregateEntity, ISegregatedEntity
 {
   public int RoleId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -31,8 +32,12 @@ public sealed class RoleEntity : AggregateEntity
 
   public RoleEntity(RealmEntity? realm, RoleCreated @event) : base(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
 
     RoleId roleId = new(@event.StreamId);
     Id = roleId.EntityId;

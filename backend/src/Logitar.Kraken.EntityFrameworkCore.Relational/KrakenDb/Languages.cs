@@ -24,4 +24,5 @@ public static class Languages
   public static readonly ColumnId LCID = new(nameof(LanguageEntity.LCID), Table);
   public static readonly ColumnId NativeName = new(nameof(LanguageEntity.NativeName), Table);
   public static readonly ColumnId RealmId = new(nameof(LanguageEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(LanguageEntity.RealmUid), Table);
 }

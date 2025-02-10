@@ -4,12 +4,13 @@ using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class LanguageEntity : AggregateEntity
+public sealed class LanguageEntity : AggregateEntity, ISegregatedEntity
 {
   public int LanguageId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -34,8 +35,12 @@ public sealed class LanguageEntity : AggregateEntity
 
   public LanguageEntity(RealmEntity? realm, LanguageCreated @event) : base(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
 
     LanguageId language = new(@event.StreamId);
     Id = language.EntityId;

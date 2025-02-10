@@ -15,6 +15,7 @@ public sealed class ApiKeyConfiguration : AggregateConfiguration<ApiKeyEntity>, 
     builder.HasKey(x => x.ApiKeyId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
     builder.HasIndex(x => x.Name);
     builder.HasIndex(x => x.ExpiresOn);

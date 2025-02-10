@@ -22,5 +22,6 @@ public static class ApiKeys
   public static readonly ColumnId ExpiresOn = new(nameof(ApiKeyEntity.ExpiresOn), Table);
   public static readonly ColumnId Id = new(nameof(ApiKeyEntity.Id), Table);
   public static readonly ColumnId RealmId = new(nameof(ApiKeyEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(ApiKeyEntity.RealmUid), Table);
   public static readonly ColumnId SecretHash = new(nameof(ApiKeyEntity.SecretHash), Table);
 }

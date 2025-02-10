@@ -118,10 +118,25 @@ public sealed class RealmEntity : AggregateEntity
     }
   }
 
+  public UniqueNameSettingsModel GetUniqueNameSettings() => new()
+  {
+    AllowedCharacters = AllowedUniqueNameCharacters
+  };
   private void SetUniqueNameSettings(IUniqueNameSettings uniqueName)
   {
     AllowedUniqueNameCharacters = uniqueName.AllowedCharacters;
   }
+
+  public PasswordSettingsModel GetPasswordSettings() => new()
+  {
+    RequiredLength = RequiredPasswordLength,
+    RequiredUniqueChars = RequiredPasswordUniqueChars,
+    RequireNonAlphanumeric = PasswordsRequireNonAlphanumeric,
+    RequireLowercase = PasswordsRequireLowercase,
+    RequireUppercase = PasswordsRequireUppercase,
+    RequireDigit = PasswordsRequireDigit,
+    HashingStrategy = PasswordHashingStrategy
+  };
   private void SetPasswordSettings(IPasswordSettings password)
   {
     RequiredPasswordLength = password.RequiredLength;

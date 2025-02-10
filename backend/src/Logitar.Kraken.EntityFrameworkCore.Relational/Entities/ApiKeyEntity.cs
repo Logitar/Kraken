@@ -5,12 +5,13 @@ using Logitar.Kraken.Core.ApiKeys.Events;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class ApiKeyEntity : AggregateEntity
+public sealed class ApiKeyEntity : AggregateEntity, ISegregatedEntity
 {
   public int ApiKeyId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -28,8 +29,12 @@ public sealed class ApiKeyEntity : AggregateEntity
 
   public ApiKeyEntity(RealmEntity? realm, ApiKeyCreated @event) : base(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
 
     ApiKeyId apiKeyId = new(@event.StreamId);
     Id = apiKeyId.EntityId;

@@ -14,6 +14,7 @@ public sealed class DictionaryConfiguration : AggregateConfiguration<DictionaryE
     builder.HasKey(x => x.DictionaryId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
     builder.HasIndex(x => x.EntryCount);
 
