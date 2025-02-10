@@ -20,6 +20,7 @@ public static class Templates
   public static readonly ColumnId DisplayName = new(nameof(TemplateEntity.DisplayName), Table);
   public static readonly ColumnId Id = new(nameof(TemplateEntity.Id), Table);
   public static readonly ColumnId RealmId = new(nameof(TemplateEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(TemplateEntity.RealmUid), Table);
   public static readonly ColumnId Subject = new(nameof(TemplateEntity.Subject), Table);
   public static readonly ColumnId TemplateId = new(nameof(TemplateEntity.TemplateId), Table);
   public static readonly ColumnId UniqueKey = new(nameof(TemplateEntity.UniqueKey), Table);

@@ -22,6 +22,7 @@ public static class Messages
   public static readonly ColumnId Locale = new(nameof(MessageEntity.Locale), Table);
   public static readonly ColumnId MessageId = new(nameof(MessageEntity.MessageId), Table);
   public static readonly ColumnId RealmId = new(nameof(MessageEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(MessageEntity.RealmUid), Table);
   public static readonly ColumnId ResultData = new(nameof(MessageEntity.ResultData), Table);
   public static readonly ColumnId SenderAddress = new(nameof(MessageEntity.SenderAddress), Table);
   public static readonly ColumnId SenderDisplayName = new(nameof(MessageEntity.SenderDisplayName), Table);

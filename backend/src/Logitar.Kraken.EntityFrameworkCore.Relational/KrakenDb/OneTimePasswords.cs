@@ -23,5 +23,6 @@ public static class OneTimePasswords
   public static readonly ColumnId OneTimePasswordId = new(nameof(OneTimePasswordEntity.OneTimePasswordId), Table);
   public static readonly ColumnId PasswordHash = new(nameof(OneTimePasswordEntity.PasswordHash), Table);
   public static readonly ColumnId RealmId = new(nameof(OneTimePasswordEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(OneTimePasswordEntity.RealmUid), Table);
   public static readonly ColumnId UserId = new(nameof(OneTimePasswordEntity.UserId), Table);
 }

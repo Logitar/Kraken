@@ -4,12 +4,13 @@ using Logitar.Kraken.Core.Passwords.Events;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class OneTimePasswordEntity : AggregateEntity
+public sealed class OneTimePasswordEntity : AggregateEntity, ISegregatedEntity
 {
   public int OneTimePasswordId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public UserEntity? User { get; private set; }
   public int? UserId { get; private set; }
@@ -28,13 +29,18 @@ public sealed class OneTimePasswordEntity : AggregateEntity
 
   public OneTimePasswordEntity(RealmEntity? realm, OneTimePasswordCreated @event) : this(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
   }
   public OneTimePasswordEntity(UserEntity user, OneTimePasswordCreated @event) : this(@event)
   {
     Realm = user.Realm;
     RealmId = user.RealmId;
+    RealmUid = user.RealmUid;
   }
   private OneTimePasswordEntity(OneTimePasswordCreated @event) : base(@event)
   {

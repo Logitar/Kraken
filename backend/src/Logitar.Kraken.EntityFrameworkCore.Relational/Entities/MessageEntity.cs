@@ -1,16 +1,18 @@
 ﻿using Logitar.Kraken.Contracts.Messages;
 using Logitar.Kraken.Contracts.Senders;
+using Logitar.Kraken.Contracts.Templates;
 using Logitar.Kraken.Core.Messages;
 using Logitar.Kraken.Core.Messages.Events;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class MessageEntity : AggregateEntity
+public sealed class MessageEntity : AggregateEntity, ISegregatedEntity
 {
   public int MessageId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -46,8 +48,12 @@ public sealed class MessageEntity : AggregateEntity
 
   public MessageEntity(RealmEntity? realm, SenderEntity sender, TemplateEntity template, Dictionary<string, UserEntity> users, MessageCreated @event) : base(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
 
     MessageId messageId = new(@event.StreamId);
     Id = messageId.EntityId;
@@ -115,6 +121,8 @@ public sealed class MessageEntity : AggregateEntity
     Status = MessageStatus.Succeeded;
     SetResultData(@event.ResultData);
   }
+
+  public TemplateContentModel GetBody() => new(BodyType, BodyText);
 
   public Dictionary<string, string> GetVariables()
   {

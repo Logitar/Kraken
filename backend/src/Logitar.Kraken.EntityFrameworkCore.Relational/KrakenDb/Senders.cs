@@ -21,6 +21,7 @@ public static class Senders
   public static readonly ColumnId IsDefault = new(nameof(SenderEntity.IsDefault), Table);
   public static readonly ColumnId Provider = new(nameof(SenderEntity.Provider), Table);
   public static readonly ColumnId RealmId = new(nameof(SenderEntity.RealmId), Table);
+  public static readonly ColumnId RealmUid = new(nameof(SenderEntity.RealmUid), Table);
   public static readonly ColumnId SenderId = new(nameof(SenderEntity.SenderId), Table);
   public static readonly ColumnId Settings = new(nameof(SenderEntity.Settings), Table);
   public static readonly ColumnId Type = new(nameof(SenderEntity.Type), Table);

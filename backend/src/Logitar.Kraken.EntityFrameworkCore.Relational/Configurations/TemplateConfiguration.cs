@@ -18,6 +18,7 @@ public sealed class TemplateConfiguration : AggregateConfiguration<TemplateEntit
     builder.HasKey(x => x.TemplateId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
     builder.HasIndex(x => x.UniqueKey);
     builder.HasIndex(x => new { x.RealmId, x.UniqueKeyNormalized }).IsUnique();

@@ -21,6 +21,7 @@ public sealed class MessageConfiguration : AggregateConfiguration<MessageEntity>
     builder.HasKey(x => x.MessageId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
     builder.HasIndex(x => x.Subject);
     builder.HasIndex(x => x.RecipientCount);

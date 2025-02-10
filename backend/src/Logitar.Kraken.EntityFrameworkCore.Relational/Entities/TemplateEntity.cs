@@ -5,12 +5,13 @@ using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class TemplateEntity : AggregateEntity
+public sealed class TemplateEntity : AggregateEntity, ISegregatedEntity
 {
   public int TemplateId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -31,8 +32,12 @@ public sealed class TemplateEntity : AggregateEntity
 
   public TemplateEntity(RealmEntity? realm, TemplateCreated @event) : base(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
 
     TemplateId templateId = new(@event.StreamId);
     Id = templateId.EntityId;
@@ -77,6 +82,7 @@ public sealed class TemplateEntity : AggregateEntity
     }
   }
 
+  public TemplateContentModel GetContent() => new(ContentType, ContentText);
   private void SetContent(ITemplateContent content)
   {
     ContentType = content.Type;

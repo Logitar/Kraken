@@ -4,12 +4,13 @@ using Logitar.Kraken.Core.Senders.Events;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-public sealed class SenderEntity : AggregateEntity
+public sealed class SenderEntity : AggregateEntity, ISegregatedEntity
 {
   public int SenderId { get; private set; }
 
   public RealmEntity? Realm { get; private set; }
   public int? RealmId { get; private set; }
+  public Guid? RealmUid { get; private set; }
 
   public Guid Id { get; private set; }
 
@@ -28,8 +29,12 @@ public sealed class SenderEntity : AggregateEntity
 
   public SenderEntity(RealmEntity? realm, SenderCreated @event) : base(@event)
   {
-    Realm = realm;
-    RealmId = realm?.RealmId;
+    if (realm != null)
+    {
+      Realm = realm;
+      RealmId = realm.RealmId;
+      RealmUid = realm.Id;
+    }
 
     SenderId senderId = new(@event.StreamId);
     Id = senderId.EntityId;
@@ -57,34 +62,31 @@ public sealed class SenderEntity : AggregateEntity
     IsDefault = @event.IsDefault;
   }
 
+  public MailgunSettingsModel GetMailgunSettings() => (Settings == null ? null : JsonSerializer.Deserialize<MailgunSettingsModel>(Settings)) ?? new();
   public void SetMailgunSettings(SenderMailgunSettingsChanged @event)
   {
     Update(@event);
 
-    SetSettings(new Dictionary<string, string>
-    {
-      [nameof(IMailgunSettings.ApiKey)] = @event.Settings.ApiKey,
-      [nameof(IMailgunSettings.DomainName)] = @event.Settings.DomainName
-    });
+    MailgunSettingsModel settings = new(@event.Settings);
+    Settings = JsonSerializer.Serialize(settings);
   }
+
+  public SendGridSettingsModel GetSendGridSettings() => (Settings == null ? null : JsonSerializer.Deserialize<SendGridSettingsModel>(Settings)) ?? new();
   public void SetSendGridSettings(SenderSendGridSettingsChanged @event)
   {
     Update(@event);
 
-    SetSettings(new Dictionary<string, string>
-    {
-      [nameof(ISendGridSettings.ApiKey)] = @event.Settings.ApiKey
-    });
+    SendGridSettingsModel settings = new(@event.Settings);
+    Settings = JsonSerializer.Serialize(settings);
   }
+
+  public TwilioSettingsModel GetTwilioSettings() => (Settings == null ? null : JsonSerializer.Deserialize<TwilioSettingsModel>(Settings)) ?? new();
   public void SetTwilioSettings(SenderTwilioSettingsChanged @event)
   {
     Update(@event);
 
-    SetSettings(new Dictionary<string, string>
-    {
-      [nameof(ITwilioSettings.AccountSid)] = @event.Settings.AccountSid,
-      [nameof(ITwilioSettings.AuthenticationToken)] = @event.Settings.AuthenticationToken
-    });
+    TwilioSettingsModel settings = new(@event.Settings);
+    Settings = JsonSerializer.Serialize(settings);
   }
 
   public void Update(SenderUpdated @event)
@@ -107,15 +109,6 @@ public sealed class SenderEntity : AggregateEntity
     {
       Description = @event.Description.Value?.Value;
     }
-  }
-
-  public Dictionary<string, string> GetSettings()
-  {
-    return (Settings == null ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(Settings)) ?? [];
-  }
-  private void SetSettings(Dictionary<string, string> settings)
-  {
-    Settings = settings.Count < 1 ? null : JsonSerializer.Serialize(settings);
   }
 
   public override string ToString()
