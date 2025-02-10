@@ -17,6 +17,7 @@ public sealed class FieldTypeConfiguration : AggregateConfiguration<FieldTypeEnt
     builder.HasKey(x => x.FieldTypeId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
     builder.HasIndex(x => x.UniqueName);
     builder.HasIndex(x => x.UniqueNameNormalized).IsUnique();

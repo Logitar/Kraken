@@ -14,6 +14,7 @@ public sealed class ContentConfiguration : AggregateConfiguration<ContentEntity>
     builder.HasKey(x => x.ContentId);
 
     builder.HasIndex(x => new { x.RealmId, x.Id }).IsUnique();
+    builder.HasIndex(x => x.RealmUid);
     builder.HasIndex(x => x.Id);
 
     builder.HasOne(x => x.Realm).WithMany(x => x.Contents)
