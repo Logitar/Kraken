@@ -1,4 +1,5 @@
 ﻿using Logitar.Kraken.Contracts.Realms;
+using Logitar.Kraken.Contracts.Users;
 
 namespace Logitar.Kraken.Contracts.Passwords;
 
@@ -15,4 +16,5 @@ public class OneTimePasswordModel : AggregateModel
   public List<CustomAttributeModel> CustomAttributes { get; set; } = [];
 
   public RealmModel? Realm { get; set; }
+  public UserModel? User { get; set; }
 }
