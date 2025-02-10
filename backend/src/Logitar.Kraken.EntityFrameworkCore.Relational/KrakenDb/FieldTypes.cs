@@ -19,9 +19,9 @@ public static class FieldTypes
   public static readonly ColumnId DisplayName = new(nameof(FieldTypeEntity.DisplayName), Table);
   public static readonly ColumnId FieldTypeId = new(nameof(FieldTypeEntity.FieldTypeId), Table);
   public static readonly ColumnId Id = new(nameof(FieldTypeEntity.Id), Table);
-  public static readonly ColumnId Properties = new(nameof(FieldTypeEntity.Properties), Table);
   public static readonly ColumnId RealmId = new(nameof(FieldTypeEntity.RealmId), Table);
   public static readonly ColumnId RealmUid = new(nameof(FieldTypeEntity.RealmUid), Table);
+  public static readonly ColumnId Settings = new(nameof(FieldTypeEntity.Settings), Table);
   public static readonly ColumnId UniqueName = new(nameof(FieldTypeEntity.UniqueName), Table);
   public static readonly ColumnId UniqueNameNormalized = new(nameof(FieldTypeEntity.UniqueNameNormalized), Table);
 }

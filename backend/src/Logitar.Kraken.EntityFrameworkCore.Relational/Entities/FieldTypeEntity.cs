@@ -26,7 +26,7 @@ public sealed class FieldTypeEntity : AggregateEntity, ISegregatedEntity
   public string? Description { get; private set; }
 
   public DataType DataType { get; private set; }
-  public string? Properties { get; private set; }
+  public string? Settings { get; private set; }
 
   public List<FieldDefinitionEntity> FieldDefinitions { get; private set; } = [];
   public List<FieldIndexEntity> FieldIndex { get; private set; } = [];
@@ -55,59 +55,59 @@ public sealed class FieldTypeEntity : AggregateEntity, ISegregatedEntity
 
   public BooleanPropertiesModel? GetBooleanProperties()
   {
-    if (Properties == null || DataType != DataType.Boolean)
+    if (Settings == null || DataType != DataType.Boolean)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<BooleanPropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<BooleanPropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeBooleanPropertiesChanged @event)
   {
     Update(@event);
 
     BooleanPropertiesModel properties = new(@event.Properties);
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public DateTimePropertiesModel? GetDateTimeProperties()
   {
-    if (Properties == null || DataType != DataType.DateTime)
+    if (Settings == null || DataType != DataType.DateTime)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<DateTimePropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<DateTimePropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeDateTimePropertiesChanged @event)
   {
     Update(@event);
 
     DateTimePropertiesModel properties = new(@event.Properties);
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public NumberPropertiesModel? GetNumberProperties()
   {
-    if (Properties == null || DataType != DataType.Number)
+    if (Settings == null || DataType != DataType.Number)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<NumberPropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<NumberPropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeNumberPropertiesChanged @event)
   {
     Update(@event);
 
     NumberPropertiesModel properties = new(@event.Properties);
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public RelatedContentPropertiesModel? GetRelatedContentProperties()
   {
-    if (Properties == null || DataType != DataType.RelatedContent)
+    if (Settings == null || DataType != DataType.RelatedContent)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<RelatedContentPropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<RelatedContentPropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeRelatedContentPropertiesChanged @event)
   {
@@ -118,32 +118,32 @@ public sealed class FieldTypeEntity : AggregateEntity, ISegregatedEntity
       ContentTypeId = @event.Properties.ContentTypeId.EntityId,
       IsMultiple = @event.Properties.IsMultiple
     };
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public RichTextPropertiesModel? GetRichTextProperties()
   {
-    if (Properties == null || DataType != DataType.RichText)
+    if (Settings == null || DataType != DataType.RichText)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<RichTextPropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<RichTextPropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeRichTextPropertiesChanged @event)
   {
     Update(@event);
 
     RichTextPropertiesModel properties = new(@event.Properties);
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public SelectPropertiesModel? GetSelectProperties()
   {
-    if (Properties == null || DataType != DataType.Select)
+    if (Settings == null || DataType != DataType.Select)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<SelectPropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<SelectPropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeSelectPropertiesChanged @event)
   {
@@ -157,39 +157,39 @@ public sealed class FieldTypeEntity : AggregateEntity, ISegregatedEntity
     {
       properties.Options.Add(new SelectOptionModel(option));
     }
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public StringPropertiesModel? GetStringProperties()
   {
-    if (Properties == null || DataType != DataType.String)
+    if (Settings == null || DataType != DataType.String)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<StringPropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<StringPropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeStringPropertiesChanged @event)
   {
     Update(@event);
 
     StringPropertiesModel properties = new(@event.Properties);
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public TagsPropertiesModel? GetTagsProperties()
   {
-    if (Properties == null || DataType != DataType.Tags)
+    if (Settings == null || DataType != DataType.Tags)
     {
       return null;
     }
-    return JsonSerializer.Deserialize<TagsPropertiesModel>(Properties);
+    return JsonSerializer.Deserialize<TagsPropertiesModel>(Settings);
   }
   public void SetProperties(FieldTypeTagsPropertiesChanged @event)
   {
     Update(@event);
 
     TagsPropertiesModel properties = new(@event.Properties);
-    Properties = JsonSerializer.Serialize(properties);
+    Settings = JsonSerializer.Serialize(properties);
   }
 
   public void SetUniqueName(FieldTypeUniqueNameChanged @event)
