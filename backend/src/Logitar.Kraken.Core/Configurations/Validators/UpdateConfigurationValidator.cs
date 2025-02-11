@@ -8,7 +8,7 @@ internal class UpdateConfigurationValidator : AbstractValidator<UpdateConfigurat
 {
   public UpdateConfigurationValidator()
   {
-    // TODO(fpion): Secret
+    When(x => !string.IsNullOrWhiteSpace(x.Secret), () => RuleFor(x => x.Secret!).Secret());
 
     When(x => x.UniqueNameSettings != null, () => RuleFor(x => x.UniqueNameSettings!).SetValidator(new UniqueNameSettingsValidator()));
     When(x => x.PasswordSettings != null, () => RuleFor(x => x.PasswordSettings!).SetValidator(new PasswordSettingsValidator()));

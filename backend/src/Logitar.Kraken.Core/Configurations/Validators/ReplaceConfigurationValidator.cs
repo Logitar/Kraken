@@ -8,7 +8,7 @@ internal class ReplaceConfigurationValidator : AbstractValidator<ReplaceConfigur
 {
   public ReplaceConfigurationValidator()
   {
-    // TODO(fpion): Secret
+    When(x => !string.IsNullOrWhiteSpace(x.Secret), () => RuleFor(x => x.Secret!).Secret());
 
     RuleFor(x => x.UniqueNameSettings).SetValidator(new UniqueNameSettingsValidator());
     RuleFor(x => x.PasswordSettings).SetValidator(new PasswordSettingsValidator());

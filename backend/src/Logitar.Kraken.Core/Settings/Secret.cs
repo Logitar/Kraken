@@ -4,6 +4,8 @@ namespace Logitar.Kraken.Core.Settings;
 
 public partial record Secret
 {
+  public const int Length = 256 / 8;
+
   public string Value { get; }
 
   public Secret(string value)
