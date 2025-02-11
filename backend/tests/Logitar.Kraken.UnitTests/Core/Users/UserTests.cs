@@ -76,8 +76,8 @@ public class UserTests
   [Fact(DisplayName = "RemoveCustomAttribute: it should remove the custom attribute.")]
   public void Given_CustomAttributes_When_RemoveCustomAttribute_Then_CustomAttributeRemoved()
   {
-    Identifier key = new("IsProfileCompleted");
-    _user.SetCustomAttribute(key, bool.TrueString);
+    Identifier key = new("HealthInsuranceNumber");
+    _user.SetCustomAttribute(key, _faker.Person.BuildHealthInsuranceNumber());
     _user.Update();
 
     _user.RemoveCustomAttribute(key);
@@ -97,8 +97,8 @@ public class UserTests
   [InlineData("  ")]
   public void Given_EmptyValue_When_SetCustomAttribute_Then_CustomAttributeRemoved(string? value)
   {
-    Identifier key = new("IsProfileCompleted");
-    _user.SetCustomAttribute(key, bool.TrueString);
+    Identifier key = new("HealthInsuranceNumber");
+    _user.SetCustomAttribute(key, _faker.Person.BuildHealthInsuranceNumber());
     _user.Update();
 
     _user.SetCustomAttribute(key, value!);
@@ -110,8 +110,8 @@ public class UserTests
   [Fact(DisplayName = "SetCustomAttribute: it should set a custom attribute.")]
   public void Given_CustomAttribute_When_SetCustomAttribute_Then_CustomAttributeSet()
   {
-    Identifier key = new("IsProfileCompleted");
-    string value = $"  {bool.TrueString}  ";
+    Identifier key = new("HealthInsuranceNumber");
+    string value = $"  {_faker.Person.BuildHealthInsuranceNumber()}  ";
 
     _user.SetCustomAttribute(key, value);
     _user.Update();
@@ -150,7 +150,7 @@ public class UserTests
     Assert.False(_user.HasChanges);
     Assert.Empty(_user.Changes);
 
-    _user.SetCustomAttribute(new Identifier("IsProfileCompleted"), bool.TrueString);
+    _user.SetCustomAttribute(new Identifier("HealthInsuranceNumber"), _faker.Person.BuildHealthInsuranceNumber());
     _user.Update(actorId);
     Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.ActorId == actorId && (updated.OccurredOn - DateTime.Now) < TimeSpan.FromSeconds(1));
   }

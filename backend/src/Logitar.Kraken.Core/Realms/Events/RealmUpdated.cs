@@ -1,5 +1,6 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Settings;
+using Logitar.Kraken.Core.Tokens;
 using MediatR;
 
 namespace Logitar.Kraken.Core.Realms.Events;
@@ -9,7 +10,7 @@ public record RealmUpdated : DomainEvent, INotification
   public Change<DisplayName>? DisplayName { get; set; }
   public Change<Description>? Description { get; set; }
 
-  public Secret? Secret { get; set; }
+  public JwtSecret? Secret { get; set; }
   public Change<Url>? Url { get; set; }
 
   public UniqueNameSettings? UniqueNameSettings { get; set; }
