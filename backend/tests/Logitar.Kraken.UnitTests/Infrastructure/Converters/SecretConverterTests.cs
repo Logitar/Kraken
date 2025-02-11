@@ -3,22 +3,22 @@
 namespace Logitar.Kraken.Infrastructure.Converters;
 
 [Trait(Traits.Category, Categories.Unit)]
-public class JwtSecretConverterTests
+public class SecretConverterTests
 {
   private readonly JsonSerializerOptions _serializerOptions = new();
 
-  private readonly JwtSecret _secret = new("agwWZrQ9vEfYtncb8xXAMRJUH57m2Kzy");
+  private readonly Secret _secret = new("agwWZrQ9vEfYtncb8xXAMRJUH57m2Kzy");
 
-  public JwtSecretConverterTests()
+  public SecretConverterTests()
   {
-    _serializerOptions.Converters.Add(new JwtSecretConverter());
+    _serializerOptions.Converters.Add(new SecretConverter());
   }
 
   [Fact(DisplayName = "It should deserialize the correct value.")]
   public void Given_Value_When_Read_Then_Deserialized()
   {
     string json = string.Concat('"', _secret, '"');
-    JwtSecret? secret = JsonSerializer.Deserialize<JwtSecret?>(json, _serializerOptions);
+    Secret? secret = JsonSerializer.Deserialize<Secret?>(json, _serializerOptions);
     Assert.NotNull(secret);
     Assert.Equal(_secret, secret);
   }
@@ -26,7 +26,7 @@ public class JwtSecretConverterTests
   [Fact(DisplayName = "It should deserialize the null value.")]
   public void Given_Null_When_Read_Then_NullReturned()
   {
-    JwtSecret? secret = JsonSerializer.Deserialize<JwtSecret?>("null", _serializerOptions);
+    Secret? secret = JsonSerializer.Deserialize<Secret?>("null", _serializerOptions);
     Assert.Null(secret);
   }
 

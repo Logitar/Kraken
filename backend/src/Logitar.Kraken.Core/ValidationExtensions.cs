@@ -21,14 +21,14 @@ internal static class ValidationExtensions
     return ruleBuilder.NotEmpty().MaximumLength(Core.Identifier.MaximumLength).SetValidator(new IdentifierValidator<T>());
   }
 
-  public static IRuleBuilderOptions<T, string> JwtSecret<T>(this IRuleBuilder<T, string> ruleBuilder) // TODO(fpion): remove this when done
-  {
-    return ruleBuilder.NotEmpty().MinimumLength(Tokens.JwtSecret.MinimumLength).MaximumLength(Tokens.JwtSecret.MaximumLength);
-  }
-
   public static IRuleBuilderOptions<T, string> Locale<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
     return ruleBuilder.NotEmpty().MaximumLength(Localization.Locale.MaximumLength).SetValidator(new LocaleValidator<T>());
+  }
+
+  public static IRuleBuilderOptions<T, string> Secret<T>(this IRuleBuilder<T, string> ruleBuilder)
+  {
+    return ruleBuilder.NotEmpty().MinimumLength(Tokens.Secret.MinimumLength).MaximumLength(Tokens.Secret.MaximumLength);
   }
 
   public static IRuleBuilderOptions<T, string> Slug<T>(this IRuleBuilder<T, string> ruleBuilder)

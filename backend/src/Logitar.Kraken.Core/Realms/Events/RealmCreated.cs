@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Realms.Events;
 
-public record RealmCreated(Slug UniqueSlug, JwtSecret Secret) : DomainEvent, INotification;
+public record RealmCreated(Slug UniqueSlug, Secret Secret) : DomainEvent, INotification;

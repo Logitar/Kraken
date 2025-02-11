@@ -5,4 +5,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Events;
 
-public record ConfigurationInitialized(JwtSecret Secret, UniqueNameSettings UniqueNameSettings, PasswordSettings PasswordSettings) : DomainEvent, INotification;
+public record ConfigurationInitialized(Secret Secret, UniqueNameSettings UniqueNameSettings, PasswordSettings PasswordSettings) : DomainEvent, INotification;

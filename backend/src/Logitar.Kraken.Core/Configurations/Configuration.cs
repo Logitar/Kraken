@@ -11,8 +11,8 @@ public class Configuration : AggregateRoot
 
   public new ConfigurationId Id { get; } = new();
 
-  private JwtSecret? _secret = null;
-  public JwtSecret Secret
+  private Secret? _secret = null;
+  public Secret Secret
   {
     get => _secret ?? throw new InvalidOperationException("The configuration has not been initialized.");
     set
@@ -56,7 +56,7 @@ public class Configuration : AggregateRoot
   {
   }
 
-  private Configuration(JwtSecret secret, UniqueNameSettings uniqueNameSettings, PasswordSettings passwordSettings, ActorId? actorId, ConfigurationId configurationId)
+  private Configuration(Secret secret, UniqueNameSettings uniqueNameSettings, PasswordSettings passwordSettings, ActorId? actorId, ConfigurationId configurationId)
     : base(configurationId.StreamId)
   {
     Raise(new ConfigurationInitialized(secret, uniqueNameSettings, passwordSettings), actorId);
@@ -71,7 +71,7 @@ public class Configuration : AggregateRoot
 
   public static Configuration Initialize(ActorId? actorId = null)
   {
-    JwtSecret secret = JwtSecret.Generate();
+    Secret secret = Secret.Generate();
     UniqueNameSettings uniqueNameSettings = new();
     PasswordSettings passwordSettings = new();
     ConfigurationId configurationId = new();

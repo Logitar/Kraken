@@ -80,7 +80,7 @@ internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrRepl
 
     if (payload.Secret != null)
     {
-      realm.Secret = JwtSecret.CreateOrGenerate(payload.Secret);
+      realm.Secret = Secret.CreateOrGenerate(payload.Secret);
     }
     Url? url = Url.TryCreate(payload.Url);
     if (reference.Url != url)

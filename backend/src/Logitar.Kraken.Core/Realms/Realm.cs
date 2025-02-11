@@ -40,8 +40,8 @@ public class Realm : AggregateRoot, ICustomizable
     }
   }
 
-  private JwtSecret? _secret = null;
-  public JwtSecret? Secret
+  private Secret? _secret = null;
+  public Secret? Secret
   {
     get => _secret;
     set
@@ -130,7 +130,7 @@ public class Realm : AggregateRoot, ICustomizable
   public Realm(Slug uniqueSlug, ActorId? actorId = null, RealmId? realmId = null)
     : base(realmId?.StreamId)
   {
-    JwtSecret secret = JwtSecret.Generate();
+    Secret secret = Secret.Generate();
     Raise(new RealmCreated(uniqueSlug, secret), actorId);
   }
   protected virtual void Handle(RealmCreated @event)

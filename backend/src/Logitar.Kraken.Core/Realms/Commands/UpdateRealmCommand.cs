@@ -60,7 +60,7 @@ internal class UpdateRealmCommandHandler : IRequestHandler<UpdateRealmCommand, R
 
     if (payload.Secret != null)
     {
-      realm.Secret = JwtSecret.CreateOrGenerate(payload.Secret);
+      realm.Secret = Secret.CreateOrGenerate(payload.Secret);
     }
     if (payload.Url != null)
     {

@@ -36,7 +36,7 @@ internal class ReplaceConfigurationCommandHandler : IRequestHandler<ReplaceConfi
 
     if (payload.Secret != null)
     {
-      configuration.Secret = JwtSecret.CreateOrGenerate(payload.Secret);
+      configuration.Secret = Secret.CreateOrGenerate(payload.Secret);
     }
 
     UniqueNameSettings uniqueNameSettings = new(payload.UniqueNameSettings);

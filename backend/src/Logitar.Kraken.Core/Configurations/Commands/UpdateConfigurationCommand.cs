@@ -32,7 +32,7 @@ internal class UpdateConfigurationCommandHandler : IRequestHandler<UpdateConfigu
 
     if (payload.Secret != null)
     {
-      configuration.Secret = JwtSecret.CreateOrGenerate(payload.Secret);
+      configuration.Secret = Secret.CreateOrGenerate(payload.Secret);
     }
 
     if (payload.UniqueNameSettings != null)
