@@ -9,6 +9,7 @@ public record RealmUpdated : DomainEvent, INotification
   public Change<DisplayName>? DisplayName { get; set; }
   public Change<Description>? Description { get; set; }
 
+  // TODO(fpion): Secret
   public Change<Url>? Url { get; set; }
 
   public UniqueNameSettings? UniqueNameSettings { get; set; }

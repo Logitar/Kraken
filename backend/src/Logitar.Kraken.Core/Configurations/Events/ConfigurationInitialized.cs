@@ -4,6 +4,4 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Events;
 
-public record ConfigurationInitialized(
-  UniqueNameSettings UniqueNameSettings,
-  PasswordSettings PasswordSettings) : DomainEvent, INotification;
+public record ConfigurationInitialized(UniqueNameSettings UniqueNameSettings, PasswordSettings PasswordSettings) : DomainEvent, INotification; // TODO(fpion): Secret
