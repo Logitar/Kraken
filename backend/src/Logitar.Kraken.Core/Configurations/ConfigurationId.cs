@@ -11,6 +11,10 @@ public readonly struct ConfigurationId
   {
     StreamId = new("CONFIGURATION");
   }
+  public ConfigurationId(StreamId streamId)
+  {
+    StreamId = streamId;
+  }
 
   public static bool operator ==(ConfigurationId left, ConfigurationId right) => left.Equals(right);
   public static bool operator !=(ConfigurationId left, ConfigurationId right) => !left.Equals(right);
