@@ -38,6 +38,8 @@
   <ItemGroup>
     <Using Include="System.Globalization" />
     <Using Include="System.Reflection" />
+    <Using Include="System.Text.Encodings.Web" />
+    <Using Include="System.Text.Json" />
     <Using Include="Xunit" />
   </ItemGroup>
 
