@@ -9,7 +9,7 @@ public record RealmUpdated : DomainEvent, INotification
   public Change<DisplayName>? DisplayName { get; set; }
   public Change<Description>? Description { get; set; }
 
-  // TODO(fpion): Secret
+  public Secret? Secret { get; set; }
   public Change<Url>? Url { get; set; }
 
   public UniqueNameSettings? UniqueNameSettings { get; set; }
@@ -21,7 +21,7 @@ public record RealmUpdated : DomainEvent, INotification
 
   [JsonIgnore]
   public bool HasChanges => DisplayName != null || Description != null
-    || Url != null
+    || Secret != null || Url != null
     || UniqueNameSettings != null || PasswordSettings != null || RequireUniqueEmail != null || RequireConfirmedAccount != null
     || CustomAttributes.Count > 0;
 }

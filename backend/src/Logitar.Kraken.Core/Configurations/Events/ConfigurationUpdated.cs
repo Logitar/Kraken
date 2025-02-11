@@ -6,7 +6,7 @@ namespace Logitar.Kraken.Core.Configurations.Events;
 
 public record ConfigurationUpdated : DomainEvent, INotification
 {
-  // TODO(fpion): Secret
+  public Secret? Secret { get; set; }
 
   public UniqueNameSettings? UniqueNameSettings { get; set; }
   public PasswordSettings? PasswordSettings { get; set; }
