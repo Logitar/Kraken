@@ -6,6 +6,7 @@ using Logitar.Kraken.Core.Configurations.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Handlers;
 
@@ -14,12 +15,14 @@ internal class ConfigurationEvents : INotificationHandler<ConfigurationInitializ
   private readonly IActorService _actorService;
   private readonly ICacheService _cacheService;
   private readonly KrakenContext _context;
+  private readonly ILogger<ConfigurationEvents> _logger;
 
-  public ConfigurationEvents(IActorService actorService, ICacheService cacheService, KrakenContext context)
+  public ConfigurationEvents(IActorService actorService, ICacheService cacheService, KrakenContext context, ILogger<ConfigurationEvents> logger)
   {
     _actorService = actorService;
     _cacheService = cacheService;
     _context = context;
+    _logger = logger;
   }
 
   public async Task Handle(ConfigurationInitialized @event, CancellationToken cancellationToken)
@@ -38,6 +41,8 @@ internal class ConfigurationEvents : INotificationHandler<ConfigurationInitializ
     await _context.SaveChangesAsync(cancellationToken);
 
     await RefreshCacheAsync(configurations.Values, cancellationToken);
+
+    _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
   }
 
   public async Task Handle(ConfigurationUpdated @event, CancellationToken cancellationToken)
@@ -66,6 +71,8 @@ internal class ConfigurationEvents : INotificationHandler<ConfigurationInitializ
     await _context.SaveChangesAsync(cancellationToken);
 
     await RefreshCacheAsync(configurations.Values, cancellationToken);
+
+    _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
   }
 
   private void HandleChange(Dictionary<string, ConfigurationEntity> configurations, string key, object? value, DomainEvent @event)
@@ -109,5 +116,6 @@ internal class ConfigurationEvents : INotificationHandler<ConfigurationInitializ
     Mapper mapper = new(actors);
 
     _cacheService.Configuration = mapper.ToConfiguration(configurations);
+    _logger.LogInformation("Configuration cache has been refreshed.");
   }
 }
