@@ -10,6 +10,8 @@ namespace Logitar.Kraken.Core.Realms.Commands;
 
 public record CreateOrReplaceRealmResult(RealmModel? Realm = null, bool Created = false);
 
+/// <exception cref="UniqueSlugAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceRealmCommand(Guid? Id, CreateOrReplaceRealmPayload Payload, long? Version) : IRequest<CreateOrReplaceRealmResult>;
 
 internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrReplaceRealmCommand, CreateOrReplaceRealmResult>
@@ -86,10 +88,6 @@ internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrRepl
       realm.Description = description;
     }
 
-    //if (payload.Secret != null)
-    //{
-    //  realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
-    //}
     Url? url = Url.TryCreate(payload.Url);
     if (reference.Url != url)
     {

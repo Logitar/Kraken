@@ -1,6 +1,7 @@
 ﻿using Logitar.Data;
 using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Actors;
+using Logitar.Kraken.Contracts.Localization;
 using Logitar.Kraken.Contracts.Realms;
 using Logitar.Kraken.Contracts.Search;
 using Logitar.Kraken.Core.Actors;

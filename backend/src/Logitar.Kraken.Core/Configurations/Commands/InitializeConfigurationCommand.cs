@@ -1,4 +1,5 @@
-﻿using Logitar.EventSourcing;
+﻿using FluentValidation;
+using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Caching;
 using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
@@ -8,6 +9,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Commands;
 
+/// <exception cref="ValidationException"></exception>
 public record InitializeConfigurationCommand(string DefaultLocale, string UniqueName, string Password) : Activity, IRequest
 {
   public override IActivity Anonymize()

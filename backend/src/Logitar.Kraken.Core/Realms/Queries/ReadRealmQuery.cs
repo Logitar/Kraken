@@ -3,6 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Realms.Queries;
 
+/// <exception cref="TooManyResultsException"></exception>
 public record ReadRealmQuery(Guid? Id, string? UniqueSlug) : IRequest<RealmModel?>;
 
 internal class ReadRealmQueryHandler : IRequestHandler<ReadRealmQuery, RealmModel?>

@@ -9,6 +9,8 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Realms.Commands;
 
+/// <exception cref="UniqueSlugAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record UpdateRealmCommand(Guid Id, UpdateRealmPayload Payload) : IRequest<RealmModel?>;
 
 internal class UpdateRealmCommandHandler : IRequestHandler<UpdateRealmCommand, RealmModel?>

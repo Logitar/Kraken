@@ -36,4 +36,9 @@
     <InternalsVisibleTo Include="Logitar.Kraken.UnitTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Localization\Commands\" />
+    <Folder Include="Localization\Queries\" />
+  </ItemGroup>
+
 </Project>

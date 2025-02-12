@@ -28,6 +28,14 @@ public class RealmController : ControllerBase
     return ToActionResult(result);
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<RealmModel>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+  {
+    DeleteRealmCommand command = new(id);
+    RealmModel? realm = await _mediator.Send(command, cancellationToken);
+    return realm == null ? NotFound() : Ok(realm);
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<RealmModel>> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
