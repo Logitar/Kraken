@@ -1,6 +1,8 @@
 ﻿using Logitar.Kraken.Contracts.Realms;
+using Logitar.Kraken.Contracts.Search;
 using Logitar.Kraken.Core.Realms.Commands;
 using Logitar.Kraken.Core.Realms.Queries;
+using Logitar.Kraken.Web.Models.Realm;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +50,15 @@ public class RealmController : ControllerBase
     CreateOrReplaceRealmCommand command = new(id, payload, version);
     CreateOrReplaceRealmResult result = await _mediator.Send(command, cancellationToken);
     return ToActionResult(result);
+  }
+
+  [HttpGet]
+  public async Task<ActionResult<SearchResults<RealmModel>>> SearchAsync([FromQuery] SearchRealmsParameters parameters, CancellationToken cancellationToken)
+  {
+    SearchRealmsPayload payload = parameters.ToPayload();
+    SearchRealmsQuery query = new(payload);
+    SearchResults<RealmModel> realms = await _mediator.Send(query, cancellationToken);
+    return Ok(realms);
   }
 
   [HttpPatch("{id}")]

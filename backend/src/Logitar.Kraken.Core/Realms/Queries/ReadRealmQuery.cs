@@ -38,7 +38,7 @@ internal class ReadRealmQueryHandler : IRequestHandler<ReadRealmQuery, RealmMode
 
     if (realms.Count > 1)
     {
-      throw new NotImplementedException(); // TODO(fpion): typed exception
+      throw TooManyResultsException<RealmModel>.ExpectedSingle(realms.Count);
     }
 
     return realms.SingleOrDefault().Value;

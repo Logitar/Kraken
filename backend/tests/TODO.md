@@ -3,7 +3,6 @@
 - Configuration
 - CreateOrReplaceRealmCommand
 - ReadConfigurationQuery
-- ReadRealmQuery
 - Realm
 - ReplaceConfigurationCommand
 - UpdateConfigurationCommand

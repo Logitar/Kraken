@@ -8,6 +8,16 @@ namespace Logitar.Kraken.EntityFrameworkCore.Relational;
 
 public static class QueryingExtensions
 {
+  public static IQueryBuilder ApplyIdFilter(this IQueryBuilder builder, ColumnId column, IEnumerable<Guid> ids)
+  {
+    if (!ids.Any())
+    {
+      return builder;
+    }
+    object[] values = ids.Distinct().Select(id => (object)id).ToArray();
+    return builder.Where(column, Operators.IsIn(values));
+  }
+
   public static IQueryable<T> ApplyPaging<T>(this IQueryable<T> query, SearchPayload payload)
   {
     return query.ApplyPaging(payload.Skip, payload.Limit);

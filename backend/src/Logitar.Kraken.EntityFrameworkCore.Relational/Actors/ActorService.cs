@@ -5,7 +5,7 @@ using Logitar.Kraken.Core.Caching;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Actors;
 
-internal class ActorService : IActorService
+internal class ActorService : IActorService // TODO(fpion): implement
 {
   private readonly ICacheService _cacheService;
 
@@ -16,6 +16,6 @@ internal class ActorService : IActorService
 
   public Task<IReadOnlyCollection<ActorModel>> FindAsync(IEnumerable<ActorId> ids, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException(); // TODO(fpion): implement
+    throw new NotImplementedException();
   }
 }
