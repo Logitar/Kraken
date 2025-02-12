@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Queries;
 
-public record ReadConfigurationQuery : IRequest<ConfigurationModel?>;
+public record ReadConfigurationQuery : IRequest<ConfigurationModel>;
 
-internal class ReadConfigurationQueryHandler : IRequestHandler<ReadConfigurationQuery, ConfigurationModel?>
+internal class ReadConfigurationQueryHandler : IRequestHandler<ReadConfigurationQuery, ConfigurationModel>
 {
   private readonly ICacheService _cacheService;
 
@@ -15,8 +15,9 @@ internal class ReadConfigurationQueryHandler : IRequestHandler<ReadConfiguration
     _cacheService = cacheService;
   }
 
-  public Task<ConfigurationModel?> Handle(ReadConfigurationQuery _, CancellationToken cancellationToken)
+  public Task<ConfigurationModel> Handle(ReadConfigurationQuery _, CancellationToken cancellationToken)
   {
-    return Task.FromResult(_cacheService.Configuration);
+    ConfigurationModel configuration = _cacheService.Configuration ?? throw new InvalidOperationException("The configuration was not found in the cache.");
+    return Task.FromResult(configuration);
   }
 }

@@ -1,4 +1,7 @@
 ﻿using Logitar.Kraken.Constants;
+using Logitar.Kraken.Core;
+using Logitar.Kraken.Infrastructure;
+using Logitar.Kraken.Web;
 using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
 
@@ -17,7 +20,9 @@ internal class Startup : StartupBase
   {
     base.ConfigureServices(services);
 
-    services.AddControllers();
+    services.AddLogitarKrakenCore();
+    services.AddLogitarKrakenInfrastructure();
+    services.AddLogitarKrakenWeb(_configuration);
 
     services.AddOpenApi();
 
