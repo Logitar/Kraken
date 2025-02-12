@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Logitar.Kraken.Infrastructure\Logitar.Kraken.Infrastructure.csproj" />
+    <ProjectReference Include="..\Logitar.Kraken.EntityFrameworkCore.SqlServer\Logitar.Kraken.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\Logitar.Kraken.Web\Logitar.Kraken.Web.csproj" />
   </ItemGroup>
 

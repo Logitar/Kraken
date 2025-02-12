@@ -1,5 +1,7 @@
-﻿using Logitar.Kraken.Constants;
+﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
+using Logitar.Kraken.Constants;
 using Logitar.Kraken.Core;
+using Logitar.Kraken.EntityFrameworkCore.SqlServer;
 using Logitar.Kraken.Infrastructure;
 using Logitar.Kraken.Web;
 using Microsoft.FeatureManagement;
@@ -22,11 +24,22 @@ internal class Startup : StartupBase
 
     services.AddLogitarKrakenCore();
     services.AddLogitarKrakenInfrastructure();
+    services.AddLogitarEventSourcingWithEntityFrameworkCoreRelational();
     services.AddLogitarKrakenWeb(_configuration);
 
     services.AddOpenApi();
 
     services.AddFeatureManagement();
+
+    DatabaseProvider databaseProvider = _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer; // TODO(fpion): env var override
+    switch (databaseProvider)
+    {
+      case DatabaseProvider.EntityFrameworkCoreSqlServer:
+        services.AddLogitarKrakenEntityFrameworkCoreSqlServer(_configuration);
+        break;
+      default:
+        throw new DatabaseProviderNotSupportedException(databaseProvider);
+    }
   }
 
   public override void Configure(IApplicationBuilder builder)

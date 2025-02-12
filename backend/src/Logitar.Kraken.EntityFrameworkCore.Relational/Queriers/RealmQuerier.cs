@@ -1,7 +1,6 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Actors;
 using Logitar.Kraken.Contracts.Realms;
-using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Actors;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
@@ -13,13 +12,11 @@ namespace Logitar.Kraken.EntityFrameworkCore.Relational.Queriers;
 internal class RealmQuerier : IRealmQuerier
 {
   private readonly IActorService _actorService;
-  private readonly IApplicationContext _applicationContext;
   private readonly DbSet<RealmEntity> _realms;
 
-  public RealmQuerier(IActorService actorService, IApplicationContext applicationContext, KrakenContext context)
+  public RealmQuerier(IActorService actorService, KrakenContext context)
   {
     _actorService = actorService;
-    _applicationContext = applicationContext;
     _realms = context.Realms;
   }
 
