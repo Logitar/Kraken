@@ -3,7 +3,6 @@ using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Realms.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
-using System.Text.Json;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
@@ -37,6 +36,8 @@ public sealed class RealmEntity : AggregateEntity
   public bool RequireConfirmedAccount { get; private set; }
 
   public string? CustomAttributes { get; private set; }
+
+  public List<LanguageEntity> Languages { get; private set; } = [];
 
   public RealmEntity(RealmCreated @event) : base(@event)
   {

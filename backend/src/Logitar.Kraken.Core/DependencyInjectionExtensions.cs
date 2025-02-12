@@ -1,4 +1,5 @@
 ﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Core.Localization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Logitar.Kraken.Core;
@@ -9,6 +10,13 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddLogitarEventSourcing()
+      .AddManagers()
       .AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+  }
+
+  private static IServiceCollection AddManagers(this IServiceCollection services)
+  {
+    return services
+      .AddTransient<ILanguageManager, LanguageManager>();
   }
 }

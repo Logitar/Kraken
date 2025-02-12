@@ -2,12 +2,13 @@
 using Logitar.Kraken.Contracts;
 using Logitar.Kraken.Contracts.Actors;
 using Logitar.Kraken.Contracts.Configurations;
+using Logitar.Kraken.Contracts.Localization;
 using Logitar.Kraken.Contracts.Realms;
 using Logitar.Kraken.Contracts.Settings;
 using Logitar.Kraken.Core.Configurations;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 
-namespace Logitar.Kraken.EntityFrameworkCore.Relational.Queriers;
+namespace Logitar.Kraken.EntityFrameworkCore.Relational;
 
 internal class Mapper
 {
@@ -20,7 +21,7 @@ internal class Mapper
 
   public Mapper(IEnumerable<ActorModel> actors)
   {
-    foreach (ActorModel actor in actors)
+    foreach (var actor in actors)
     {
       ActorId id = new(actor.Id);
       _actors[id] = actor;
@@ -33,6 +34,21 @@ internal class Mapper
     {
       UniqueNameSettings = new UniqueNameSettingsModel(source.UniqueNameSettings),
       PasswordSettings = new PasswordSettingsModel(source.PasswordSettings)
+    };
+
+    MapAggregate(source, destination);
+
+    return destination;
+  }
+
+  public LanguageModel ToLanguage(LanguageEntity source, RealmModel? realm)
+  {
+    LanguageModel destination = new()
+    {
+      Id = source.Id,
+      IsDefault = source.IsDefault,
+      Locale = source.GetLocale(),
+      Realm = realm
     };
 
     MapAggregate(source, destination);
@@ -55,7 +71,7 @@ internal class Mapper
       RequireConfirmedAccount = source.RequireConfirmedAccount
     };
 
-    foreach (KeyValuePair<string, string> customAttribute in source.GetCustomAttributes())
+    foreach (var customAttribute in source.GetCustomAttributes())
     {
       destination.CustomAttributes.Add(new CustomAttributeModel(customAttribute));
     }

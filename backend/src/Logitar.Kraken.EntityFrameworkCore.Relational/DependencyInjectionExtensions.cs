@@ -1,5 +1,6 @@
 ﻿using Logitar.Kraken.Core.Actors;
 using Logitar.Kraken.Core.Configurations;
+using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Actors;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Queriers;
@@ -23,6 +24,7 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddScoped<IConfigurationQuerier, ConfigurationQuerier>()
+      .AddScoped<ILanguageQuerier, LanguageQuerier>()
       .AddScoped<IRealmQuerier, RealmQuerier>();
   }
 
@@ -30,6 +32,7 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddScoped<IConfigurationRepository, ConfigurationRepository>()
+      .AddScoped<ILanguageRepository, LanguageRepository>()
       .AddScoped<IRealmRepository, RealmRepository>();
   }
 }

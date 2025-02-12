@@ -14,6 +14,10 @@ public class KrakenContext : DbContext
   public DbSet<RealmEntity> Realms => Set<RealmEntity>();
   #endregion
 
+  #region Localization
+  public DbSet<LanguageEntity> Languages => Set<LanguageEntity>();
+  #endregion
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

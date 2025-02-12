@@ -3,4 +3,5 @@
 public static class Schemas
 {
   public const string Kraken = "Kraken";
+  public const string Localization = "Localization";
 }

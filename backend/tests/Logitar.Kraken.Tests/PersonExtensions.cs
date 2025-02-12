@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using System.Text;
 
 namespace Logitar.Kraken;
 

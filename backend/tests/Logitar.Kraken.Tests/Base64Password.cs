@@ -1,5 +1,4 @@
 ﻿using Logitar.Kraken.Core.Passwords;
-using System.Text;
 
 namespace Logitar.Kraken;
 

@@ -1,11 +1,14 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Localization.Events;
+using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core.Localization;
 
 public class Language : AggregateRoot
 {
   public new LanguageId Id => new(base.Id);
+  public RealmId? RealmId => Id.RealmId;
+  public Guid EntityId => Id.EntityId;
 
   public bool IsDefault { get; private set; }
 

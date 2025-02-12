@@ -31,6 +31,8 @@ public class LanguageTests
     Language language = new(locale, isDefault, actorId, languageId);
 
     Assert.Equal(languageId, language.Id);
+    Assert.Equal(languageId.RealmId, language.RealmId);
+    Assert.Equal(languageId.EntityId, language.EntityId);
     Assert.Equal(actorId, language.CreatedBy);
     Assert.Equal(actorId, language.UpdatedBy);
     Assert.Equal(isDefault, language.IsDefault);
