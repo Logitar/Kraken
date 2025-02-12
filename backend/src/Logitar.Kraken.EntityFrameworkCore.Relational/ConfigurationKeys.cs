@@ -10,4 +10,5 @@ internal static class ConfigurationKeys
   public const string PasswordsRequireUppercase = "PasswordsRequireUppercase";
   public const string RequiredPasswordLength = "RequiredPasswordLength";
   public const string RequiredPasswordUniqueChars = "RequiredPasswordUniqueChars";
+  public const string Secret = "Secret";
 }

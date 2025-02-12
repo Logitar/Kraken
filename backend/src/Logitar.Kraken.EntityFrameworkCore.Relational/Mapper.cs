@@ -40,6 +40,67 @@ internal class Mapper
 
     return destination;
   }
+  public ConfigurationModel ToConfiguration(IEnumerable<ConfigurationEntity> configurations)
+  {
+    if (!configurations.Any())
+    {
+      throw new ArgumentException("At least one configuration must be provided.", nameof(configurations));
+    }
+
+    ConfigurationModel destination = new()
+    {
+      CreatedOn = DateTime.MaxValue,
+      UpdatedOn = DateTime.MinValue
+    };
+
+    foreach (ConfigurationEntity configuration in configurations)
+    {
+      if (configuration.Version > destination.Version)
+      {
+        destination.Version = configuration.Version;
+      }
+      if (configuration.CreatedOn < destination.CreatedOn)
+      {
+        destination.CreatedBy = TryGetActor(configuration.CreatedBy) ?? _system;
+        destination.CreatedOn = configuration.CreatedOn.AsUniversalTime();
+      }
+      if (configuration.UpdatedOn > destination.UpdatedOn)
+      {
+        destination.UpdatedBy = TryGetActor(configuration.UpdatedBy) ?? _system;
+        destination.UpdatedOn = configuration.UpdatedOn.AsUniversalTime();
+      }
+
+      switch (configuration.Key)
+      {
+        case ConfigurationKeys.AllowedUniqueNameCharacters:
+          destination.UniqueNameSettings.AllowedCharacters = configuration.Value;
+          break;
+        case ConfigurationKeys.PasswordHashingStrategy:
+          destination.PasswordSettings.HashingStrategy = configuration.Value;
+          break;
+        case ConfigurationKeys.PasswordsRequireDigit:
+          destination.PasswordSettings.RequireDigit = bool.Parse(configuration.Value);
+          break;
+        case ConfigurationKeys.PasswordsRequireLowercase:
+          destination.PasswordSettings.RequireLowercase = bool.Parse(configuration.Value);
+          break;
+        case ConfigurationKeys.PasswordsRequireNonAlphanumeric:
+          destination.PasswordSettings.RequireNonAlphanumeric = bool.Parse(configuration.Value);
+          break;
+        case ConfigurationKeys.PasswordsRequireUppercase:
+          destination.PasswordSettings.RequireUppercase = bool.Parse(configuration.Value);
+          break;
+        case ConfigurationKeys.RequiredPasswordLength:
+          destination.PasswordSettings.RequiredLength = int.Parse(configuration.Value);
+          break;
+        case ConfigurationKeys.RequiredPasswordUniqueChars:
+          destination.PasswordSettings.RequiredUniqueChars = int.Parse(configuration.Value);
+          break;
+      }
+    }
+
+    return destination;
+  }
 
   public LanguageModel ToLanguage(LanguageEntity source, RealmModel? realm)
   {
