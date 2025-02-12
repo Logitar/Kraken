@@ -17,17 +17,20 @@ internal class UpdateRealmCommandHandler : IRequestHandler<UpdateRealmCommand, R
   private readonly IRealmManager _realmManager;
   private readonly IRealmQuerier _realmQuerier;
   private readonly IRealmRepository _realmRepository;
+  private readonly ISecretHelper _secretHelper;
 
   public UpdateRealmCommandHandler(
     IApplicationContext applicationContext,
     IRealmManager realmManager,
     IRealmQuerier realmQuerier,
-    IRealmRepository realmRepository)
+    IRealmRepository realmRepository,
+    ISecretHelper secretHelper)
   {
     _applicationContext = applicationContext;
     _realmManager = realmManager;
     _realmQuerier = realmQuerier;
     _realmRepository = realmRepository;
+    _secretHelper = secretHelper;
   }
 
   public async Task<RealmModel?> Handle(UpdateRealmCommand command, CancellationToken cancellationToken)
@@ -60,7 +63,7 @@ internal class UpdateRealmCommandHandler : IRequestHandler<UpdateRealmCommand, R
 
     if (payload.Secret != null)
     {
-      realm.Secret = Secret.CreateOrGenerate(payload.Secret);
+      realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
     }
     if (payload.Url != null)
     {

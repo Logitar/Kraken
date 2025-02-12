@@ -1,7 +1,9 @@
 ﻿using Logitar.EventSourcing.Infrastructure;
 using Logitar.Kraken.Core.Caching;
+using Logitar.Kraken.Core.Tokens;
 using Logitar.Kraken.Infrastructure.Caching;
 using Logitar.Kraken.Infrastructure.Converters;
+using Logitar.Kraken.Infrastructure.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Logitar.Kraken.Infrastructure;
@@ -14,6 +16,7 @@ public static class DependencyInjectionExtensions
       .AddMemoryCache()
       .AddSingleton<ICacheService, CacheService>()
       .AddSingleton<IEventSerializer, EventSerializer>()
+      .AddSingleton<ISecretHelper, SecretHelper>()
       .AddSingleton<PasswordConverter>()
       .AddScoped<IEventBus, EventBus>();
   }

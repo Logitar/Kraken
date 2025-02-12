@@ -15,12 +15,18 @@ internal class ReplaceConfigurationCommandHandler : IRequestHandler<ReplaceConfi
   private readonly IApplicationContext _applicationContext;
   private readonly ICacheService _cacheService;
   private readonly IConfigurationRepository _configurationRepository;
+  private readonly ISecretHelper _secretHelper;
 
-  public ReplaceConfigurationCommandHandler(IApplicationContext applicationContext, ICacheService cacheService, IConfigurationRepository configurationRepository)
+  public ReplaceConfigurationCommandHandler(
+    IApplicationContext applicationContext,
+    ICacheService cacheService,
+    IConfigurationRepository configurationRepository,
+    ISecretHelper secretHelper)
   {
     _applicationContext = applicationContext;
     _cacheService = cacheService;
     _configurationRepository = configurationRepository;
+    _secretHelper = secretHelper;
   }
 
   public async Task<ConfigurationModel> Handle(ReplaceConfigurationCommand command, CancellationToken cancellationToken)
@@ -36,7 +42,7 @@ internal class ReplaceConfigurationCommandHandler : IRequestHandler<ReplaceConfi
 
     if (payload.Secret != null)
     {
-      configuration.Secret = Secret.CreateOrGenerate(payload.Secret);
+      configuration.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
     }
 
     UniqueNameSettings uniqueNameSettings = new(payload.UniqueNameSettings);

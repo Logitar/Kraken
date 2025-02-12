@@ -2,6 +2,7 @@
 using Logitar.Kraken.Core.Caching;
 using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
+using Logitar.Kraken.Core.Tokens;
 using Logitar.Kraken.Core.Users;
 using MediatR;
 
@@ -23,6 +24,7 @@ internal class InitializeConfigurationCommandHandler : IRequestHandler<Initializ
   private readonly IConfigurationRepository _configurationRepository;
   private readonly ILanguageManager _languageManager;
   private readonly IPasswordManager _passwordManager;
+  private readonly ISecretHelper _secretHelper;
   private readonly IUserManager _userManager;
 
   public InitializeConfigurationCommandHandler(
@@ -31,6 +33,7 @@ internal class InitializeConfigurationCommandHandler : IRequestHandler<Initializ
     IConfigurationRepository configurationRepository,
     ILanguageManager languageManager,
     IPasswordManager passwordManager,
+    ISecretHelper secretHelper,
     IUserManager userManager)
   {
     _cacheService = cacheService;
@@ -38,6 +41,7 @@ internal class InitializeConfigurationCommandHandler : IRequestHandler<Initializ
     _configurationRepository = configurationRepository;
     _languageManager = languageManager;
     _passwordManager = passwordManager;
+    _secretHelper = secretHelper;
     _userManager = userManager;
   }
 
@@ -49,7 +53,8 @@ internal class InitializeConfigurationCommandHandler : IRequestHandler<Initializ
       UserId userId = UserId.NewId();
       ActorId actorId = new(userId.Value);
 
-      configuration = Configuration.Initialize(actorId);
+      Secret secret = _secretHelper.Generate();
+      configuration = Configuration.Initialize(secret, actorId);
 
       Locale locale = new(command.DefaultLocale);
       Language language = new(locale, isDefault: true, actorId);

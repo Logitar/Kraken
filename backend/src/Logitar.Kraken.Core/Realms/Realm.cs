@@ -127,10 +127,9 @@ public class Realm : AggregateRoot, ICustomizable
   {
   }
 
-  public Realm(Slug uniqueSlug, ActorId? actorId = null, RealmId? realmId = null)
+  public Realm(Slug uniqueSlug, Secret secret, ActorId? actorId = null, RealmId? realmId = null)
     : base(realmId?.StreamId)
   {
-    Secret secret = Secret.Generate();
     Raise(new RealmCreated(uniqueSlug, secret), actorId);
   }
   protected virtual void Handle(RealmCreated @event)

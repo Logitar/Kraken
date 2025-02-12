@@ -69,9 +69,8 @@ public class Configuration : AggregateRoot
     _passwordSettings = @event.PasswordSettings;
   }
 
-  public static Configuration Initialize(ActorId? actorId = null)
+  public static Configuration Initialize(Secret secret, ActorId? actorId = null)
   {
-    Secret secret = Secret.Generate();
     UniqueNameSettings uniqueNameSettings = new();
     PasswordSettings passwordSettings = new();
     ConfigurationId configurationId = new();

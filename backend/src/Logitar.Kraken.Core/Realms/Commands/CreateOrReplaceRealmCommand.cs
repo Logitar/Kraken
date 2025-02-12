@@ -18,17 +18,20 @@ internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrRepl
   private readonly IRealmManager _realmManager;
   private readonly IRealmQuerier _realmQuerier;
   private readonly IRealmRepository _realmRepository;
+  private readonly ISecretHelper _secretHelper;
 
   public CreateOrReplaceRealmCommandHandler(
     IApplicationContext applicationContext,
     IRealmManager realmManager,
     IRealmQuerier realmQuerier,
-    IRealmRepository realmRepository)
+    IRealmRepository realmRepository,
+    ISecretHelper secretHelper)
   {
     _applicationContext = applicationContext;
     _realmManager = realmManager;
     _realmQuerier = realmQuerier;
     _realmRepository = realmRepository;
+    _secretHelper = secretHelper;
   }
 
   public async Task<CreateOrReplaceRealmResult> Handle(CreateOrReplaceRealmCommand command, CancellationToken cancellationToken)
@@ -55,8 +58,13 @@ internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrRepl
         return new CreateOrReplaceRealmResult();
       }
 
-      realm = new(uniqueSlug, actorId, realmId);
+      Secret secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
+      realm = new(uniqueSlug, secret, actorId, realmId);
       created = true;
+    }
+    else if (payload.Secret != null)
+    {
+      realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
     }
 
     Realm reference = (command.Version.HasValue
@@ -78,10 +86,10 @@ internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrRepl
       realm.Description = description;
     }
 
-    if (payload.Secret != null)
-    {
-      realm.Secret = Secret.CreateOrGenerate(payload.Secret);
-    }
+    //if (payload.Secret != null)
+    //{
+    //  realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
+    //}
     Url? url = Url.TryCreate(payload.Url);
     if (reference.Url != url)
     {

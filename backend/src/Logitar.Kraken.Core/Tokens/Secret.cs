@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
-using Logitar.Security.Cryptography;
 
 namespace Logitar.Kraken.Core.Tokens;
 
-public record Secret // TODO(fpion): should be encrypted!
+public record Secret
 {
   public const int MinimumLength = 256 / 8;
   public const int MaximumLength = 512 / 8;
@@ -16,9 +15,7 @@ public record Secret // TODO(fpion): should be encrypted!
     new Validator().ValidateAndThrow(this);
   }
 
-  public static Secret CreateOrGenerate(string? value) => string.IsNullOrWhiteSpace(value) ? Generate() : new(value);
-  public static Secret Generate() => Generate(MinimumLength);
-  public static Secret Generate(int length) => new(RandomStringGenerator.GetString(length));
+  public static Secret? TryCreate(string? value) => string.IsNullOrWhiteSpace(value) ? null : new(value);
 
   public override string ToString() => Value;
 
@@ -26,7 +23,7 @@ public record Secret // TODO(fpion): should be encrypted!
   {
     public Validator()
     {
-      RuleFor(x => x.Value).Secret();
+      RuleFor(x => x.Value).NotEmpty().MinimumLength(MinimumLength); // NOTE(fpion): secrets should be encrypted. An encrypted secret cannot be shorter than the original.
     }
   }
 }

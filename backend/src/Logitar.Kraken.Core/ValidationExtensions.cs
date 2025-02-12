@@ -28,7 +28,7 @@ internal static class ValidationExtensions
 
   public static IRuleBuilderOptions<T, string> Secret<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
-    return ruleBuilder.NotEmpty().MinimumLength(Tokens.Secret.MinimumLength).MaximumLength(Tokens.Secret.MaximumLength);
+    return ruleBuilder.NotEmpty().SetValidator(new SecretValidator<T>());
   }
 
   public static IRuleBuilderOptions<T, string> Slug<T>(this IRuleBuilder<T, string> ruleBuilder)
