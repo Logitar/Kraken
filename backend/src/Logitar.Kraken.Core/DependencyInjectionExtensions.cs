@@ -1,5 +1,7 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Localization;
+using Logitar.Kraken.Core.Realms;
+using Logitar.Kraken.Core.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Logitar.Kraken.Core;
@@ -17,6 +19,8 @@ public static class DependencyInjectionExtensions
   private static IServiceCollection AddManagers(this IServiceCollection services)
   {
     return services
-      .AddTransient<ILanguageManager, LanguageManager>();
+      .AddTransient<ILanguageManager, LanguageManager>()
+      .AddTransient<IRealmManager, RealmManager>()
+      .AddTransient<IUserManager, UserManager>();
   }
 }
