@@ -130,7 +130,11 @@ public class Realm : AggregateRoot, ICustomizable
   public Realm(Slug uniqueSlug, Secret secret, ActorId? actorId = null, RealmId? realmId = null)
     : base(realmId?.StreamId)
   {
-    Raise(new RealmCreated(uniqueSlug, secret), actorId);
+    UniqueNameSettings uniqueNameSettings = new();
+    PasswordSettings passwordSettings = new();
+    bool requireUniqueEmail = true;
+    bool requireConfirmedAccount = true;
+    Raise(new RealmCreated(uniqueSlug, secret, uniqueNameSettings, passwordSettings, requireUniqueEmail, requireConfirmedAccount), actorId);
   }
   protected virtual void Handle(RealmCreated @event)
   {

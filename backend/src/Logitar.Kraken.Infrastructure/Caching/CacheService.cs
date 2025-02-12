@@ -28,7 +28,7 @@ public class CacheService : ICacheService
       }
     }
   }
-  private const string ConfigurationKey = "Configuration";
+  protected const string ConfigurationKey = "Configuration";
 
   protected T? TryGetValue<T>(object key) => Cache.TryGetValue(key, out object? value) ? (T?)value : default;
   protected void RemoveValue(object key) => Cache.Remove(key);

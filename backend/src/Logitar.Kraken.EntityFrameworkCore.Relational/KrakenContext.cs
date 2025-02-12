@@ -1,0 +1,21 @@
+﻿using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Logitar.Kraken.EntityFrameworkCore.Relational;
+
+public class KrakenContext : DbContext
+{
+  public KrakenContext(DbContextOptions<KrakenContext> options) : base(options)
+  {
+  }
+
+  #region Kraken
+  public DbSet<ConfigurationEntity> Configurations => Set<ConfigurationEntity>();
+  public DbSet<RealmEntity> Realms => Set<RealmEntity>();
+  #endregion
+
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+  }
+}
