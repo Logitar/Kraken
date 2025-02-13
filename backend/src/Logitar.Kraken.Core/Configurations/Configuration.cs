@@ -7,7 +7,7 @@ namespace Logitar.Kraken.Core.Configurations;
 
 public class Configuration : AggregateRoot
 {
-  private ConfigurationUpdated _updated = new();
+  private ConfigurationUpdated _updatedEvent = new();
 
   public new ConfigurationId Id { get; } = new();
 
@@ -20,7 +20,7 @@ public class Configuration : AggregateRoot
       if (_secret != value)
       {
         _secret = value;
-        _updated.Secret = value;
+        _updatedEvent.Secret = value;
       }
     }
   }
@@ -34,7 +34,7 @@ public class Configuration : AggregateRoot
       if (_uniqueNameSettings != value)
       {
         _uniqueNameSettings = value;
-        _updated.UniqueNameSettings = value;
+        _updatedEvent.UniqueNameSettings = value;
       }
     }
   }
@@ -47,7 +47,7 @@ public class Configuration : AggregateRoot
       if (_passwordSettings != value)
       {
         _passwordSettings = value;
-        _updated.PasswordSettings = value;
+        _updatedEvent.PasswordSettings = value;
       }
     }
   }
@@ -79,10 +79,10 @@ public class Configuration : AggregateRoot
 
   public void Update(ActorId? actorId = null)
   {
-    if (_updated.HasChanges)
+    if (_updatedEvent.HasChanges)
     {
-      Raise(_updated, actorId, DateTime.Now);
-      _updated = new();
+      Raise(_updatedEvent, actorId, DateTime.Now);
+      _updatedEvent = new();
     }
   }
   protected virtual void Handle(ConfigurationUpdated @event)

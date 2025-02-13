@@ -1,9 +1,11 @@
 ﻿using Bogus;
 using Logitar.EventSourcing;
+using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Settings;
 using Logitar.Kraken.Core.Users.Events;
+using TimeZone = Logitar.Kraken.Core.Localization.TimeZone;
 
 namespace Logitar.Kraken.Core.Users;
 
@@ -17,6 +19,58 @@ public class UserTests
   public UserTests()
   {
     _user = new(new UniqueName(new UniqueNameSettings(), _faker.Person.UserName));
+  }
+
+  [Fact(DisplayName = "Authenticate: it should authenticate the user.")]
+  public void Given_CorrectPassword_When_Authenticate_Then_Authenticated()
+  {
+    Assert.Null(_user.AuthenticatedOn);
+
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+
+    ActorId actorId = ActorId.NewId();
+    _user.Authenticate(passwordString, actorId);
+
+    Assert.NotNull(_user.AuthenticatedOn);
+    Assert.Equal(DateTime.Now, _user.AuthenticatedOn.Value, TimeSpan.FromSeconds(1));
+    Assert.Contains(_user.Changes, change => change is UserAuthenticated authenticated && authenticated.ActorId == actorId);
+  }
+
+  [Fact(DisplayName = "Authenticate: it should throw IncorrectUserPasswordException when the input password is not correct.")]
+  public void Given_IncorrectPassword_When_Authenticate_Then_IncorrectUserPasswordException()
+  {
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+
+    string attemptedPassword = passwordString[..^1];
+    var exception = Assert.Throws<IncorrectUserPasswordException>(() => _user.Authenticate(attemptedPassword));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+    Assert.Equal(attemptedPassword, exception.AttemptedPassword);
+  }
+
+  [Fact(DisplayName = "Authenticate: it should throw UserHasNoPasswordException when the user has no password.")]
+  public void Given_NoPassword_When_Authenticate_Then_UserHasNoPasswordException()
+  {
+    var exception = Assert.Throws<UserHasNoPasswordException>(() => _user.Authenticate("Test123!"));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+  }
+
+  [Fact(DisplayName = "Authenticate: it should throw UserIsDisabledException when the user is disabled.")]
+  public void Given_Disabled_When_Authenticate_Then_UserIsDisabledException()
+  {
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+    _user.Disable();
+
+    var exception = Assert.Throws<UserIsDisabledException>(() => _user.Authenticate(passwordString));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
   }
 
   [Theory(DisplayName = "ctor: it should construct the correct user.")]
@@ -63,6 +117,89 @@ public class UserTests
     Assert.Empty(_user.Changes);
   }
 
+  [Fact(DisplayName = "Disable: it should disable the user.")]
+  public void Given_User_When_Disable_Then_Disabled()
+  {
+    ActorId actorId = ActorId.NewId();
+    _user.Disable(actorId);
+    Assert.True(_user.IsDisabled);
+    Assert.Contains(_user.Changes, change => change is UserDisabled disabled && disabled.ActorId == actorId);
+
+    _user.ClearChanges();
+    _user.Disable();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+  }
+
+  [Fact(DisplayName = "Enable: it should enable the user.")]
+  public void Given_User_When_Enable_Then_Enabled()
+  {
+    _user.Disable();
+
+    ActorId actorId = ActorId.NewId();
+    _user.Enable(actorId);
+    Assert.False(_user.IsDisabled);
+    Assert.Contains(_user.Changes, change => change is UserEnabled disabled && disabled.ActorId == actorId);
+
+    _user.ClearChanges();
+    _user.Enable();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+  }
+
+  [Fact(DisplayName = "FirstName: it should handle the updates correctly.")]
+  public void Given_FirstNameUpdates_When_setFirstName_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.FirstName = _user.FirstName;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.FirstName = new PersonName(_faker.Person.FirstName);
+    _user.Update();
+    Assert.NotNull(_user.FirstName);
+    Assert.Equal(_user.FirstName.Value, _user.FullName);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.FirstName?.Value == _user.FirstName && updated.FullName?.Value == _user.FirstName.Value);
+  }
+
+  [Fact(DisplayName = "Gender: it should handle the updates correctly.")]
+  public void Given_GenderUpdates_When_setGender_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.Gender = _user.Gender;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.Gender = new Gender(_faker.Person.Gender.ToString());
+    _user.Update();
+    Assert.NotNull(_user.Gender);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.Gender?.Value == _user.Gender);
+  }
+
+  [Fact(DisplayName = "IsConfirmed: it should return false when the user has no verified contact.")]
+  public void Given_NoVerifiedContact_When_IsConfirmed_Then_FalseReturned()
+  {
+    Assert.False(_user.IsConfirmed);
+
+    Address address = new("150 Saint-Catherine St W", "Montreal", "CA", "QC", "H2X 3Y2");
+    _user.SetAddress(address);
+    Assert.False(_user.IsConfirmed);
+  }
+
+  [Fact(DisplayName = "IsConfirmed: it should return true when the user has verified contacts.")]
+  public void Given_VerifiedContacts_When_IsConfirmed_Then_TrueReturned()
+  {
+    _user.SetEmail(new Email(_faker.Person.Email, isVerified: true));
+    _user.SetPhone(new Phone("+15148454636", "CA", extension: null, isVerified: true));
+    Assert.True(_user.IsConfirmed);
+  }
+
   [Fact(DisplayName = "It should have the correct IDs.")]
   public void Given_User_When_getIds_Then_CorrectIds()
   {
@@ -71,6 +208,110 @@ public class UserTests
     Assert.Equal(id, user.Id);
     Assert.Equal(id.RealmId, user.RealmId);
     Assert.Equal(id.EntityId, user.EntityId);
+  }
+
+  [Fact(DisplayName = "LastName: it should handle the updates correctly.")]
+  public void Given_LastNameUpdates_When_setLastName_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.LastName = _user.LastName;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.LastName = new PersonName(_faker.Person.LastName);
+    _user.Update();
+    Assert.NotNull(_user.LastName);
+    Assert.Equal(_user.LastName.Value, _user.FullName);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.LastName?.Value == _user.LastName && updated.FullName?.Value == _user.LastName.Value);
+  }
+
+  [Fact(DisplayName = "Locale: it should handle the updates correctly.")]
+  public void Given_LocaleUpdates_When_setLocale_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.Locale = _user.Locale;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.Locale = new Locale(_faker.Locale);
+    _user.Update();
+    Assert.NotNull(_user.Locale);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.Locale?.Value == _user.Locale);
+  }
+
+  [Fact(DisplayName = "MiddleName: it should handle the updates correctly.")]
+  public void Given_MiddleNameUpdates_When_setMiddleName_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.MiddleName = _user.MiddleName;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.MiddleName = new PersonName(_faker.Name.FirstName());
+    _user.Update();
+    Assert.NotNull(_user.MiddleName);
+    Assert.Equal(_user.MiddleName.Value, _user.FullName);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.MiddleName?.Value == _user.MiddleName && updated.FullName?.Value == _user.MiddleName.Value);
+  }
+
+  [Fact(DisplayName = "Nickname: it should handle the updates correctly.")]
+  public void Given_NicknameUpdates_When_setNickname_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.Nickname = _user.Nickname;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.Nickname = new PersonName(_faker.Name.LastName());
+    _user.Update();
+    Assert.NotNull(_user.Nickname);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.Nickname?.Value == _user.Nickname);
+  }
+
+  [Fact(DisplayName = "Picture: it should handle the updates correctly.")]
+  public void Given_PictureUpdates_When_setPicture_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.Picture = _user.Picture;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.Picture = new Url($"https://www.{_faker.Person.Avatar}");
+    _user.Update();
+    Assert.NotNull(_user.Picture);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.Picture?.Value == _user.Picture);
+  }
+
+  [Fact(DisplayName = "Profile: it should handle the updates correctly.")]
+  public void Given_ProfileUpdates_When_setProfile_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.Profile = _user.Profile;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.Profile = new Url($"https://www.{_faker.Internet.DomainName()}/members/{_faker.Person.UserName}");
+    _user.Update();
+    Assert.NotNull(_user.Profile);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.Profile?.Value == _user.Profile);
   }
 
   [Fact(DisplayName = "RemoveCustomAttribute: it should remove the custom attribute.")]
@@ -89,6 +330,47 @@ public class UserTests
     _user.RemoveCustomAttribute(key);
     Assert.False(_user.HasChanges);
     Assert.Empty(_user.Changes);
+  }
+
+  [Fact(DisplayName = "ResetPassword: it should reset the user password when it is not disabled.")]
+  public void Given_NotDisabled_When_ResetPassword_Then_PasswordReset()
+  {
+    Base64Password password = new(_faker.Internet.Password());
+    ActorId actorId = ActorId.NewId();
+    _user.ResetPassword(password, actorId);
+
+    Assert.True(_user.HasPassword);
+    Assert.Contains(_user.Changes, change => change is UserPasswordReset reset && reset.ActorId == actorId && reset.Password.Equals(password));
+  }
+
+  [Fact(DisplayName = "ResetPassword: it should throw UserIsDisabledException when the user is disabled.")]
+  public void Given_Disabled_When_ResetPassword_Then_UserIsDisabledException()
+  {
+    _user.Disable();
+
+    Base64Password password = new(_faker.Internet.Password());
+    var exception = Assert.Throws<UserIsDisabledException>(() => _user.ResetPassword(password));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+  }
+
+  [Fact(DisplayName = "SetAddress: it should set the user address.")]
+  public void Given_User_When_SetAddress_Then_AddressChanged()
+  {
+    Address address = new("150 Saint-Catherine St W", "Montreal", "CA", "QC", "H2X 3Y2");
+    ActorId actorId = ActorId.NewId();
+    _user.SetAddress(address, actorId);
+    Assert.Same(_user.Address, address);
+    Assert.Contains(_user.Changes, change => change is UserAddressChanged changed && changed.Address != null && changed.Address.Equals(address) && changed.ActorId == actorId);
+
+    _user.ClearChanges();
+    _user.SetAddress(address);
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.SetAddress(address: null, actorId);
+    Assert.Null(_user.Address);
+    Assert.Contains(_user.Changes, change => change is UserAddressChanged changed && changed.Address == null && changed.ActorId == actorId);
   }
 
   [Theory(DisplayName = "SetCustomAttribute: it should remove the custom attribute when the value is null, empty or white-space.")]
@@ -125,6 +407,55 @@ public class UserTests
     Assert.Empty(_user.Changes);
   }
 
+  [Fact(DisplayName = "SetEmail: it should set the user email.")]
+  public void Given_User_When_SetEmail_Then_EmailChanged()
+  {
+    Email email = new(_faker.Person.Email, isVerified: true);
+    ActorId actorId = ActorId.NewId();
+    _user.SetEmail(email, actorId);
+    Assert.Same(_user.Email, email);
+    Assert.Contains(_user.Changes, change => change is UserEmailChanged changed && changed.Email != null && changed.Email.Equals(email) && changed.ActorId == actorId);
+
+    _user.ClearChanges();
+    _user.SetEmail(email);
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.SetEmail(email: null, actorId);
+    Assert.Null(_user.Email);
+    Assert.Contains(_user.Changes, change => change is UserEmailChanged changed && changed.Email == null && changed.ActorId == actorId);
+  }
+
+  [Fact(DisplayName = "SetPassword: it should update the user password.")]
+  public void Given_Password_When_SetPassword_Then_PasswordUpdated()
+  {
+    Base64Password password = new(_faker.Internet.Password());
+    ActorId actorId = ActorId.NewId();
+    _user.SetPassword(password, actorId);
+
+    Assert.True(_user.HasPassword);
+    Assert.Contains(_user.Changes, change => change is UserPasswordUpdated updated && updated.ActorId == actorId && updated.Password.Equals(password));
+  }
+
+  [Fact(DisplayName = "SetPhone: it should set the user phone.")]
+  public void Given_User_When_SetPhone_Then_PhoneChanged()
+  {
+    Phone phone = new("+15148454636", "CA", extension: null, isVerified: true);
+    ActorId actorId = ActorId.NewId();
+    _user.SetPhone(phone, actorId);
+    Assert.Same(_user.Phone, phone);
+    Assert.Contains(_user.Changes, change => change is UserPhoneChanged changed && changed.Phone != null && changed.Phone.Equals(phone) && changed.ActorId == actorId);
+
+    _user.ClearChanges();
+    _user.SetPhone(phone);
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.SetPhone(phone: null, actorId);
+    Assert.Null(_user.Phone);
+    Assert.Contains(_user.Changes, change => change is UserPhoneChanged changed && changed.Phone == null && changed.ActorId == actorId);
+  }
+
   [Fact(DisplayName = "SetUniqueName: it should handle the updated correctly.")]
   public void Given_UniqueNameUpdates_When_setSetUniqueName_Then_UpdatesHandledCorrectly()
   {
@@ -136,6 +467,23 @@ public class UserTests
     _user.SetUniqueName(uniqueName);
     Assert.False(_user.HasChanges);
     Assert.Empty(_user.Changes);
+  }
+
+  [Fact(DisplayName = "TimeZone: it should handle the updates correctly.")]
+  public void Given_TimeZoneUpdates_When_setTimeZone_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.TimeZone = _user.TimeZone;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.TimeZone = new TimeZone("America/New_York");
+    _user.Update();
+    Assert.NotNull(_user.TimeZone);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.TimeZone?.Value == _user.TimeZone);
   }
 
   [Theory(DisplayName = "Update: it should update the user.")]
@@ -153,5 +501,22 @@ public class UserTests
     _user.SetCustomAttribute(new Identifier("HealthInsuranceNumber"), _faker.Person.BuildHealthInsuranceNumber());
     _user.Update(actorId);
     Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.ActorId == actorId && (updated.OccurredOn - DateTime.Now) < TimeSpan.FromSeconds(1));
+  }
+
+  [Fact(DisplayName = "Website: it should handle the updates correctly.")]
+  public void Given_WebsiteUpdates_When_setWebsite_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.Website = _user.Website;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.Website = new Url($"https://www.{_faker.Person.Website}");
+    _user.Update();
+    Assert.NotNull(_user.Website);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.Website?.Value == _user.Website);
   }
 }

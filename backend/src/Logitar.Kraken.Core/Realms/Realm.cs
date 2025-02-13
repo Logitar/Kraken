@@ -7,7 +7,7 @@ namespace Logitar.Kraken.Core.Realms;
 
 public class Realm : AggregateRoot, ICustomizable
 {
-  private RealmUpdated _updated = new();
+  private RealmUpdated _updatedEvent = new();
 
   public new RealmId Id => new(base.Id);
 
@@ -22,7 +22,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_displayName != value)
       {
         _displayName = value;
-        _updated.DisplayName = new Change<DisplayName>(value);
+        _updatedEvent.DisplayName = new Change<DisplayName>(value);
       }
     }
   }
@@ -35,7 +35,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_description != value)
       {
         _description = value;
-        _updated.Description = new Change<Description>(value);
+        _updatedEvent.Description = new Change<Description>(value);
       }
     }
   }
@@ -49,7 +49,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_secret != value)
       {
         _secret = value;
-        _updated.Secret = value;
+        _updatedEvent.Secret = value;
       }
     }
   }
@@ -62,7 +62,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_url != value)
       {
         _url = value;
-        _updated.Url = new Change<Url>(value);
+        _updatedEvent.Url = new Change<Url>(value);
       }
     }
   }
@@ -76,7 +76,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_uniqueNameSettings != value)
       {
         _uniqueNameSettings = value;
-        _updated.UniqueNameSettings = value;
+        _updatedEvent.UniqueNameSettings = value;
       }
     }
   }
@@ -89,7 +89,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_passwordSettings != value)
       {
         _passwordSettings = value;
-        _updated.PasswordSettings = value;
+        _updatedEvent.PasswordSettings = value;
       }
     }
   }
@@ -102,7 +102,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_requireUniqueEmail != value)
       {
         _requireUniqueEmail = value;
-        _updated.RequireUniqueEmail = value;
+        _updatedEvent.RequireUniqueEmail = value;
       }
     }
   }
@@ -115,7 +115,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (_requireConfirmedAccount != value)
       {
         _requireConfirmedAccount = value;
-        _updated.RequireConfirmedAccount = value;
+        _updatedEvent.RequireConfirmedAccount = value;
       }
     }
   }
@@ -155,7 +155,7 @@ public class Realm : AggregateRoot, ICustomizable
   {
     if (_customAttributes.Remove(key))
     {
-      _updated.CustomAttributes[key] = null;
+      _updatedEvent.CustomAttributes[key] = null;
     }
   }
 
@@ -171,7 +171,7 @@ public class Realm : AggregateRoot, ICustomizable
       if (!_customAttributes.TryGetValue(key, out string? existingValue) || existingValue != value)
       {
         _customAttributes[key] = value;
-        _updated.CustomAttributes[key] = value;
+        _updatedEvent.CustomAttributes[key] = value;
       }
     }
   }
@@ -190,10 +190,10 @@ public class Realm : AggregateRoot, ICustomizable
 
   public void Update(ActorId? actorId = null)
   {
-    if (_updated.HasChanges)
+    if (_updatedEvent.HasChanges)
     {
-      Raise(_updated, actorId, DateTime.Now);
-      _updated = new();
+      Raise(_updatedEvent, actorId, DateTime.Now);
+      _updatedEvent = new();
     }
   }
   protected virtual void Handle(RealmUpdated @event)

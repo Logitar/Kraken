@@ -1,12 +1,18 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Realms;
+using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
+using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logitar.Kraken.EntityFrameworkCore.Relational.Repositories;
 
 internal class RealmRepository : Repository, IRealmRepository
 {
-  public RealmRepository(IEventStore eventStore) : base(eventStore)
+  private readonly DbSet<RealmEntity> _realms;
+
+  public RealmRepository(KrakenContext context, IEventStore eventStore) : base(eventStore)
   {
+    _realms = context.Realms;
   }
 
   public async Task<Realm?> LoadAsync(RealmId id, CancellationToken cancellationToken)
@@ -42,6 +48,18 @@ internal class RealmRepository : Repository, IRealmRepository
   public async Task<IReadOnlyCollection<Realm>> LoadAsync(IEnumerable<RealmId> ids, bool? isDeleted, CancellationToken cancellationToken)
   {
     return await LoadAsync<Realm>(ids.Select(id => id.StreamId), isDeleted, cancellationToken);
+  }
+
+  public async Task<Realm?> LoadAsync(Slug uniqueSlug, CancellationToken cancellationToken)
+  {
+    string uniqueSlugNormalized = Helper.Normalize(uniqueSlug);
+
+    string? streamId = await _realms.AsNoTracking()
+      .Where(x => x.UniqueSlugNormalized == uniqueSlugNormalized)
+      .Select(x => x.StreamId)
+      .SingleOrDefaultAsync(cancellationToken);
+
+    return streamId == null ? null : await LoadAsync(new RealmId(streamId), cancellationToken);
   }
 
   public async Task SaveAsync(Realm realm, CancellationToken cancellationToken)
