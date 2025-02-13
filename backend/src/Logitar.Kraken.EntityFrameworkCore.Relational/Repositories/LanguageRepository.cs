@@ -84,7 +84,7 @@ internal class LanguageRepository : Repository, ILanguageRepository
       ?? throw new InvalidOperationException($"The default language entity could not be found for realm 'Id={realmId?.Value ?? "<null>"}'.");
 
     return await LoadAsync(new LanguageId(new StreamId(streamId)), cancellationToken)
-      ?? throw new InvalidOperationException($"The default language could not be loaded for realm 'Id={realmId?.Value ?? "<null>"}'.");
+      ?? throw new InvalidOperationException($"The default language was not loaded for realm 'Id={realmId?.Value ?? "<null>"}'.");
   }
 
   public async Task SaveAsync(Language language, CancellationToken cancellationToken)

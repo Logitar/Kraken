@@ -23,6 +23,14 @@
 - CreateOrReplaceRoleCommand
 - UpdateRoleCommand
 
+## Sessions (5)
+
+- CreateSessionCommand
+- RenewSessionCommand
+- Session
+- SignInSessionCommand
+- SignOutSessionCommand
+
 ## User (7)
 
 - AuthenticateUserCommand

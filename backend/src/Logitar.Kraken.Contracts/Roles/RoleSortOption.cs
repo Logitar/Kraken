@@ -10,7 +10,7 @@ public record RoleSortOption : SortOption
     set => base.Field = value.ToString();
   }
 
-  public RoleSortOption() : this(RoleSort.DisplayName)
+  public RoleSortOption() : this(RoleSort.UpdatedOn, isDescending: true)
   {
   }
 

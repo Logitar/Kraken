@@ -10,9 +10,11 @@ public record RealmSortOption : SortOption
     set => base.Field = value.ToString();
   }
 
-  public RealmSortOption(RealmSort field = RealmSort.UpdatedOn, bool isDescending = true)
+  public RealmSortOption() : this(RealmSort.UpdatedOn, isDescending: true)
   {
-    Field = field;
-    IsDescending = isDescending;
+  }
+
+  public RealmSortOption(RealmSort field, bool isDescending = false) : base(field.ToString(), isDescending)
+  {
   }
 }

@@ -21,7 +21,7 @@ public interface IUserRepository
   Task<IReadOnlyCollection<User>> LoadAsync(RealmId? realmId, IEmail email, CancellationToken cancellationToken = default);
   Task<IReadOnlyCollection<User>> LoadAsync(RoleId roleId, CancellationToken cancellationToken = default);
   Task<User?> LoadAsync(RealmId? realmId, UniqueName uniqueName, CancellationToken cancellationToken = default);
-  // TODO(fpion): continue here...
+  Task<User?> LoadAsync(RealmId? realmId, Identifier key, CustomIdentifier value, CancellationToken cancellationToken = default);
 
   Task SaveAsync(User user, CancellationToken cancellationToken = default);
   Task SaveAsync(IEnumerable<User> users, CancellationToken cancellationToken = default);

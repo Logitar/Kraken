@@ -32,7 +32,7 @@ internal class SetDefaultLanguageCommandHandler : IRequestHandler<SetDefaultLang
     {
       LanguageId defaultId = await _languageQuerier.FindDefaultIdAsync(cancellationToken);
       Language @default = await _languageRepository.LoadAsync(defaultId, cancellationToken)
-        ?? throw new InvalidOperationException($"The default language 'Id={defaultId}' could not be loaded.");
+        ?? throw new InvalidOperationException($"The default language 'Id={defaultId}' was not loaded.");
 
       ActorId? actorId = _applicationContext.ActorId;
       @default.SetDefault(false, actorId);
