@@ -41,9 +41,9 @@ public class Realm : AggregateRoot, ICustomizable
   }
 
   private Secret? _secret = null;
-  public Secret? Secret
+  public Secret Secret
   {
-    get => _secret;
+    get => _secret ?? throw new InvalidOperationException("The realm has not been initialized.");
     set
     {
       if (_secret != value)
@@ -141,6 +141,11 @@ public class Realm : AggregateRoot, ICustomizable
     _uniqueSlug = @event.UniqueSlug;
 
     _secret = @event.Secret;
+
+    _uniqueNameSettings = @event.UniqueNameSettings;
+    _passwordSettings = @event.PasswordSettings;
+    _requireUniqueEmail = @event.RequireUniqueEmail;
+    _requireConfirmedAccount = @event.RequireConfirmedAccount;
   }
 
   public void Delete(ActorId? actorId = null)

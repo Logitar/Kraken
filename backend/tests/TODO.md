@@ -6,16 +6,14 @@
 - CreateOrReplaceApiKeyCommand
 - UpdateApiKeyCommand
 
-## Configuration (3)
+## Configuration (2)
 
-- Configuration
 - ReplaceConfigurationCommand
 - UpdateConfigurationCommand
 
-## Realm (3)
+## Realm (2)
 
 - CreateOrReplaceRealmCommand
-- Realm
 - UpdateRealmCommand
 
 ## Role (2)
@@ -23,11 +21,10 @@
 - CreateOrReplaceRoleCommand
 - UpdateRoleCommand
 
-## Sessions (5)
+## Sessions (4)
 
 - CreateSessionCommand
 - RenewSessionCommand
-- Session
 - SignInSessionCommand
 - SignOutSessionCommand
 

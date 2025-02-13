@@ -44,4 +44,6 @@ public class UserModel : AggregateModel
   public List<RoleModel> Roles { get; set; } = [];
 
   public RealmModel? Realm { get; set; }
+
+  public override string ToString() => $"{FullName ?? UniqueName} | {base.ToString()}";
 }

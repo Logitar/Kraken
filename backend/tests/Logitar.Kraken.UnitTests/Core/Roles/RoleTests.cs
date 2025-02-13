@@ -77,7 +77,7 @@ public class RoleTests
     Assert.False(_role.HasChanges);
     Assert.Empty(_role.Changes);
 
-    _role.DisplayName = new DisplayName("New API Key");
+    _role.DisplayName = new DisplayName("Administrator");
     _role.Update();
     Assert.True(_role.HasChanges);
     Assert.Contains(_role.Changes, change => change is RoleUpdated updated && updated.DisplayName?.Value == _role.DisplayName);
