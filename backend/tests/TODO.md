@@ -1,5 +1,11 @@
 # 🧪 TODO
 
+## API Keys (3)
+
+- AuthenticateApiKeyCommand
+- CreateOrReplaceApiKeyCommand
+- UpdateApiKeyCommand
+
 ## Configuration (3)
 
 - Configuration

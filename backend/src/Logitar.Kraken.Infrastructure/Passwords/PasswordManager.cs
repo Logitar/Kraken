@@ -14,4 +14,9 @@ internal class PasswordManager : IPasswordManager // TODO(fpion): implement
   {
     throw new NotImplementedException();
   }
+
+  public Password GenerateBase64(int length, out string password)
+  {
+    throw new NotImplementedException();
+  }
 }

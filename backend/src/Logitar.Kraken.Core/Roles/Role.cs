@@ -82,7 +82,6 @@ public class Role : AggregateRoot, ICustomizable
     else
     {
       value = value.Trim();
-
       if (!_customAttributes.TryGetValue(key, out string? existingValue) || existingValue != value)
       {
         _customAttributes[key] = value;

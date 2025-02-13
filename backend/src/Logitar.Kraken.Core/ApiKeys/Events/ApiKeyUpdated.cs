@@ -1,6 +1,9 @@
-﻿namespace Logitar.Kraken.Core.ApiKeys.Events;
+﻿using Logitar.EventSourcing;
+using MediatR;
 
-public record ApiKeyUpdated
+namespace Logitar.Kraken.Core.ApiKeys.Events;
+
+public record ApiKeyUpdated : DomainEvent, INotification
 {
   public DisplayName? Name { get; set; }
   public Change<Description>? Description { get; set; }
