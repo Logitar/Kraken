@@ -20,6 +20,7 @@
     <PackageReference Include="Logitar.EventSourcing" Version="7.0.1" />
     <PackageReference Include="Logitar.Security" Version="7.0.1" />
     <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.4.0" />
     <PackageReference Include="NodaTime" Version="3.2.1" />
   </ItemGroup>
 
@@ -32,6 +33,7 @@
     <Using Include="System.Diagnostics.CodeAnalysis" />
     <Using Include="System.Globalization" />
     <Using Include="System.Reflection" />
+    <Using Include="System.Security.Claims" />
     <Using Include="System.Text" />
     <Using Include="System.Text.Json" />
     <Using Include="System.Text.Json.Serialization" />

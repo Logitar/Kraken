@@ -11,6 +11,8 @@ public interface IApplicationContext
 
   RealmModel? Realm { get; }
   RealmId? RealmId { get; }
+  string BaseUrl { get; }
+  string Secret { get; }
   IRoleSettings RoleSettings { get; }
   IUserSettings UserSettings { get; }
 }
