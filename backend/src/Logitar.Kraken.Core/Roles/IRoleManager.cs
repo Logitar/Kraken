@@ -2,6 +2,6 @@
 
 public interface IRoleManager
 {
-  Task<IReadOnlyDictionary<string, Role>> FindAsync(IEnumerable<string> roles, CancellationToken cancellationToken = default);
+  Task<IReadOnlyDictionary<string, Role>> FindAsync(IEnumerable<string> roles, string propertyName, CancellationToken cancellationToken = default);
   Task SaveAsync(Role role, CancellationToken cancellationToken = default);
 }

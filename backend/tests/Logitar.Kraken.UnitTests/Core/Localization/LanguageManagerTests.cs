@@ -6,6 +6,8 @@ namespace Logitar.Kraken.Core.Localization;
 [Trait(Traits.Category, Categories.Unit)]
 public class LanguageManagerTests
 {
+  private const string PropertyName = "Language";
+
   private readonly CancellationToken _cancellationToken = default;
 
   private readonly Mock<IApplicationContext> _applicationContext = new();
@@ -25,7 +27,7 @@ public class LanguageManagerTests
     Language language = new(new Locale("fr"));
     _languageRepository.Setup(x => x.LoadAsync(language.Id, _cancellationToken)).ReturnsAsync(language);
 
-    Language result = await _manager.FindAsync($"  {language.EntityId}  ", _cancellationToken);
+    Language result = await _manager.FindAsync($"  {language.EntityId}  ", PropertyName, _cancellationToken);
     Assert.Same(language, result);
 
     _languageQuerier.Verify(x => x.FindIdAsync(It.IsAny<Locale>(), It.IsAny<CancellationToken>()), Times.Never());
@@ -42,7 +44,7 @@ public class LanguageManagerTests
     _languageQuerier.Setup(x => x.FindIdAsync(language.Locale, _cancellationToken)).ReturnsAsync(language.Id);
     _languageRepository.Setup(x => x.LoadAsync(language.Id, _cancellationToken)).ReturnsAsync(language);
 
-    Language result = await _manager.FindAsync($"  {language.Locale.Code}  ", _cancellationToken);
+    Language result = await _manager.FindAsync($"  {language.Locale.Code}  ", PropertyName, _cancellationToken);
     Assert.Same(language, result);
 
     _languageQuerier.Verify(x => x.FindIdAsync(language.Locale, _cancellationToken), Times.Once());
@@ -53,10 +55,10 @@ public class LanguageManagerTests
   public async Task Given_NotFound_When_FindAsync_Then_LanguageNotFoundException()
   {
     string language = "invalid";
-    var exception = await Assert.ThrowsAsync<LanguageNotFoundException>(async () => await _manager.FindAsync(language, _cancellationToken));
+    var exception = await Assert.ThrowsAsync<LanguageNotFoundException>(async () => await _manager.FindAsync(language, PropertyName, _cancellationToken));
     Assert.Null(exception.RealmId);
     Assert.Equal(language, exception.Language);
-    Assert.Equal("Language", exception.PropertyName);
+    Assert.Equal(PropertyName, exception.PropertyName);
 
     _languageQuerier.Verify(x => x.FindIdAsync(It.IsAny<Locale>(), It.IsAny<CancellationToken>()), Times.Never());
     _languageRepository.Verify(x => x.LoadAsync(It.IsAny<LanguageId>(), It.IsAny<CancellationToken>()), Times.Never());

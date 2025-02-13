@@ -16,7 +16,7 @@ internal class RoleManager : IRoleManager
     _roleRepository = roleRepository;
   }
 
-  public async Task<IReadOnlyDictionary<string, Role>> FindAsync(IEnumerable<string> values, CancellationToken cancellationToken)
+  public async Task<IReadOnlyDictionary<string, Role>> FindAsync(IEnumerable<string> values, string propertyName, CancellationToken cancellationToken)
   {
     RealmId? realmId = _applicationContext.RealmId;
 
@@ -77,7 +77,7 @@ internal class RoleManager : IRoleManager
 
     if (missingRoles.Count > 0)
     {
-      throw new RolesNotFoundException(missingRoles);
+      throw new RolesNotFoundException(missingRoles, propertyName);
     }
 
     return foundRoles.AsReadOnly();

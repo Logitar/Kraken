@@ -90,7 +90,7 @@ internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Use
       user.SetCustomAttribute(new Identifier(customAttribute.Key), customAttribute.Value);
     }
 
-    IReadOnlyDictionary<string, Role> roles = await _roleManager.FindAsync(payload.Roles.Select(x => x.Role), cancellationToken);
+    IReadOnlyDictionary<string, Role> roles = await _roleManager.FindAsync(payload.Roles.Select(x => x.Role), nameof(payload.Roles), cancellationToken);
     foreach (RoleAction action in payload.Roles)
     {
       Role role = roles[action.Role];

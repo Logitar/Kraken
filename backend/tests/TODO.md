@@ -11,6 +11,11 @@
 - ReplaceConfigurationCommand
 - UpdateConfigurationCommand
 
+## Dictionary (2)
+
+- CreateOrReplaceDictionaryCommand
+- UpdateDictionaryCommand
+
 ## Realm (2)
 
 - CreateOrReplaceRealmCommand

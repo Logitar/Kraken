@@ -218,7 +218,7 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
 
   private async Task SetRolesAsync(CreateOrReplaceUserPayload payload, User reference, User user, ActorId? actorId, CancellationToken cancellationToken)
   {
-    IReadOnlyDictionary<RoleId, Role> roles = (await _roleManager.FindAsync(payload.Roles, cancellationToken))
+    IReadOnlyDictionary<RoleId, Role> roles = (await _roleManager.FindAsync(payload.Roles, nameof(payload.Roles), cancellationToken))
       .ToDictionary(x => x.Value.Id, x => x.Value);
 
     foreach (RoleId roleId in reference.Roles)

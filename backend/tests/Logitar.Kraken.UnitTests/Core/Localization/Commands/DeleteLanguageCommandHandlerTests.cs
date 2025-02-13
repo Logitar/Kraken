@@ -1,5 +1,7 @@
 ﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Localization;
+using Logitar.Kraken.Core.Dictionaries;
+using Logitar.Kraken.Core.Dictionaries.Events;
 using Logitar.Kraken.Core.Realms;
 using Moq;
 
@@ -13,6 +15,7 @@ public class DeleteLanguageCommandHandlerTests
   private readonly RealmId _realmId = RealmId.NewId();
 
   private readonly Mock<IApplicationContext> _applicationContext = new();
+  private readonly Mock<IDictionaryRepository> _dictionaryRepository = new();
   private readonly Mock<ILanguageQuerier> _languageQuerier = new();
   private readonly Mock<ILanguageRepository> _languageRepository = new();
 
@@ -22,7 +25,7 @@ public class DeleteLanguageCommandHandlerTests
 
   public DeleteLanguageCommandHandlerTests()
   {
-    _handler = new(_applicationContext.Object, _languageQuerier.Object, _languageRepository.Object);
+    _handler = new(_applicationContext.Object, _dictionaryRepository.Object, _languageQuerier.Object, _languageRepository.Object);
 
     _applicationContext.SetupGet(x => x.ActorId).Returns(_actorId);
 
@@ -35,8 +38,8 @@ public class DeleteLanguageCommandHandlerTests
   {
     _applicationContext.SetupGet(x => x.RealmId).Returns(_realmId);
 
-    //Dictionary dictionary = new(_language, actorId: null, DictionaryId.NewId(_realmId));
-    //_dictionaryRepository.Setup(x => x.LoadAsync(_language.Id, _cancellationToken)).ReturnsAsync(dictionary);
+    Dictionary dictionary = new(_language, actorId: null, DictionaryId.NewId(_realmId));
+    _dictionaryRepository.Setup(x => x.LoadAsync(_language.Id, _cancellationToken)).ReturnsAsync(dictionary);
 
     //ContentType contentType = new(new Identifier("Person"));
     //ContentLocale invariant = new(new UniqueName(Content.UniqueNameSettings, _faker.Person.UserName));
@@ -53,7 +56,7 @@ public class DeleteLanguageCommandHandlerTests
     Assert.Same(model, result);
 
     //Assert.Contains(content.Changes, change => change is ContentLocaleRemoved removed && removed.ActorId == _actorId && removed.LanguageId == _language.Id);
-    //Assert.Contains(dictionary.Changes, change => change is DictionaryDeleted deleted && deleted.ActorId == _actorId);
+    Assert.Contains(dictionary.Changes, change => change is DictionaryDeleted deleted && deleted.ActorId == _actorId);
     Assert.True(_language.IsDeleted);
 
     _languageRepository.Verify(x => x.SaveAsync(_language, _cancellationToken), Times.Once());

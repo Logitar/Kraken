@@ -7,6 +7,8 @@ namespace Logitar.Kraken.Core.Roles;
 [Trait(Traits.Category, Categories.Unit)]
 public class RoleManagerTests
 {
+  private const string PropertyName = "Roles";
+
   private readonly CancellationToken _cancellationToken = default;
 
   private readonly Mock<IApplicationContext> _applicationContext = new();
@@ -23,7 +25,7 @@ public class RoleManagerTests
   [Fact(DisplayName = "FindAsync: it should not load roles when there is no ID.")]
   public async Task Given_NoId_When_FindAsync_Then_NotLoaded()
   {
-    IReadOnlyDictionary<string, Role> results = await _manager.FindAsync(values: [], _cancellationToken);
+    IReadOnlyDictionary<string, Role> results = await _manager.FindAsync(values: [], PropertyName, _cancellationToken);
     Assert.Empty(results);
 
     _roleRepository.Verify(x => x.LoadAsync(It.IsAny<IEnumerable<RoleId>>(), It.IsAny<CancellationToken>()), Times.Never());
@@ -40,7 +42,7 @@ public class RoleManagerTests
       _cancellationToken)).ReturnsAsync([admin]);
 
     string[] roles = [admin.EntityId.ToString()];
-    IReadOnlyDictionary<string, Role> results = await _manager.FindAsync(roles, _cancellationToken);
+    IReadOnlyDictionary<string, Role> results = await _manager.FindAsync(roles, PropertyName, _cancellationToken);
 
     Assert.Single(results);
     Assert.Contains(results, r => r.Key == roles.Single() && r.Value.Equals(admin));
@@ -69,7 +71,7 @@ public class RoleManagerTests
       _cancellationToken)).ReturnsAsync([admin, buyer, guest, seller]);
 
     string[] roles = [$"  {admin.UniqueName}  ", buyer.EntityId.ToString(), guest.EntityId.ToString(), seller.UniqueName.Value];
-    IReadOnlyDictionary<string, Role> results = await _manager.FindAsync(roles, _cancellationToken);
+    IReadOnlyDictionary<string, Role> results = await _manager.FindAsync(roles, PropertyName, _cancellationToken);
 
     Assert.Equal(4, results.Count);
     Assert.Contains(results, r => r.Key == $"  {admin.UniqueName}  " && r.Value.Equals(admin));
@@ -96,8 +98,9 @@ public class RoleManagerTests
       _cancellationToken)).ReturnsAsync([admin, guest]);
 
     string[] roles = [admin.UniqueName.Value, buyer.EntityId.ToString(), guest.EntityId.ToString(), seller.UniqueName.Value];
-    var exception = await Assert.ThrowsAsync<RolesNotFoundException>(async () => await _manager.FindAsync(roles, _cancellationToken));
+    var exception = await Assert.ThrowsAsync<RolesNotFoundException>(async () => await _manager.FindAsync(roles, PropertyName, _cancellationToken));
     Assert.Equal([buyer.EntityId.ToString(), seller.UniqueName.Value], exception.Roles);
+    Assert.Equal(PropertyName, exception.PropertyName);
   }
 
   [Fact(DisplayName = "SaveAsync: it should save a role.")]

@@ -5,8 +5,6 @@ namespace Logitar.Kraken.Core.Localization;
 
 internal class LanguageManager : ILanguageManager
 {
-  private const string PropertyName = "Language";
-
   private readonly IApplicationContext _applicationContext;
   private readonly ILanguageQuerier _languageQuerier;
   private readonly ILanguageRepository _languageRepository;
@@ -18,7 +16,7 @@ internal class LanguageManager : ILanguageManager
     _languageRepository = languageRepository;
   }
 
-  public async Task<Language> FindAsync(string idOrLocaleCode, CancellationToken cancellationToken)
+  public async Task<Language> FindAsync(string idOrLocaleCode, string propertyName, CancellationToken cancellationToken)
   {
     RealmId? realmId = _applicationContext.RealmId;
     Language? language = null;
@@ -50,7 +48,7 @@ internal class LanguageManager : ILanguageManager
 
     if (language == null)
     {
-      throw new LanguageNotFoundException(realmId, idOrLocaleCode, PropertyName);
+      throw new LanguageNotFoundException(realmId, idOrLocaleCode, propertyName);
     }
 
     return language;
