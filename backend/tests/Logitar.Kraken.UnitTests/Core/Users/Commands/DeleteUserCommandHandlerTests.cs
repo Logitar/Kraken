@@ -42,7 +42,7 @@ public class DeleteUserCommandHandlerTests
     _userQuerier.Setup(x => x.ReadAsync(_user, _cancellationToken)).ReturnsAsync(model);
 
     Base64Password password = new(_faker.Random.String(6, minChar: '0', maxChar: '9'));
-    OneTimePassword[] oneTimePasswords = [new(password, _user, oneTimePasswordId: OneTimePasswordId.NewId(_realmId))];
+    OneTimePassword[] oneTimePasswords = [new(password, user: _user, oneTimePasswordId: OneTimePasswordId.NewId(_realmId))];
     _oneTimePasswordRepository.Setup(x => x.LoadAsync(_user.Id, _cancellationToken)).ReturnsAsync(oneTimePasswords);
 
     Session[] sessions = [new(_user, sessionId: SessionId.NewId(_realmId))];
