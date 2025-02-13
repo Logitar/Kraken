@@ -28,6 +28,11 @@
 - SignInSessionCommand
 - SignOutSessionCommand
 
+## Tokens (2)
+
+- CreateTokenCommand
+- ValidateTokenCommand
+
 ## User (7)
 
 - AuthenticateUserCommand
