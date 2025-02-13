@@ -1,28 +1,26 @@
 # 🧪 TODO
 
-## Configuration
+## Configuration (3)
 
 - Configuration
 - ReplaceConfigurationCommand
 - UpdateConfigurationCommand
 
-## Realm
+## Realm (3)
 
 - CreateOrReplaceRealmCommand
 - Realm
 - UpdateRealmCommand
 
-## Role
+## Role (2)
 
 - CreateOrReplaceRoleCommand
-- DeleteRoleCommand
 - UpdateRoleCommand
 
-## User
+## User (7)
 
 - AuthenticateUserCommand
 - CreateOrReplaceUserCommand
-- DeleteUserCommand
 - RemoveUserIdentifierCommand
 - ResetUserPasswordCommand
 - SaveUserIdentifierCommand
