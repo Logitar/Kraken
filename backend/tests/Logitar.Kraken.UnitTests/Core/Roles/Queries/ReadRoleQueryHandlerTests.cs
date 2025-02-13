@@ -15,12 +15,12 @@ public class ReadRoleQueryHandlerTests
   private readonly RoleModel _admin = new()
   {
     Id = Guid.NewGuid(),
-    UniqueName = "the-old-world"
+    UniqueName = "admin"
   };
   private readonly RoleModel _guest = new()
   {
     Id = Guid.NewGuid(),
-    UniqueName = "the-new-world"
+    UniqueName = "guest"
   };
 
   public ReadRoleQueryHandlerTests()

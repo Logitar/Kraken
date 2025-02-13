@@ -3,7 +3,6 @@
 ## Configuration
 
 - Configuration
-- ReadConfigurationQuery
 - ReplaceConfigurationCommand
 - UpdateConfigurationCommand
 
