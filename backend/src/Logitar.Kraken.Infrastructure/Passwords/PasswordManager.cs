@@ -1,46 +1,75 @@
-﻿using FluentValidation.Results;
-using Logitar.Kraken.Contracts.Settings;
+﻿using Logitar.Kraken.Contracts.Settings;
+using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Passwords;
+using Logitar.Security.Cryptography;
 
 namespace Logitar.Kraken.Infrastructure.Passwords;
 
-internal class PasswordManager : IPasswordManager // TODO(fpion): implement
+public class PasswordManager : IPasswordManager
 {
-  public Password Create(IPasswordSettings settings, string password)
+  protected virtual IApplicationContext ApplicationContext { get; }
+  protected virtual Dictionary<string, IPasswordStrategy> Strategies { get; } = [];
+
+  public PasswordManager(IApplicationContext applicationContext, IEnumerable<IPasswordStrategy> strategies)
   {
-    throw new NotImplementedException();
+    ApplicationContext = applicationContext;
+
+    foreach (IPasswordStrategy strategy in strategies)
+    {
+      Strategies[strategy.Key] = strategy;
+    }
   }
 
-  public Password Decode(string value)
+  public virtual Password Decode(string password)
   {
-    throw new NotImplementedException();
+    string key = password.Split(Password.Separator).First();
+    return GetStrategy(key).Decode(password);
   }
 
-  public Password Generate(int length, out string password)
+  public virtual Password Generate(int length, out string password)
   {
-    throw new NotImplementedException();
+    password = RandomStringGenerator.GetString(length);
+    return Hash(password);
   }
-  public Password Generate(string characters, int length, out string password)
+  public virtual Password Generate(string characters, int length, out string password)
   {
-    throw new NotImplementedException();
-  }
-
-  public Password GenerateBase64(int length, out string password)
-  {
-    throw new NotImplementedException();
+    password = RandomStringGenerator.GetString(characters, length);
+    return Hash(password);
   }
 
-  public ValidationResult Validate(IPasswordSettings settings, string password)
+  public virtual Password GenerateBase64(int length, out string password)
   {
-    throw new NotImplementedException();
-  }
-  public void ValidateAndThrow(IPasswordSettings settings, string password)
-  {
-    throw new NotImplementedException();
+    password = RandomStringGenerator.GetBase64String(length, out _);
+    return Hash(password);
   }
 
-  public Password ValidateAndCreate(IPasswordSettings? settings, string password)
+  public virtual Password Hash(string password) => Hash(settings: null, password);
+  protected virtual Password Hash(IPasswordSettings? settings, string password)
   {
-    throw new NotImplementedException();
+    settings ??= ApplicationContext.UserSettings.Password;
+    return GetStrategy(settings.HashingStrategy).Hash(password);
+  }
+
+  public virtual void Validate(string password)
+  {
+    Validate(settings: null, password);
+  }
+  protected virtual void Validate(IPasswordSettings? settings, string password)
+  {
+    settings ??= ApplicationContext.UserSettings.Password;
+    _ = new PasswordInput(settings, password);
+  }
+
+  public virtual Password ValidateAndHash(string password) => ValidateAndHash(settings: null, password);
+  public virtual Password ValidateAndHash(IPasswordSettings? settings, string password)
+  {
+    settings ??= ApplicationContext.UserSettings.Password;
+    Validate(settings, password);
+    return Hash(settings, password);
+  }
+
+  protected virtual IPasswordStrategy GetStrategy(string key)
+  {
+    return Strategies.TryGetValue(key, out IPasswordStrategy? strategy) ? strategy : throw new PasswordStrategyNotSupportedException(key);
   }
 }

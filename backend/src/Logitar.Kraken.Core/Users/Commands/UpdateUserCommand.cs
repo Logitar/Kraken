@@ -121,7 +121,7 @@ internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Use
 
     if (payload.Password != null)
     {
-      Password newPassword = _passwordManager.Create(userSettings.Password, payload.Password.New);
+      Password newPassword = _passwordManager.ValidateAndHash(payload.Password.New);
       if (payload.Password.Current == null)
       {
         user.SetPassword(newPassword, actorId);

@@ -62,7 +62,7 @@ internal class InitializeConfigurationCommandHandler : IRequestHandler<Initializ
       Language language = new(locale, isDefault: true, actorId);
 
       UniqueName uniqueName = new(configuration.UniqueNameSettings, command.UniqueName);
-      Password password = _passwordManager.Create(configuration.PasswordSettings, command.Password);
+      Password password = _passwordManager.ValidateAndHash(configuration.PasswordSettings, command.Password);
       User user = new(uniqueName, password, actorId, userId);
 
       await _configurationRepository.SaveAsync(configuration, cancellationToken); // NOTE(fpion): this should cache the configuration.

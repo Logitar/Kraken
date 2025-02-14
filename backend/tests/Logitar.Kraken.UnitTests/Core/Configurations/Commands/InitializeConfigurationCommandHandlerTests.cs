@@ -42,11 +42,11 @@ public class InitializeConfigurationCommandHandlerTests
     _secretHelper.Setup(x => x.Generate(null)).Returns(secret);
 
     Base64Password password = new(command.Password);
-    _passwordManager.Setup(x => x.Create(It.IsAny<IPasswordSettings>(), command.Password)).Returns(password);
+    _passwordManager.Setup(x => x.ValidateAndHash(It.IsAny<IPasswordSettings>(), command.Password)).Returns(password);
 
     await _handler.Handle(command, _cancellationToken);
 
-    _passwordManager.Verify(x => x.Create(It.IsAny<IPasswordSettings>(), command.Password), Times.Once());
+    _passwordManager.Verify(x => x.ValidateAndHash(It.IsAny<IPasswordSettings>(), command.Password), Times.Once());
     _configurationRepository.Verify(x => x.SaveAsync(It.Is<Configuration>(y => y.Secret.Equals(secret)), _cancellationToken), Times.Once());
     _languageManager.Verify(x => x.SaveAsync(It.Is<Language>(y => y.IsDefault && y.Locale.Code == command.DefaultLocale), _cancellationToken), Times.Once());
     _userManager.Verify(x => x.SaveAsync(It.Is<User>(y => y.UniqueName.Value == command.UniqueName && y.HasPassword), _cancellationToken), Times.Once());

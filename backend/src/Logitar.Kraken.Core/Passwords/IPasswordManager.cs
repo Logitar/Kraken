@@ -1,12 +1,9 @@
-﻿using FluentValidation.Results;
-using Logitar.Kraken.Contracts.Settings;
+﻿using Logitar.Kraken.Contracts.Settings;
 
 namespace Logitar.Kraken.Core.Passwords;
 
-public interface IPasswordManager // TODO(fpion): refactor, remove settings, etc.
+public interface IPasswordManager
 {
-  Password Create(IPasswordSettings settings, string password);
-
   Password Decode(string password);
 
   Password Generate(int length, out string password);
@@ -14,8 +11,10 @@ public interface IPasswordManager // TODO(fpion): refactor, remove settings, etc
 
   Password GenerateBase64(int length, out string password);
 
-  ValidationResult Validate(IPasswordSettings settings, string password);
-  void ValidateAndThrow(IPasswordSettings settings, string password);
+  Password Hash(string password);
 
-  Password ValidateAndCreate(IPasswordSettings? settings, string password);
+  void Validate(string password);
+
+  Password ValidateAndHash(string password);
+  Password ValidateAndHash(IPasswordSettings? settings, string password);
 }

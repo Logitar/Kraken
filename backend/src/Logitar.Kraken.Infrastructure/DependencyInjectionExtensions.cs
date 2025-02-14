@@ -5,6 +5,7 @@ using Logitar.Kraken.Core.Tokens;
 using Logitar.Kraken.Infrastructure.Caching;
 using Logitar.Kraken.Infrastructure.Converters;
 using Logitar.Kraken.Infrastructure.Passwords;
+using Logitar.Kraken.Infrastructure.Passwords.Pbkdf2;
 using Logitar.Kraken.Infrastructure.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,11 +17,18 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddMemoryCache()
+      .AddPasswordStrategies()
       .AddSingleton<ICacheService, CacheService>()
       .AddSingleton<IEventSerializer, EventSerializer>()
       .AddSingleton<IPasswordManager, PasswordManager>()
       .AddSingleton<ISecretHelper, SecretHelper>()
       .AddSingleton<PasswordConverter>()
-      .AddScoped<IEventBus, EventBus>();
+      .AddScoped<IEventBus, EventBus>()
+      /*.AddScoped<ITokenManager, JsonWebTokenManager>()*/; // TODO(fpion): JWT
+  }
+
+  private static IServiceCollection AddPasswordStrategies(this IServiceCollection services)
+  {
+    return services.AddSingleton<IPasswordStrategy, Pbkdf2Strategy>();
   }
 }

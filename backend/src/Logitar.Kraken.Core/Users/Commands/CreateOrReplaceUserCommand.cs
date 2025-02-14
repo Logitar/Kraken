@@ -77,7 +77,7 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
 
     ActorId? actorId = _applicationContext.ActorId;
     UniqueName uniqueName = new(userSettings.UniqueName, payload.UniqueName);
-    Password? password = payload.Password == null ? null : _passwordManager.Create(userSettings.Password, payload.Password);
+    Password? password = payload.Password == null ? null : _passwordManager.ValidateAndHash(payload.Password);
 
     bool created = false;
     if (user == null)
