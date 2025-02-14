@@ -31,7 +31,10 @@ public class Session : AggregateRoot, ICustomizable
 
   public Session(User user, Password? secret = null, ActorId? actorId = null, SessionId? sessionId = null) : base(sessionId?.StreamId)
   {
-    // TODO(fpion): ensure in same realm
+    if (RealmId != user.RealmId)
+    {
+      throw new RealmMismatchException(RealmId, user.RealmId, nameof(user));
+    }
 
     actorId ??= new(user.Id.Value);
     Raise(new SessionCreated(user.Id, secret), actorId.Value);

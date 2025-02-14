@@ -3,6 +3,7 @@ using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
 using Logitar.Kraken.Core.Realms;
+using Logitar.Kraken.Core.Roles;
 using Logitar.Kraken.Core.Settings;
 using Logitar.Kraken.Core.Users.Events;
 using TimeZone = Logitar.Kraken.Core.Localization.TimeZone;
@@ -19,6 +20,32 @@ public class UserTests
   public UserTests()
   {
     _user = new(new UniqueName(new UniqueNameSettings(), _faker.Person.UserName));
+  }
+
+  [Fact(DisplayName = "AddRole: it should add a role.")]
+  public void Given_Role_When_AddRole_Then_RoleAdded()
+  {
+    Role role = new(new UniqueName(new UniqueNameSettings(), "admin"));
+
+    _user.AddRole(role);
+    Assert.Contains(role.Id, _user.Roles);
+    Assert.Contains(_user.Changes, change => change is UserRoleAdded added && added.RoleId == role.Id);
+
+    _user.ClearChanges();
+    _user.AddRole(role);
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+  }
+
+  [Fact(DisplayName = "AddRole: it should throw RealmMismatchException when the role is in another realm.")]
+  public void Given_DifferentRealms_When_AddRole_Then_RealmMismatchException()
+  {
+    Role role = new(new UniqueName(new UniqueNameSettings(), "guest"), actorId: null, new RoleId(Guid.NewGuid(), RealmId.NewId()));
+
+    var exception = Assert.Throws<RealmMismatchException>(() => _user.AddRole(role));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.ExpectedRealmId);
+    Assert.Equal(role.RealmId?.ToGuid(), exception.ActualRealmId);
+    Assert.Equal("role", exception.PropertyName);
   }
 
   [Fact(DisplayName = "Authenticate: it should authenticate the user.")]
@@ -330,6 +357,23 @@ public class UserTests
     _user.RemoveCustomAttribute(key);
     Assert.False(_user.HasChanges);
     Assert.Empty(_user.Changes);
+  }
+
+  [Fact(DisplayName = "RemoveRole: it should remove a role.")]
+  public void Given_Role_When_RemoveRole_Then_RoleRemoved()
+  {
+    Role role = new(new UniqueName(new UniqueNameSettings(), "client"));
+    _user.AddRole(role);
+    Assert.True(_user.HasRole(role));
+
+    _user.RemoveRole(role);
+    Assert.Contains(_user.Changes, change => change is UserRoleRemoved removed && removed.RoleId == role.Id);
+
+    _user.ClearChanges();
+    _user.RemoveRole(role);
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+    Assert.False(_user.HasRole(role));
   }
 
   [Fact(DisplayName = "ResetPassword: it should reset the user password when it is not disabled.")]

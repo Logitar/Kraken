@@ -218,9 +218,12 @@ public class User : AggregateRoot, ICustomizable
     _password = @event.Password;
   }
 
-  public void AddRole(Role role, ActorId? actorId = null) // TODO(fpion): unit tests
+  public void AddRole(Role role, ActorId? actorId = null)
   {
-    // TODO(fpion): ensure is in same realm
+    if (RealmId != role.RealmId)
+    {
+      throw new RealmMismatchException(RealmId, role.RealmId, nameof(role));
+    }
 
     if (!HasRole(role))
     {
@@ -310,8 +313,8 @@ public class User : AggregateRoot, ICustomizable
     IsDisabled = false;
   }
 
-  public bool HasRole(Role role) => HasRole(role.Id); // TODO(fpion): unit tests
-  public bool HasRole(RoleId roleId) => _roles.Contains(roleId); // TODO(fpion): unit tests
+  public bool HasRole(Role role) => HasRole(role.Id);
+  public bool HasRole(RoleId roleId) => _roles.Contains(roleId);
 
   public void RemoveCustomAttribute(Identifier key)
   {
@@ -345,7 +348,7 @@ public class User : AggregateRoot, ICustomizable
     _password = null;
   }
 
-  public void RemoveRole(Role role, ActorId? actorId = null) // TODO(fpion): unit tests
+  public void RemoveRole(Role role, ActorId? actorId = null)
   {
     if (HasRole(role))
     {

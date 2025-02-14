@@ -36,15 +36,16 @@ public class ApiKeyTests
     Assert.Empty(_apiKey.Changes);
   }
 
-  //[Fact(DisplayName = "AddRole: it should throw InvalidRealmException when the role is in another realm.")]
-  //public void Given_DifferentRealms_When_AddRole_Then_InvalidRealmException()
-  //{
-  //  Role role = new(new UniqueName(new UniqueNameSettings(), "manage_api"), actorId: null, new RoleId(RealmId.NewId(), Guid.NewGuid()));
+  [Fact(DisplayName = "AddRole: it should throw RealmMismatchException when the role is in another realm.")]
+  public void Given_DifferentRealms_When_AddRole_Then_RealmMismatchException()
+  {
+    Role role = new(new UniqueName(new UniqueNameSettings(), "manage_api"), actorId: null, new RoleId(Guid.NewGuid(), RealmId.NewId()));
 
-  //  var exception = Assert.Throws<InvalidRealmException>(() => _apiKey.AddRole(role));
-  //  Assert.Equal(_apiKey.RealmId?.ToGuid(), exception.ExpectedRealmId);
-  //  Assert.Equal(role.RealmId?.ToGuid(), exception.ActualRealmId);
-  //} // TODO(fpion): implement
+    var exception = Assert.Throws<RealmMismatchException>(() => _apiKey.AddRole(role));
+    Assert.Equal(_apiKey.RealmId?.ToGuid(), exception.ExpectedRealmId);
+    Assert.Equal(role.RealmId?.ToGuid(), exception.ActualRealmId);
+    Assert.Equal("role", exception.PropertyName);
+  }
 
   [Theory(DisplayName = "Authenticate: it should authenticate the API key.")]
   [InlineData(null)]

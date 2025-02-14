@@ -95,7 +95,10 @@ public class ApiKey : AggregateRoot, ICustomizable
 
   public void AddRole(Role role, ActorId? actorId = null)
   {
-    // TODO(fpion): ensure in same realm
+    if (RealmId != role.RealmId)
+    {
+      throw new RealmMismatchException(RealmId, role.RealmId, nameof(role));
+    }
 
     if (!HasRole(role))
     {

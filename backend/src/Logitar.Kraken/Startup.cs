@@ -31,7 +31,7 @@ internal class Startup : StartupBase
 
     services.AddFeatureManagement();
 
-    DatabaseProvider databaseProvider = _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer; // TODO(fpion): env var override
+    DatabaseProvider databaseProvider = GetDatabaseProvider();
     switch (databaseProvider)
     {
       case DatabaseProvider.EntityFrameworkCoreSqlServer:
@@ -40,6 +40,15 @@ internal class Startup : StartupBase
       default:
         throw new DatabaseProviderNotSupportedException(databaseProvider);
     }
+  }
+  private DatabaseProvider GetDatabaseProvider()
+  {
+    string? value = Environment.GetEnvironmentVariable("DATABASE_PROVIDER");
+    if (!string.IsNullOrWhiteSpace(value))
+    {
+      return Enum.Parse<DatabaseProvider>(value.Trim());
+    }
+    return _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer;
   }
 
   public override void Configure(IApplicationBuilder builder)

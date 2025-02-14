@@ -64,11 +64,26 @@ public class SessionTests
   [Fact(DisplayName = "It should have the correct IDs.")]
   public void Given_Session_When_getIds_Then_CorrectIds()
   {
-    SessionId id = new(Guid.NewGuid(), RealmId.NewId());
-    Session session = new(_user, sessionId: id);
+    RealmId realmId = RealmId.NewId();
+    User user = new(_user.UniqueName, userId: UserId.NewId(realmId));
+
+    SessionId id = new(Guid.NewGuid(), realmId);
+    Session session = new(user, sessionId: id);
     Assert.Equal(id, session.Id);
     Assert.Equal(id.RealmId, session.RealmId);
     Assert.Equal(id.EntityId, session.EntityId);
+  }
+
+  [Fact(DisplayName = "It should throw RealmMismatchException when the user is in another realm.")]
+  public void Given_AnotherRealm_When_ctor_Then_RealmMismatchException()
+  {
+    User user = new(new UniqueName(new UniqueNameSettings(), _faker.Person.UserName), userId: UserId.NewId(RealmId.NewId()));
+
+    var exception = Assert.Throws<RealmMismatchException>(() => new Session(user));
+    Assert.Null(exception.ExpectedRealmId);
+    Assert.NotNull(user.RealmId);
+    Assert.Equal(user.RealmId.Value.ToGuid(), exception.ActualRealmId);
+    Assert.Equal("user", exception.PropertyName);
   }
 
   [Fact(DisplayName = "RemoveCustomAttribute: it should remove the custom attribute.")]

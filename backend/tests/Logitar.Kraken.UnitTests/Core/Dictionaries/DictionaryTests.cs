@@ -48,6 +48,18 @@ public class DictionaryTests
     Assert.Empty(dictionary.Entries);
   }
 
+  [Fact(DisplayName = "It should throw RealmMismatchException when the language is in another realm.")]
+  public void Given_AnotherRealm_When_ctor_Then_RealmMismatchException()
+  {
+    Language language = new(_language.Locale, languageId: LanguageId.NewId(RealmId.NewId()));
+
+    var exception = Assert.Throws<RealmMismatchException>(() => new Dictionary(language));
+    Assert.Null(exception.ExpectedRealmId);
+    Assert.NotNull(language.RealmId);
+    Assert.Equal(language.RealmId.Value.ToGuid(), exception.ActualRealmId);
+    Assert.Equal("language", exception.PropertyName);
+  }
+
   [Fact(DisplayName = "RemoveEntry: it should remove the entry.")]
   public void Given_Entries_When_RemoveEntry_Then_EntryRemoved()
   {
@@ -121,14 +133,15 @@ public class DictionaryTests
     Assert.Contains(_dictionary.Changes, change => change is DictionaryLanguageChanged changed && changed.ActorId == actorId && changed.LanguageId == language.Id);
   }
 
-  //[Fact(DisplayName = "SetLanguage: it should throw InvalidRealmException when the language is in another realm.")]
-  //public void Given_AnotherRealm_When_SetLanguage_Then_InvalidRealmException()
-  //{
-  //  Language language = new(new Locale("fr-CA"), isDefault: false, actorId: null, LanguageId.NewId(RealmId.NewId()));
-  //  var exception = Assert.Throws<InvalidRealmException>(() => _dictionary.SetLanguage(language));
-  //  Assert.Equal(_dictionary.RealmId?.ToGuid(), exception.ExpectedRealmId);
-  //  Assert.Equal(language.RealmId?.ToGuid(), exception.ActualRealmId);
-  //} // TODO(fpion): implement
+  [Fact(DisplayName = "SetLanguage: it should throw RealmMismatchException when the language is in another realm.")]
+  public void Given_AnotherRealm_When_SetLanguage_Then_RealmMismatchException()
+  {
+    Language language = new(new Locale("fr-CA"), isDefault: false, actorId: null, LanguageId.NewId(RealmId.NewId()));
+    var exception = Assert.Throws<RealmMismatchException>(() => _dictionary.SetLanguage(language));
+    Assert.Equal(_dictionary.RealmId?.ToGuid(), exception.ExpectedRealmId);
+    Assert.Equal(language.RealmId?.ToGuid(), exception.ActualRealmId);
+    Assert.Equal("language", exception.PropertyName);
+  }
 
   [Fact(DisplayName = "Translate: it should return null when the translation was not found.")]
   public void Given_NotFound_When_Translate_Then_NullReturned()

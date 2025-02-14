@@ -42,7 +42,10 @@ public class OneTimePassword : AggregateRoot, ICustomizable
       throw new ArgumentOutOfRangeException(nameof(maximumAttempts), "There should be at least one attempt to validate the One-Time Password (OTP).");
     }
 
-    // TODO(fpion): ensure user is in same realm
+    if (user != null && RealmId != user.RealmId)
+    {
+      throw new RealmMismatchException(RealmId, user.RealmId, nameof(user));
+    }
 
     Raise(new OneTimePasswordCreated(password, expiresOn, maximumAttempts, user?.Id), actorId);
   }

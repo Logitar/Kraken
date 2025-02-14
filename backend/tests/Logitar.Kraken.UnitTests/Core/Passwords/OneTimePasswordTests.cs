@@ -121,6 +121,18 @@ public class OneTimePasswordTests
     Assert.Equal("maximumAttempts", exception.ParamName);
   }
 
+  [Fact(DisplayName = "It should throw RealmMismatchException when the user is in another realm.")]
+  public void Given_AnotherRealm_When_ctor_Then_RealmMismatchException()
+  {
+    User user = new(new UniqueName(new UniqueNameSettings(), _faker.Person.UserName), userId: UserId.NewId(RealmId.NewId()));
+
+    var exception = Assert.Throws<RealmMismatchException>(() => new OneTimePassword(_password, user: user));
+    Assert.Null(exception.ExpectedRealmId);
+    Assert.NotNull(user.RealmId);
+    Assert.Equal(user.RealmId.Value.ToGuid(), exception.ActualRealmId);
+    Assert.Equal("user", exception.PropertyName);
+  }
+
   [Fact(DisplayName = "RemoveCustomAttribute: it should not do anything when the custom attribute could not be found.")]
   public void Given_NotFound_When_RemoveCustomAttribute_Then_Nothing()
   {

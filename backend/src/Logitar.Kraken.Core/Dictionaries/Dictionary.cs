@@ -25,7 +25,10 @@ public class Dictionary : AggregateRoot
 
   public Dictionary(Language language, ActorId? actorId = null, DictionaryId? dictionaryId = null) : base(dictionaryId?.StreamId)
   {
-    // TODO(fpion): ensure same realm
+    if (RealmId != language.RealmId)
+    {
+      throw new RealmMismatchException(RealmId, language.RealmId, nameof(language));
+    }
 
     Raise(new DictionaryCreated(language.Id), actorId);
   }
@@ -69,7 +72,10 @@ public class Dictionary : AggregateRoot
 
   public void SetLanguage(Language language, ActorId? actorId = null)
   {
-    // TODO(fpion): ensure same realm
+    if (RealmId != language.RealmId)
+    {
+      throw new RealmMismatchException(RealmId, language.RealmId, nameof(language));
+    }
 
     if (_languageId != language.Id)
     {
