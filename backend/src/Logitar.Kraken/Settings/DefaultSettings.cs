@@ -9,9 +9,25 @@ internal record DefaultSettings
   public static DefaultSettings Initialize(IConfiguration configuration)
   {
     DefaultSettings settings = configuration.GetSection("Default").Get<DefaultSettings>() ?? new();
-    settings.Locale = EnvironmentHelper.GetVariable("DEFAULT_LOCALE", settings.Locale);
-    settings.UniqueName = EnvironmentHelper.GetVariable("DEFAULT_UNIQUE_NAME", settings.UniqueName);
-    settings.Password = EnvironmentHelper.GetVariable("DEFAULT_PASSWORD", settings.Password);
+
+    string? locale = Environment.GetEnvironmentVariable("DEFAULT_LOCALE");
+    if (!string.IsNullOrWhiteSpace(locale))
+    {
+      settings.Locale = locale.Trim();
+    }
+
+    string? uniqueName = Environment.GetEnvironmentVariable("DEFAULT_UNIQUE_NAME");
+    if (!string.IsNullOrWhiteSpace(uniqueName))
+    {
+      settings.UniqueName = uniqueName.Trim();
+    }
+
+    string? password = Environment.GetEnvironmentVariable("DEFAULT_PASSWORD");
+    if (!string.IsNullOrWhiteSpace(password))
+    {
+      settings.Password = password.Trim();
+    }
+
     return settings;
   }
 }
