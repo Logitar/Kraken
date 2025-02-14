@@ -18,10 +18,10 @@
 
 ## Password
 
+- PasswordInput
 - PasswordManager
 - Pbkdf2Password
-- ❓ PasswordInput
-- ❓ Pbkdf2Strategy
+- Pbkdf2Strategy
 
 ## Realm (2)
 

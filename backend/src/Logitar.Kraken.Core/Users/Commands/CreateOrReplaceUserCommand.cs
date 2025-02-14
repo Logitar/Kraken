@@ -14,8 +14,6 @@ namespace Logitar.Kraken.Core.Users.Commands;
 
 public record CreateOrReplaceUserResult(UserModel? User = null, bool Created = false);
 
-// TODO(fpion): UserManager exceptions
-/// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceUserCommand(Guid? Id, CreateOrReplaceUserPayload Payload, long? Version) : Activity, IRequest<CreateOrReplaceUserResult>
 {
   public override IActivity Anonymize()

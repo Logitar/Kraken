@@ -6,8 +6,6 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Users.Commands;
 
-// TODO(fpion): UserManager exceptions
-/// <exception cref="ValidationException"></exception>
 public record SaveUserIdentifierCommand(Guid Id, string Key, SaveUserIdentifierPayload Payload) : Activity, IRequest<UserModel?>;
 
 internal class SaveUserIdentifierCommandHandler : IRequestHandler<SaveUserIdentifierCommand, UserModel?>

@@ -94,7 +94,7 @@ public class User : AggregateRoot, ICustomizable
   }
 
   private DateTime? _birthdate = null;
-  public DateTime? Birthdate // TODO(fpion): unit tests
+  public DateTime? Birthdate
   {
     get => _birthdate;
     set
@@ -258,7 +258,7 @@ public class User : AggregateRoot, ICustomizable
     AuthenticatedOn = @event.OccurredOn;
   }
 
-  public void ChangePassword(string currentPassword, Password newPassword, ActorId? actorId = null) // TODO(fpion): unit tests
+  public void ChangePassword(string currentPassword, Password newPassword, ActorId? actorId = null)
   {
     if (IsDisabled)
     {
@@ -324,7 +324,7 @@ public class User : AggregateRoot, ICustomizable
     }
   }
 
-  public void RemoveCustomIdentifier(Identifier key, ActorId? actorId = null) // TODO(fpion): unit tests
+  public void RemoveCustomIdentifier(Identifier key, ActorId? actorId = null)
   {
     if (_customIdentifiers.ContainsKey(key))
     {
@@ -336,7 +336,7 @@ public class User : AggregateRoot, ICustomizable
     _customIdentifiers.Remove(@event.Key);
   }
 
-  public void RemovePassword(ActorId? actorId = null) // TODO(fpion): unit tests
+  public void RemovePassword(ActorId? actorId = null)
   {
     if (_password != null)
     {
@@ -411,7 +411,7 @@ public class User : AggregateRoot, ICustomizable
     }
   }
 
-  public void SetCustomIdentifier(Identifier key, CustomIdentifier value, ActorId? actorId = null) // TODO(fpion): unit tests
+  public void SetCustomIdentifier(Identifier key, CustomIdentifier value, ActorId? actorId = null)
   {
     if (!_customIdentifiers.TryGetValue(key, out CustomIdentifier? existingValue) || existingValue != value)
     {
@@ -472,7 +472,7 @@ public class User : AggregateRoot, ICustomizable
   {
     return SignIn(password: null, secret, actorId, sessionId);
   }
-  public Session SignIn(string? password, Password? secret = null, ActorId? actorId = null, Guid? sessionId = null) // TODO(fpion): unit tests
+  public Session SignIn(string? password, Password? secret = null, ActorId? actorId = null, Guid? sessionId = null)
   {
     if (IsDisabled)
     {

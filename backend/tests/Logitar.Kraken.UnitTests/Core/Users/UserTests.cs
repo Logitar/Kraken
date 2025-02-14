@@ -4,6 +4,7 @@ using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Passwords;
 using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Roles;
+using Logitar.Kraken.Core.Sessions;
 using Logitar.Kraken.Core.Settings;
 using Logitar.Kraken.Core.Users.Events;
 using TimeZone = Logitar.Kraken.Core.Localization.TimeZone;
@@ -96,6 +97,83 @@ public class UserTests
     _user.Disable();
 
     var exception = Assert.Throws<UserIsDisabledException>(() => _user.Authenticate(passwordString));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+  }
+
+  [Fact(DisplayName = "Birthdate: it should handle the updates correctly.")]
+  public void Given_BirthdateUpdates_When_setBirthdate_Then_UpdatesHandledCorrectly()
+  {
+    _user.ClearChanges();
+
+    _user.Birthdate = _user.Birthdate;
+    _user.Update();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+
+    _user.Birthdate = _faker.Person.DateOfBirth;
+    _user.Update();
+    Assert.NotNull(_user.Birthdate);
+    Assert.True(_user.HasChanges);
+    Assert.Contains(_user.Changes, change => change is UserUpdated updated && updated.Birthdate?.Value == _user.Birthdate);
+  }
+
+  [Fact(DisplayName = "Birthdate: it should throw ArgumentOutOfRangeException when the value is not in the past.")]
+  public void Given_NotInThePast_When_setBirthdate_Then_ArgumentOutOfRangeException()
+  {
+    var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _user.Birthdate = DateTime.Now.AddMinutes(1));
+    Assert.StartsWith("The value must be a date and time set in the past.", exception.Message);
+    Assert.Equal("Birthdate", exception.ParamName);
+  }
+
+  [Theory(DisplayName = "ChangePassword: it should change the password of the user.")]
+  [InlineData(null)]
+  [InlineData("SYSTEM")]
+  public void Given_CorrectPassword_When_ChangePassword_Then_PasswordChanged(string? actorIdValue)
+  {
+    ActorId? actorId = actorIdValue == null ? null : new ActorId(actorIdValue);
+
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+
+    Base64Password newPassword = new(_faker.Internet.Password());
+    _user.ChangePassword(passwordString, newPassword, actorId);
+    Assert.True(_user.HasPassword);
+    Assert.Contains(_user.Changes, change => change is UserPasswordChanged changed && changed.ActorId == (actorId ?? new(_user.Id.Value)) && changed.Password.Equals(newPassword));
+  }
+
+  [Fact(DisplayName = "ChangePassword: it should throw IncorrectUserPasswordException when the input password is not correct.")]
+  public void Given_IncorrectPassword_When_ChangePassword_Then_IncorrectUserPasswordException()
+  {
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+
+    string attemptedPassword = passwordString[..^1];
+    var exception = Assert.Throws<IncorrectUserPasswordException>(() => _user.ChangePassword(attemptedPassword, password));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+    Assert.Equal(attemptedPassword, exception.AttemptedPassword);
+  }
+
+  [Fact(DisplayName = "ChangePassword: it should throw UserHasNoPasswordException when the user has no password.")]
+  public void Given_NoPassword_When_ChangePassword_Then_UserHasNoPasswordException()
+  {
+    var exception = Assert.Throws<UserHasNoPasswordException>(() => _user.ChangePassword("Test123!", new Base64Password("Test123!")));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+  }
+
+  [Fact(DisplayName = "ChangePassword: it should throw UserIsDisabledException when the user is disabled.")]
+  public void Given_Disabled_When_ChangePassword_Then_UserIsDisabledException()
+  {
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+    _user.Disable();
+
+    var exception = Assert.Throws<UserIsDisabledException>(() => _user.ChangePassword(passwordString, password));
     Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
     Assert.Equal(_user.EntityId, exception.UserId);
   }
@@ -359,6 +437,42 @@ public class UserTests
     Assert.Empty(_user.Changes);
   }
 
+  [Fact(DisplayName = "RemoveCustomIdentifier: it should remove the custom attribute.")]
+  public void Given_CustomIdentifiers_When_RemoveCustomIdentifier_Then_CustomIdentifierRemoved()
+  {
+    Identifier key = new("Google");
+    _user.SetCustomIdentifier(key, new CustomIdentifier("1234567890"));
+    _user.Update();
+
+    ActorId actorId = ActorId.NewId();
+    _user.RemoveCustomIdentifier(key, actorId);
+    Assert.Empty(_user.CustomIdentifiers);
+    Assert.Contains(_user.Changes, change => change is UserIdentifierRemoved removed && removed.ActorId == actorId && removed.Key == key);
+
+    _user.ClearChanges();
+    _user.RemoveCustomIdentifier(key);
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+  }
+
+  [Fact(DisplayName = "RemovePassword: it should remove the password.")]
+  public void Given_Password_When_RemovePassword_Then_Removed()
+  {
+    Base64Password password = new(_faker.Internet.Password());
+    _user.SetPassword(password);
+    Assert.True(_user.HasPassword);
+
+    ActorId actorId = ActorId.NewId();
+    _user.RemovePassword(actorId);
+    Assert.False(_user.HasPassword);
+    Assert.Contains(_user.Changes, change => change is UserPasswordRemoved removed && removed.ActorId == actorId);
+
+    _user.ClearChanges();
+    _user.RemovePassword();
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+  }
+
   [Fact(DisplayName = "RemoveRole: it should remove a role.")]
   public void Given_Role_When_RemoveRole_Then_RoleRemoved()
   {
@@ -451,6 +565,23 @@ public class UserTests
     Assert.Empty(_user.Changes);
   }
 
+  [Fact(DisplayName = "SetCustomIdentifier: it should set a custom identifier.")]
+  public void Given_CustomIdentifier_When_SetCustomIdentifier_Then_CustomIdentifierSet()
+  {
+    Identifier key = new("Google");
+    CustomIdentifier value = new("1234567890");
+    ActorId actorId = ActorId.NewId();
+
+    _user.SetCustomIdentifier(key, value, actorId);
+    Assert.Equal(value, _user.CustomIdentifiers[key]);
+    Assert.Contains(_user.Changes, change => change is UserIdentifierChanged changed && changed.ActorId == actorId && changed.Key == key && changed.Value == value);
+
+    _user.ClearChanges();
+    _user.SetCustomIdentifier(key, value);
+    Assert.False(_user.HasChanges);
+    Assert.Empty(_user.Changes);
+  }
+
   [Fact(DisplayName = "SetEmail: it should set the user email.")]
   public void Given_User_When_SetEmail_Then_EmailChanged()
   {
@@ -511,6 +642,79 @@ public class UserTests
     _user.SetUniqueName(uniqueName);
     Assert.False(_user.HasChanges);
     Assert.Empty(_user.Changes);
+  }
+
+  [Theory(DisplayName = "SignIn: it should sign-in the user.")]
+  [InlineData(null, false)]
+  [InlineData("SYSTEM", true)]
+  public void Given_CorrectPassword_When_SignIn_Then_SignedIn(string? actorIdValue, bool isPersistent)
+  {
+    ActorId? actorId = actorIdValue == null ? null : new ActorId(actorIdValue);
+    RealmId realmId = RealmId.NewId();
+
+    User user = new(_user.UniqueName, userId: UserId.NewId(realmId));
+
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    user.SetPassword(password);
+
+    Base64Password? secret = isPersistent ? new(_faker.Internet.Password()) : null;
+    Guid? sessionId = isPersistent ? Guid.NewGuid() : null;
+    Session session = user.SignIn(passwordString, secret, actorId, sessionId);
+    Assert.NotNull(user.AuthenticatedOn);
+    Assert.Equal(session.CreatedOn, user.AuthenticatedOn.Value);
+    Assert.Contains(user.Changes, change => change is UserSignedIn signedIn && signedIn.ActorId == (actorId ?? new(user.Id.Value)) && signedIn.OccurredOn == session.CreatedOn);
+
+    Assert.Equal(realmId, session.RealmId);
+    if (sessionId.HasValue)
+    {
+      Assert.Equal(sessionId.Value, session.EntityId);
+    }
+    else
+    {
+      Assert.NotEqual(Guid.Empty, session.EntityId);
+    }
+    Assert.Equal(actorId ?? new(user.Id.Value), session.CreatedBy);
+    Assert.Equal(actorId ?? new(user.Id.Value), session.UpdatedBy);
+    Assert.Equal(DateTime.Now, session.CreatedOn, TimeSpan.FromSeconds(1));
+    Assert.Equal(user.Id, session.UserId);
+    Assert.Equal(secret != null, session.IsPersistent);
+    Assert.True(session.IsActive);
+  }
+
+  [Fact(DisplayName = "SignIn: it should throw IncorrectUserPasswordException when the input password is not correct.")]
+  public void Given_IncorrectPassword_When_SignIn_Then_IncorrectUserPasswordException()
+  {
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+
+    string attemptedPassword = passwordString[..^1];
+    var exception = Assert.Throws<IncorrectUserPasswordException>(() => _user.SignIn(attemptedPassword));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+    Assert.Equal(attemptedPassword, exception.AttemptedPassword);
+  }
+
+  [Fact(DisplayName = "SignIn: it should throw UserHasNoPasswordException when the user has no password.")]
+  public void Given_NoPassword_When_SignIn_Then_UserHasNoPasswordException()
+  {
+    var exception = Assert.Throws<UserHasNoPasswordException>(() => _user.SignIn("Test123!"));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
+  }
+
+  [Fact(DisplayName = "SignIn: it should throw UserIsDisabledException when the user is disabled.")]
+  public void Given_Disabled_When_SignIn_Then_UserIsDisabledException()
+  {
+    string passwordString = _faker.Internet.Password();
+    Base64Password password = new(passwordString);
+    _user.SetPassword(password);
+    _user.Disable();
+
+    var exception = Assert.Throws<UserIsDisabledException>(() => _user.SignIn(passwordString));
+    Assert.Equal(_user.RealmId?.ToGuid(), exception.RealmId);
+    Assert.Equal(_user.EntityId, exception.UserId);
   }
 
   [Fact(DisplayName = "TimeZone: it should handle the updates correctly.")]

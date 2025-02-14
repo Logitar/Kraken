@@ -6,11 +6,6 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Users.Commands;
 
-// TODO(fpion): UserManager exceptions
-/// <exception cref="IncorrectUserPasswordException"></exception>
-/// <exception cref="UserHasNoPasswordException"></exception>
-/// <exception cref="UserIsDisabledException"></exception>
-/// <exception cref="ValidationException"></exception>
 public record AuthenticateUserCommand(AuthenticateUserPayload Payload) : Activity, IRequest<UserModel>
 {
   public override IActivity Anonymize()
