@@ -3,7 +3,7 @@ using Logitar.Kraken.Core.Realms;
 
 namespace Logitar.Kraken.Core;
 
-internal static class IdHelper
+public static class IdHelper
 {
   private const char Separator = ':';
 

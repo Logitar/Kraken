@@ -1,4 +1,4 @@
-﻿using Logitar.Kraken.Core.Localization;
+﻿using Logitar.EventSourcing;
 using Logitar.Kraken.Core.Localization.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 using MediatR;
@@ -23,18 +23,10 @@ internal class LanguageEvents : INotificationHandler<LanguageCreated>,
 
   public async Task Handle(LanguageCreated @event, CancellationToken cancellationToken)
   {
-    LanguageEntity? language = await _context.Languages.AsNoTracking().SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    LanguageEntity? language = await FindAsync(@event, cancellationToken);
     if (language == null)
     {
-      LanguageId languageId = new(@event.StreamId);
-      RealmEntity? realm = null;
-      if (languageId.RealmId.HasValue)
-      {
-        Guid realmId = languageId.RealmId.Value.ToGuid();
-        realm = await _context.Realms
-          .SingleOrDefaultAsync(x => x.Id == realmId, cancellationToken)
-          ?? throw new InvalidOperationException($"The realm entity 'Id={realmId}' could not be found.");
-      }
+      RealmEntity? realm = await _context.FindRealmAsync(@event.StreamId, cancellationToken);
 
       language = new(realm, @event);
 
@@ -52,7 +44,7 @@ internal class LanguageEvents : INotificationHandler<LanguageCreated>,
 
   public async Task Handle(LanguageDeleted @event, CancellationToken cancellationToken)
   {
-    LanguageEntity? language = await _context.Languages.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    LanguageEntity? language = await FindAsync(@event, cancellationToken);
     if (language == null)
     {
       _logger.LogWarning("{Event}: the language entity 'StreamId={StreamId}' is already deleted.", @event.GetType().Name, @event.StreamId);
@@ -71,7 +63,7 @@ internal class LanguageEvents : INotificationHandler<LanguageCreated>,
   {
     long expectedVersion = @event.Version - 1;
 
-    LanguageEntity? language = await _context.Languages.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    LanguageEntity? language = await FindAsync(@event, cancellationToken);
     if (language == null || language.Version < expectedVersion)
     {
       throw new InvalidOperationException($"The language entity was expected to be at version {expectedVersion}, but was found at version {language?.Version ?? 0}.");
@@ -99,7 +91,7 @@ internal class LanguageEvents : INotificationHandler<LanguageCreated>,
   {
     long expectedVersion = @event.Version - 1;
 
-    LanguageEntity? language = await _context.Languages.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    LanguageEntity? language = await FindAsync(@event, cancellationToken);
     if (language == null || language.Version < expectedVersion)
     {
       throw new InvalidOperationException($"The language entity was expected to be at version {expectedVersion}, but was found at version {language?.Version ?? 0}.");
@@ -121,5 +113,10 @@ internal class LanguageEvents : INotificationHandler<LanguageCreated>,
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
+  }
+
+  private async Task<LanguageEntity?> FindAsync(DomainEvent @event, CancellationToken cancellationToken)
+  {
+    return await _context.Languages.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
   }
 }

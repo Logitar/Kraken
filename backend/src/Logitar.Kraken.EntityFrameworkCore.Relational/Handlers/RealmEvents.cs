@@ -1,4 +1,5 @@
-﻿using Logitar.Kraken.Core.Realms.Events;
+﻿using Logitar.EventSourcing;
+using Logitar.Kraken.Core.Realms.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ internal class RealmEvents : INotificationHandler<RealmCreated>,
 
   public async Task Handle(RealmCreated @event, CancellationToken cancellationToken)
   {
-    RealmEntity? realm = await _context.Realms.AsNoTracking().SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    RealmEntity? realm = await FindAsync(@event, cancellationToken);
     if (realm == null)
     {
       realm = new(@event);
@@ -41,7 +42,7 @@ internal class RealmEvents : INotificationHandler<RealmCreated>,
 
   public async Task Handle(RealmDeleted @event, CancellationToken cancellationToken)
   {
-    RealmEntity? realm = await _context.Realms.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    RealmEntity? realm = await FindAsync(@event, cancellationToken);
     if (realm == null)
     {
       _logger.LogWarning("{Event}: the realm entity 'StreamId={StreamId}' is already deleted.", @event.GetType().Name, @event.StreamId);
@@ -60,7 +61,7 @@ internal class RealmEvents : INotificationHandler<RealmCreated>,
   {
     long expectedVersion = @event.Version - 1;
 
-    RealmEntity? realm = await _context.Realms.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    RealmEntity? realm = await FindAsync(@event, cancellationToken);
     if (realm == null || realm.Version < expectedVersion)
     {
       throw new InvalidOperationException($"The realm entity was expected to be at version {expectedVersion}, but was found at version {realm?.Version ?? 0}.");
@@ -88,7 +89,7 @@ internal class RealmEvents : INotificationHandler<RealmCreated>,
   {
     long expectedVersion = @event.Version - 1;
 
-    RealmEntity? realm = await _context.Realms.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+    RealmEntity? realm = await FindAsync(@event, cancellationToken);
     if (realm == null || realm.Version < expectedVersion)
     {
       throw new InvalidOperationException($"The realm entity was expected to be at version {expectedVersion}, but was found at version {realm?.Version ?? 0}.");
@@ -110,5 +111,10 @@ internal class RealmEvents : INotificationHandler<RealmCreated>,
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
+  }
+
+  private async Task<RealmEntity?> FindAsync(DomainEvent @event, CancellationToken cancellationToken)
+  {
+    return await _context.Realms.SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
   }
 }
