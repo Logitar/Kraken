@@ -28,6 +28,8 @@ public sealed class LanguageEntity : AggregateEntity, ISegregatedEntity
   public string EnglishName { get; private set; } = string.Empty;
   public string NativeName { get; private set; } = string.Empty;
 
+  public DictionaryEntity? Dictionary { get; private set; }
+
   public LanguageEntity(RealmEntity? realm, LanguageCreated @event) : base(@event)
   {
     if (realm != null)

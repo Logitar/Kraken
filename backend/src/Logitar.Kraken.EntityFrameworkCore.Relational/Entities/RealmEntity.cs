@@ -37,7 +37,14 @@ public sealed class RealmEntity : AggregateEntity
 
   public string? CustomAttributes { get; private set; }
 
+  public List<ApiKeyEntity> ApiKeys { get; private set; } = [];
+  public List<DictionaryEntity> Dictionaries { get; private set; } = [];
   public List<LanguageEntity> Languages { get; private set; } = [];
+  public List<OneTimePasswordEntity> OneTimePasswords { get; private set; } = [];
+  public List<RoleEntity> Roles { get; private set; } = [];
+  public List<SessionEntity> Sessions { get; private set; } = [];
+  public List<UserEntity> Users { get; private set; } = [];
+  public List<UserIdentifierEntity> UserIdentifiers { get; private set; } = [];
 
   public RealmEntity(RealmCreated @event) : base(@event)
   {
