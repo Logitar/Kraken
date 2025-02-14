@@ -18,10 +18,10 @@
 
 ## Password
 
-- PasswordInput
-- PasswordManager
-- Pbkdf2Password
-- Pbkdf2Strategy
+- PasswordInput ⚠️
+- PasswordManager ⚠️
+- Pbkdf2Password ⚠️
+- Pbkdf2Strategy ⚠️
 
 ## Realm (2)
 
@@ -43,7 +43,7 @@
 ## Tokens (2)
 
 - CreateTokenCommand
-- JsonWebTokenManager
+- JsonWebTokenManager ⚠️
 - ValidateTokenCommand
 
 ## User (7)
@@ -55,3 +55,4 @@
 - SaveUserIdentifierCommand
 - SignOutUserCommand
 - UpdateUserCommand
+- UserManager ⚠️
