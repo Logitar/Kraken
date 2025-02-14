@@ -24,7 +24,7 @@ public static class DependencyInjectionExtensions
       .AddSingleton<ISecretHelper, SecretHelper>()
       .AddSingleton<PasswordConverter>()
       .AddScoped<IEventBus, EventBus>()
-      /*.AddScoped<ITokenManager, JsonWebTokenManager>()*/; // TODO(fpion): JWT
+      .AddScoped<ITokenManager, JsonWebTokenManager>();
   }
 
   private static IServiceCollection AddPasswordStrategies(this IServiceCollection services)

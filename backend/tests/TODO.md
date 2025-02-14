@@ -43,6 +43,7 @@
 ## Tokens (2)
 
 - CreateTokenCommand
+- JsonWebTokenManager
 - ValidateTokenCommand
 
 ## User (7)
