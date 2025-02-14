@@ -1,6 +1,6 @@
-﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
-using Logitar.Kraken.Constants;
+﻿using Logitar.Kraken.Constants;
 using Logitar.Kraken.Core;
+using Logitar.Kraken.EntityFrameworkCore.Relational;
 using Logitar.Kraken.EntityFrameworkCore.SqlServer;
 using Logitar.Kraken.Infrastructure;
 using Logitar.Kraken.Web;
@@ -24,7 +24,7 @@ internal class Startup : StartupBase
 
     services.AddLogitarKrakenCore();
     services.AddLogitarKrakenInfrastructure();
-    services.AddLogitarEventSourcingWithEntityFrameworkCoreRelational();
+    services.AddLogitarKrakenEntityFrameworkCoreRelational();
     services.AddLogitarKrakenWeb(_configuration);
 
     services.AddOpenApi();

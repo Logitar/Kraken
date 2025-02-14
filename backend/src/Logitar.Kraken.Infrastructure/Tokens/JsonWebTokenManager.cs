@@ -1,9 +1,6 @@
 ﻿using Logitar.Kraken.Core.Tokens;
 using Logitar.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Logitar.Kraken.Infrastructure.Tokens;
 

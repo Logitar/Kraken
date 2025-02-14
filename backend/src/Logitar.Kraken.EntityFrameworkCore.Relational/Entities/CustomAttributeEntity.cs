@@ -21,3 +21,5 @@ public sealed class CustomAttributeEntity
   public override int GetHashCode() => CustomAttributeId.GetHashCode();
   public override string ToString() => $"{GetType()} (CustomAttributeId={CustomAttributeId})";
 }
+
+// TODO(fpion): implement

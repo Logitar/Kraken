@@ -27,6 +27,10 @@
 
   <ItemGroup>
     <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="System.IdentityModel.Tokens.Jwt" />
+    <Using Include="System.Security.Claims" />
+    <Using Include="System.Security.Cryptography" />
+    <Using Include="System.Text" />
     <Using Include="System.Text.Json" />
     <Using Include="System.Text.Json.Serialization" />
   </ItemGroup>
