@@ -1,4 +1,5 @@
 ﻿using Logitar.Kraken.Core.Roles;
+using Logitar.Kraken.Core.Users;
 
 namespace Logitar.Kraken.Core;
 
@@ -48,6 +49,10 @@ public class UniqueNameAlreadyUsedException : ConflictException
 
   public UniqueNameAlreadyUsedException(Role role, RoleId conflictId)
     : this(role.RealmId?.ToGuid(), role.EntityId, conflictId.EntityId, role.UniqueName.Value, nameof(role.UniqueName))
+  {
+  }
+  public UniqueNameAlreadyUsedException(User user, UserId conflictId)
+    : this(user.RealmId?.ToGuid(), user.EntityId, conflictId.EntityId, user.UniqueName.Value, nameof(user.UniqueName))
   {
   }
   public UniqueNameAlreadyUsedException(Guid? realmId, Guid entityId, Guid conflictId, string uniqueName, string propertyName)

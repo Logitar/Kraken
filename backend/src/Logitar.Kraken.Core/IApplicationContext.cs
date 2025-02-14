@@ -9,10 +9,11 @@ public interface IApplicationContext
 {
   ActorId? ActorId { get; }
 
+  string BaseUrl { get; }
+
   RealmModel? Realm { get; }
   RealmId? RealmId { get; }
-  string BaseUrl { get; }
   string Secret { get; }
-  IRoleSettings RoleSettings { get; }
   IUserSettings UserSettings { get; }
+  IUniqueNameSettings UniqueNameSettings { get; }
 }

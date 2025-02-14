@@ -37,6 +37,30 @@ internal class UserQuerier : IUserQuerier
 
     return streamId == null ? null : new UserId(new StreamId(streamId));
   }
+  public async Task<UserId?> FindIdAsync(Identifier key, CustomIdentifier value, CancellationToken cancellationToken)
+  {
+    string? streamId = await _users.AsNoTracking()
+      .Include(x => x.Identifiers)
+      .WhereRealm(_applicationContext.RealmId)
+      .Where(x => x.Identifiers.Any(i => i.Key == key.Value && i.Value == value.Value))
+      .Select(x => x.StreamId)
+      .SingleOrDefaultAsync(cancellationToken);
+
+    return streamId == null ? null : new UserId(new StreamId(streamId));
+  }
+  public async Task<IReadOnlyCollection<UserId>> FindIdsAsync(IEmail email, CancellationToken cancellationToken)
+  {
+    string emailAddressNormalized = Helper.Normalize(email);
+
+    string[] streamIds = await _users.AsNoTracking()
+      .WhereRealm(_applicationContext.RealmId)
+      .Where(x => x.EmailAddressNormalized == emailAddressNormalized)
+      .Select(x => x.StreamId)
+      .Distinct()
+      .ToArrayAsync(cancellationToken);
+
+    return streamIds.Select(streamId => new UserId(new StreamId(streamId))).ToArray();
+  }
 
   public async Task<UserModel> ReadAsync(User user, CancellationToken cancellationToken)
   {

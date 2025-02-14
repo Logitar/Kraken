@@ -10,10 +10,11 @@ internal class HttpApplicationContext : IApplicationContext // TODO(fpion): auth
 {
   public ActorId? ActorId => throw new NotImplementedException();
 
+  public string BaseUrl => throw new NotImplementedException();
+
   public RealmModel? Realm => throw new NotImplementedException();
   public RealmId? RealmId => throw new NotImplementedException();
-  public string BaseUrl => throw new NotImplementedException();
   public string Secret => throw new NotImplementedException();
-  public IRoleSettings RoleSettings => throw new NotImplementedException();
   public IUserSettings UserSettings => throw new NotImplementedException();
+  public IUniqueNameSettings UniqueNameSettings => throw new NotImplementedException();
 }

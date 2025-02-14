@@ -31,10 +31,10 @@ internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Rol
 
   public async Task<RoleModel?> Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
   {
-    IRoleSettings roleSettings = _applicationContext.RoleSettings;
+    IUniqueNameSettings uniqueNameSettings = _applicationContext.UniqueNameSettings;
 
     UpdateRolePayload payload = command.Payload;
-    new UpdateRoleValidator(roleSettings.UniqueName).ValidateAndThrow(payload);
+    new UpdateRoleValidator(uniqueNameSettings).ValidateAndThrow(payload);
 
     RoleId roleId = new(command.Id, _applicationContext.RealmId);
     Role? role = await _roleRepository.LoadAsync(roleId, cancellationToken);
@@ -47,7 +47,7 @@ internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Rol
 
     if (!string.IsNullOrWhiteSpace(payload.UniqueName))
     {
-      role.SetUniqueName(new UniqueName(roleSettings.UniqueName, payload.UniqueName));
+      role.SetUniqueName(new UniqueName(uniqueNameSettings, payload.UniqueName));
     }
     if (payload.DisplayName != null)
     {

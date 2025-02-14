@@ -97,7 +97,7 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
       ? await _userRepository.LoadAsync(user.Id, command.Version.Value, cancellationToken)
       : null) ?? user;
 
-    ReplaceAuthenticationInformation(userSettings, payload, user, reference, actorId);
+    ReplaceAuthenticationInformation(userSettings.UniqueName, payload, user, reference, actorId);
     ReplaceContactInformation(payload, user, reference, actorId);
     ReplacePersonalInformation(payload, user, reference);
 
@@ -112,9 +112,9 @@ internal class CreateOrReplaceUserCommandHandler : IRequestHandler<CreateOrRepla
     return new CreateOrReplaceUserResult(model, created);
   }
 
-  private static void ReplaceAuthenticationInformation(IUserSettings userSettings, CreateOrReplaceUserPayload payload, User user, User reference, ActorId? actorId)
+  private static void ReplaceAuthenticationInformation(IUniqueNameSettings uniqueNameSettings, CreateOrReplaceUserPayload payload, User user, User reference, ActorId? actorId)
   {
-    UniqueName uniqueName = new(userSettings.UniqueName, payload.UniqueName);
+    UniqueName uniqueName = new(uniqueNameSettings, payload.UniqueName);
     if (reference.UniqueName != uniqueName)
     {
       user.SetUniqueName(uniqueName, actorId);
