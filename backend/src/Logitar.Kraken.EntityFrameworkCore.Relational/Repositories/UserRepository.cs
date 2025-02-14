@@ -66,7 +66,7 @@ internal class UserRepository : Repository, IUserRepository
   }
   public async Task<IReadOnlyCollection<User>> LoadAsync(RealmId? realmId, IEmail email, CancellationToken cancellationToken)
   {
-    string emailAddressNormalized = Helper.Normalize(email.Address);
+    string emailAddressNormalized = Helper.Normalize(email);
 
     string[] streamIds = await _users.AsNoTracking()
       .WhereRealm(realmId)

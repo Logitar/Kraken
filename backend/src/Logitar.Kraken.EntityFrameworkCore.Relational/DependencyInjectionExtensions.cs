@@ -29,9 +29,15 @@ public static class DependencyInjectionExtensions
   private static IServiceCollection AddQueriers(this IServiceCollection services)
   {
     return services
+      .AddScoped<IApiKeyQuerier, ApiKeyQuerier>()
       .AddScoped<IConfigurationQuerier, ConfigurationQuerier>()
+      .AddScoped<IDictionaryQuerier, DictionaryQuerier>()
       .AddScoped<ILanguageQuerier, LanguageQuerier>()
-      .AddScoped<IRealmQuerier, RealmQuerier>();
+      .AddScoped<IOneTimePasswordQuerier, OneTimePasswordQuerier>()
+      .AddScoped<IRealmQuerier, RealmQuerier>()
+      .AddScoped<IRoleQuerier, RoleQuerier>()
+      .AddScoped<ISessionQuerier, SessionQuerier>()
+      .AddScoped<IUserQuerier, UserQuerier>();
   }
 
   private static IServiceCollection AddRepositories(this IServiceCollection services)
