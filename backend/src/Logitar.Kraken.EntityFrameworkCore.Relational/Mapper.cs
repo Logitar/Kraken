@@ -34,6 +34,16 @@ internal class Mapper
     }
   }
 
+  public static ActorModel ToActor(ActorEntity source) => new()
+  {
+    Id = source.Id,
+    Type = source.Type,
+    IsDeleted = source.IsDeleted,
+    DisplayName = source.DisplayName,
+    EmailAddress = source.EmailAddress,
+    PictureUrl = source.PictureUrl
+  };
+
   public ApiKeyModel ToApiKey(ApiKeyEntity source, RealmModel? realm)
   {
     ApiKeyModel destination = new()

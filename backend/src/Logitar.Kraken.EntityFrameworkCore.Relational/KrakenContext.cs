@@ -10,6 +10,7 @@ public class KrakenContext : DbContext
   }
 
   #region Identity
+  public DbSet<ActorEntity> Actors => Set<ActorEntity>();
   public DbSet<ApiKeyEntity> ApiKeys => Set<ApiKeyEntity>();
   public DbSet<ApiKeyRoleEntity> ApiKeyRoles => Set<ApiKeyRoleEntity>();
   public DbSet<OneTimePasswordEntity> OneTimePasswords => Set<OneTimePasswordEntity>();
