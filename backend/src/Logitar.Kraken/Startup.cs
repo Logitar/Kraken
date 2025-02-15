@@ -53,7 +53,7 @@ internal class Startup : StartupBase
     //  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     //}); // TODO(fpion): Session
 
-    //services.AddApplicationInsightsTelemetry(); // TODO(fpion): ApplicationInsights
+    services.AddApplicationInsightsTelemetry();
     //IHealthChecksBuilder healthChecks = services.AddHealthChecks(); // TODO(fpion): HealthChecks
 
     services.AddOpenApi();
