@@ -90,6 +90,7 @@ internal class OneTimePasswordEvents : INotificationHandler<OneTimePasswordCreat
       oneTimePassword.Update(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await _context.SynchronizeCustomAttributesAsync(KrakenDb.OneTimePasswords.Table, oneTimePassword.OneTimePasswordId, oneTimePassword.GetCustomAttributes(), cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }

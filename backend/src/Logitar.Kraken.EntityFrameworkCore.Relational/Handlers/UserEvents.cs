@@ -552,6 +552,7 @@ internal class UserEvents : INotificationHandler<UserAddressChanged>,
 
       await _context.SaveChangesAsync(cancellationToken);
       await UpdateActorAsync(user, cancellationToken);
+      await _context.SynchronizeCustomAttributesAsync(KrakenDb.Users.Table, user.UserId, user.GetCustomAttributes(), cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }

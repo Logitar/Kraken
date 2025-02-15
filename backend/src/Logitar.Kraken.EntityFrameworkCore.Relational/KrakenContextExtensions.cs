@@ -1,4 +1,5 @@
-﻿using Logitar.EventSourcing;
+﻿using Logitar.Data;
+using Logitar.EventSourcing;
 using Logitar.Kraken.Core;
 using Logitar.Kraken.Core.Localization;
 using Logitar.Kraken.Core.Realms;
@@ -40,5 +41,46 @@ internal static class KrakenContextExtensions
   {
     return await context.Users.SingleOrDefaultAsync(x => x.StreamId == id.Value, cancellationToken)
       ?? throw new InvalidOperationException($"The user entity 'StreamId={id}' could not be found.");
+  }
+
+  public static async Task SynchronizeCustomAttributesAsync(
+    this KrakenContext context,
+    TableId table,
+    int entityId,
+    IReadOnlyDictionary<string, string> customAttributes,
+    CancellationToken cancellationToken)
+  {
+    string entityType = string.Join('.', new string?[] { table.Schema, table.Table }
+      .Where(value => !string.IsNullOrWhiteSpace(value))
+      .Select(value => value!.Trim()));
+
+    Dictionary<string, CustomAttributeEntity> entities = await context.CustomAttributes
+      .Where(x => x.EntityType == entityType && x.EntityId == entityId)
+      .ToDictionaryAsync(x => x.Key, x => x, cancellationToken);
+
+    foreach (KeyValuePair<string, CustomAttributeEntity> entity in entities)
+    {
+      if (!customAttributes.ContainsKey(entity.Key))
+      {
+        context.CustomAttributes.Remove(entity.Value);
+      }
+    }
+
+    foreach (KeyValuePair<string, string> customAttribute in customAttributes)
+    {
+      _ = entities.TryGetValue(customAttribute.Key, out CustomAttributeEntity? entity);
+      if (entity == null)
+      {
+        entity = new(entityType, entityId, customAttribute.Key, customAttribute.Value);
+
+        context.CustomAttributes.Add(entity);
+      }
+      else if (entity.Value != customAttribute.Value)
+      {
+        entity.Update(customAttribute.Value);
+      }
+    }
+
+    await context.SaveChangesAsync(cancellationToken);
   }
 }

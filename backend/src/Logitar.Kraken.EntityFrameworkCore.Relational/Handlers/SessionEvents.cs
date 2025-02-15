@@ -139,6 +139,7 @@ internal class SessionEvents : INotificationHandler<SessionCreated>,
       session.Update(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await _context.SynchronizeCustomAttributesAsync(KrakenDb.Sessions.Table, session.SessionId, session.GetCustomAttributes(), cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }

@@ -108,6 +108,7 @@ internal class RealmEvents : INotificationHandler<RealmCreated>,
       realm.Update(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await _context.SynchronizeCustomAttributesAsync(KrakenDb.Realms.Table, realm.RealmId, realm.GetCustomAttributes(), cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }

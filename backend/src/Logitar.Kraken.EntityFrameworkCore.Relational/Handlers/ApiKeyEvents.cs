@@ -173,6 +173,7 @@ internal class ApiKeyEvents : INotificationHandler<ApiKeyAuthenticated>,
 
       await _context.SaveChangesAsync(cancellationToken);
       await UpdateActorAsync(apiKey, cancellationToken);
+      await _context.SynchronizeCustomAttributesAsync(KrakenDb.ApiKeys.Table, apiKey.ApiKeyId, apiKey.GetCustomAttributes(), cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }

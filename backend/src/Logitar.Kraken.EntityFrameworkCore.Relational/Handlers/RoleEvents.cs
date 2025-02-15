@@ -110,6 +110,7 @@ internal class RoleEvents : INotificationHandler<RoleCreated>,
       role.Update(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await _context.SynchronizeCustomAttributesAsync(KrakenDb.Roles.Table, role.RoleId, role.GetCustomAttributes(), cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
