@@ -1,4 +1,6 @@
-﻿namespace Logitar.Kraken.Settings;
+﻿using Logitar.Kraken.Infrastructure;
+
+namespace Logitar.Kraken.Settings;
 
 internal record DefaultSettings
 {
@@ -10,23 +12,9 @@ internal record DefaultSettings
   {
     DefaultSettings settings = configuration.GetSection("Default").Get<DefaultSettings>() ?? new();
 
-    string? locale = Environment.GetEnvironmentVariable("DEFAULT_LOCALE");
-    if (!string.IsNullOrWhiteSpace(locale))
-    {
-      settings.Locale = locale.Trim();
-    }
-
-    string? uniqueName = Environment.GetEnvironmentVariable("DEFAULT_UNIQUE_NAME");
-    if (!string.IsNullOrWhiteSpace(uniqueName))
-    {
-      settings.UniqueName = uniqueName.Trim();
-    }
-
-    string? password = Environment.GetEnvironmentVariable("DEFAULT_PASSWORD");
-    if (!string.IsNullOrWhiteSpace(password))
-    {
-      settings.Password = password.Trim();
-    }
+    settings.Locale = EnvironmentHelper.GetString("DEFAULT_LOCALE", settings.Locale);
+    settings.UniqueName = EnvironmentHelper.GetString("DEFAULT_UNIQUE_NAME", settings.UniqueName);
+    settings.Password = EnvironmentHelper.GetString("DEFAULT_PASSWORD", settings.Password);
 
     return settings;
   }

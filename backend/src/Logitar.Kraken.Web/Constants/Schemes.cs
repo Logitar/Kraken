@@ -1,4 +1,6 @@
-﻿namespace Logitar.Kraken.Web.Constants;
+﻿using Logitar.Kraken.Infrastructure;
+
+namespace Logitar.Kraken.Web.Constants;
 
 public static class Schemes
 {
@@ -16,11 +18,7 @@ public static class Schemes
       Session
     };
 
-    string? enabled = Environment.GetEnvironmentVariable("BASIC_AUTHENTICATION_ENABLED");
-    if (string.IsNullOrWhiteSpace(enabled) || !bool.TryParse(enabled.Trim(), out bool isBasicAuthenticationEnabled))
-    {
-      isBasicAuthenticationEnabled = configuration.GetValue<bool>("EnableBasicAuthentication");
-    }
+    bool isBasicAuthenticationEnabled = EnvironmentHelper.GetBoolean("BASIC_AUTHENTICATION_ENABLED", configuration.GetValue<bool>("EnableBasicAuthentication"));
     if (isBasicAuthenticationEnabled)
     {
       schemes.Add(Basic);

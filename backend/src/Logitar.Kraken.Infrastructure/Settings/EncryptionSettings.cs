@@ -10,11 +10,7 @@ internal record EncryptionSettings
   {
     EncryptionSettings settings = configuration.GetSection("Encryption").Get<EncryptionSettings>() ?? new();
 
-    string? key = Environment.GetEnvironmentVariable("ENCRYPTION_KEY");
-    if (!string.IsNullOrWhiteSpace(key))
-    {
-      settings.Key = key.Trim();
-    }
+    settings.Key = EnvironmentHelper.GetString("ENCRYPTION_KEY", settings.Key);
 
     return settings;
   }

@@ -1,4 +1,5 @@
 ﻿using Logitar.Kraken.Core;
+using Logitar.Kraken.Web.Settings;
 
 namespace Logitar.Kraken.Web;
 
@@ -14,9 +15,7 @@ public static class DependencyInjectionExtensions
       });
 
     // TODO(fpion): Cookies settings
-
-    // TODO(fpion): CORS settings
-
+    services.AddSingleton(CorsSettings.Initialize(configuration));
     // TODO(fpion): OAuth settings
 
     return services.AddSingleton<IApplicationContext, HttpApplicationContext>();

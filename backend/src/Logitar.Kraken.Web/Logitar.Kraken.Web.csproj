@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Logitar.Kraken.Core\Logitar.Kraken.Core.csproj" />
+    <ProjectReference Include="..\Logitar.Kraken.Infrastructure\Logitar.Kraken.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

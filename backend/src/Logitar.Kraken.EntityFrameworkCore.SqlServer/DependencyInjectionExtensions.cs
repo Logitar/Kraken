@@ -11,11 +11,7 @@ public static class DependencyInjectionExtensions
 {
   public static IServiceCollection AddLogitarKrakenEntityFrameworkCoreSqlServer(this IServiceCollection services, IConfiguration configuration)
   {
-    string? connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_Kraken");
-    if (string.IsNullOrWhiteSpace(connectionString))
-    {
-      connectionString = configuration.GetConnectionString("SqlServer");
-    }
+    string? connectionString = EnvironmentHelper.TryGetString("SQLCONNSTR_Kraken", configuration.GetConnectionString("SqlServer"));
     if (string.IsNullOrWhiteSpace(connectionString))
     {
       throw new ArgumentException($"The connection string for the database provider '{DatabaseProvider.EntityFrameworkCoreSqlServer}' could not be found.", nameof(configuration));
