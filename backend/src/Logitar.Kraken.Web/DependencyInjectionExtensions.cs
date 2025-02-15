@@ -13,6 +13,12 @@ public static class DependencyInjectionExtensions
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
       });
 
+    // TODO(fpion): Cookies settings
+
+    // TODO(fpion): CORS settings
+
+    // TODO(fpion): OAuth settings
+
     return services.AddSingleton<IApplicationContext, HttpApplicationContext>();
   }
 }

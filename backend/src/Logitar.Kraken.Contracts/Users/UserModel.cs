@@ -2,6 +2,7 @@
 using Logitar.Kraken.Contracts.Localization;
 using Logitar.Kraken.Contracts.Realms;
 using Logitar.Kraken.Contracts.Roles;
+using Logitar.Kraken.Contracts.Sessions;
 
 namespace Logitar.Kraken.Contracts.Users;
 
@@ -42,6 +43,7 @@ public class UserModel : AggregateModel
   public List<CustomAttributeModel> CustomAttributes { get; set; } = [];
   public List<CustomIdentifierModel> CustomIdentifiers { get; set; } = [];
   public List<RoleModel> Roles { get; set; } = [];
+  public List<SessionModel> Sessions { get; set; } = [];
 
   public RealmModel? Realm { get; set; }
 
