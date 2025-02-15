@@ -6,6 +6,7 @@ using Logitar.Kraken.Infrastructure.Caching;
 using Logitar.Kraken.Infrastructure.Converters;
 using Logitar.Kraken.Infrastructure.Passwords;
 using Logitar.Kraken.Infrastructure.Passwords.Pbkdf2;
+using Logitar.Kraken.Infrastructure.Settings;
 using Logitar.Kraken.Infrastructure.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ public static class DependencyInjectionExtensions
     return services
       .AddMemoryCache()
       .AddPasswordStrategies()
+      .AddSingleton(serviceProvider => EncryptionSettings.Initialize(serviceProvider.GetRequiredService<IConfiguration>()))
       .AddSingleton(serviceProvider => Pbkdf2Settings.Initialize(serviceProvider.GetRequiredService<IConfiguration>()))
       .AddSingleton<ICacheService, CacheService>()
       .AddSingleton<IEventSerializer, EventSerializer>()

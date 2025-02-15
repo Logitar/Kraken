@@ -1,6 +1,9 @@
-﻿using Logitar.Kraken.Core.Configurations.Commands;
+﻿using Logitar.Kraken.Constants;
+using Logitar.Kraken.Core.Configurations.Commands;
+using Logitar.Kraken.EntityFrameworkCore.Relational.Commands;
 using Logitar.Kraken.Settings;
 using MediatR;
+using Microsoft.FeatureManagement;
 
 namespace Logitar.Kraken;
 
@@ -18,7 +21,15 @@ internal class Program
 
     await startup.ConfigureAsync(application);
 
-    IMediator mediator = application.Services.GetRequiredService<IMediator>();
+    using IServiceScope scope = application.Services.CreateScope();
+    IMediator mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+    IFeatureManager featureManager = scope.ServiceProvider.GetRequiredService<IFeatureManager>();
+    if (await featureManager.IsEnabledAsync(Features.MigrateDatabase))
+    {
+      await mediator.Send(new MigrateDatabaseCommand());
+    }
+
     DefaultSettings defaults = DefaultSettings.Initialize(configuration);
     await mediator.Send(new InitializeConfigurationCommand(defaults.Locale, defaults.UniqueName, defaults.Password));
 

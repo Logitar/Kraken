@@ -3,6 +3,7 @@ using Logitar.Kraken.Contracts.Actors;
 using Logitar.Kraken.Contracts.Localization;
 using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core;
+using Logitar.Kraken.Core.Passwords;
 using Logitar.Kraken.Core.Users;
 using Logitar.Kraken.Core.Users.Events;
 using Logitar.Kraken.EntityFrameworkCore.Relational.KrakenDb;
@@ -126,6 +127,11 @@ public sealed class UserEntity : AggregateEntity, ISegregatedEntity
     Id = userId.EntityId;
 
     UniqueName = @event.UniqueName.Value;
+
+    if (@event.Password != null)
+    {
+      SetPassword(@event.Password, @event);
+    }
   }
 
   private UserEntity() : base()
@@ -330,7 +336,11 @@ public sealed class UserEntity : AggregateEntity, ISegregatedEntity
   {
     Update(@event);
 
-    PasswordHash = @event.Password.Encode();
+    SetPassword(@event.Password, @event);
+  }
+  private void SetPassword(Password password, DomainEvent @event)
+  {
+    PasswordHash = password.Encode();
     PasswordChangedBy = @event.ActorId?.Value;
     PasswordChangedOn = @event.OccurredOn.AsUniversalTime();
   }

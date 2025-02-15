@@ -44,6 +44,7 @@
 
 - CreateTokenCommand
 - JsonWebTokenManager ⚠️
+- SecretHelper ⚠️
 - ValidateTokenCommand
 
 ## User (7)

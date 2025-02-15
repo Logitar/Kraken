@@ -13,11 +13,13 @@ public record ValidateTokenCommand(ValidateTokenPayload Payload) : Activity, IRe
 internal class ValidateTokenCommandHandler : IRequestHandler<ValidateTokenCommand, ValidatedTokenModel>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly ISecretHelper _secretHelper;
   private readonly ITokenManager _tokenManager;
 
-  public ValidateTokenCommandHandler(IApplicationContext applicationContext, ITokenManager tokenManager)
+  public ValidateTokenCommandHandler(IApplicationContext applicationContext, ISecretHelper secretHelper, ITokenManager tokenManager)
   {
     _applicationContext = applicationContext;
+    _secretHelper = secretHelper;
     _tokenManager = tokenManager;
   }
 
@@ -29,7 +31,7 @@ internal class ValidateTokenCommandHandler : IRequestHandler<ValidateTokenComman
     RealmModel? realm = _applicationContext.Realm;
     string baseUrl = _applicationContext.BaseUrl;
 
-    string secret = payload.Secret?.CleanTrim() ?? _applicationContext.Secret; // TODO(fpion): secret is still encrypted! secret from payload needs spaces removed!
+    string secret = _secretHelper.Resolve(payload.Secret);
     ValidateTokenOptions options = new()
     {
       ValidAudiences = [TokenHelper.ResolveAudience(payload.Audience, realm, baseUrl)],

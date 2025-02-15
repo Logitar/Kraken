@@ -15,7 +15,8 @@ public static class DependencyInjectionExtensions
     return services
       .AddLogitarEventSourcing()
       .AddManagers()
-      .AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+      .AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
+      .AddSingleton<IAddressHelper, AddressHelper>();
   }
 
   private static IServiceCollection AddManagers(this IServiceCollection services)

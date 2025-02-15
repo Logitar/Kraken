@@ -2,6 +2,7 @@
 using Logitar.Kraken.Contracts.Realms;
 using Logitar.Kraken.Contracts.Settings;
 using Logitar.Kraken.Core.Realms;
+using Logitar.Kraken.Core.Tokens;
 
 namespace Logitar.Kraken.Core;
 
@@ -13,7 +14,7 @@ public interface IApplicationContext
 
   RealmModel? Realm { get; }
   RealmId? RealmId { get; }
-  string Secret { get; }
+  Secret Secret { get; }
   IUserSettings UserSettings { get; }
   IUniqueNameSettings UniqueNameSettings { get; }
 }

@@ -13,11 +13,13 @@ public record CreateTokenCommand(CreateTokenPayload Payload) : Activity, IReques
 internal class CreateTokenCommandHandler : IRequestHandler<CreateTokenCommand, CreatedTokenModel>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly ISecretHelper _secretHelper;
   private readonly ITokenManager _tokenManager;
 
-  public CreateTokenCommandHandler(IApplicationContext applicationContext, ITokenManager tokenManager)
+  public CreateTokenCommandHandler(IApplicationContext applicationContext, ISecretHelper secretHelper, ITokenManager tokenManager)
   {
     _applicationContext = applicationContext;
+    _secretHelper = secretHelper;
     _tokenManager = tokenManager;
   }
 
@@ -30,7 +32,7 @@ internal class CreateTokenCommandHandler : IRequestHandler<CreateTokenCommand, C
     string baseUrl = _applicationContext.BaseUrl;
 
     ClaimsIdentity subject = CreateSubject(payload);
-    string secret = payload.Secret?.CleanTrim() ?? _applicationContext.Secret; // TODO(fpion): secret is still encrypted! secret from payload needs spaces removed!
+    string secret = _secretHelper.Resolve(payload.Secret);
     CreateTokenOptions options = new()
     {
       Audience = TokenHelper.ResolveAudience(payload.Audience, realm, baseUrl),
