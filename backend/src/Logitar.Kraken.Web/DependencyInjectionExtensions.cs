@@ -14,7 +14,7 @@ public static class DependencyInjectionExtensions
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
       });
 
-    // TODO(fpion): Cookies settings
+    services.AddSingleton(CookiesSettings.Initialize(configuration));
     services.AddSingleton(CorsSettings.Initialize(configuration));
     // TODO(fpion): OAuth settings
 

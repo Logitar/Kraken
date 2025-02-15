@@ -9,6 +9,7 @@ using Logitar.Kraken.Web.Authentication;
 using Logitar.Kraken.Web.Authorization;
 using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Extensions;
+using Logitar.Kraken.Web.Middlewares;
 using Logitar.Kraken.Web.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -47,6 +48,7 @@ internal class Startup : StartupBase
     {
       authenticationBuilder.AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(Schemes.Basic, options => { });
     }
+    // TODO(fpion): OpenAuthenticationService implementation
 
     services.AddAuthorizationBuilder()
       .SetDefaultPolicy(new AuthorizationPolicyBuilder(_authenticationSchemes).RequireAuthenticatedUser().Build())
@@ -56,7 +58,29 @@ internal class Startup : StartupBase
         .Build());
     services.AddSingleton<IAuthorizationHandler, KrakenAdminAuthorizationHandler>();
 
-    CookiesSettings cookiesSettings = _configuration.GetSection(CookiesSettings.SectionKey).Get<CookiesSettings>() ?? new();
+    IEnumerable<ServiceDescriptor> cookiesSettingsDescriptors = services.Where(service => service.ServiceType.Equals(typeof(CookiesSettings)));
+    CookiesSettings cookiesSettings;
+    if (cookiesSettingsDescriptors.Any())
+    {
+      CookiesSettings[] cookiesSettingsValues = cookiesSettingsDescriptors
+        .Where(descriptor => descriptor.ImplementationInstance is CookiesSettings)
+        .Select(descriptor => (CookiesSettings)descriptor.ImplementationInstance!)
+        .ToArray();
+      if (cookiesSettingsValues.Length < 1)
+      {
+        throw new InvalidOperationException($"No {nameof(CookiesSettings)} implementation instance was registered.");
+      }
+      else if (cookiesSettingsValues.Length > 1)
+      {
+        throw new InvalidOperationException($"More than one {nameof(CookiesSettings)} implementation instances were registered.");
+      }
+      cookiesSettings = cookiesSettingsValues.Single();
+    }
+    else
+    {
+      cookiesSettings = CookiesSettings.Initialize(_configuration);
+      services.AddSingleton(cookiesSettings);
+    }
     services.AddSession(options =>
     {
       options.Cookie.SameSite = cookiesSettings.Session.SameSite;
@@ -72,7 +96,9 @@ internal class Startup : StartupBase
     services.AddFeatureManagement();
     //services.AddProblemDetails(); // TODO(fpion): ExceptionHandler
 
-    DatabaseProvider databaseProvider = EnvironmentHelper.GetEnum("DATABASE_PROVIDER", _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer);
+    DatabaseProvider databaseProvider = EnvironmentHelper.GetEnum(
+      "DATABASE_PROVIDER",
+      _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.EntityFrameworkCoreSqlServer);
     switch (databaseProvider)
     {
       case DatabaseProvider.EntityFrameworkCoreSqlServer:
