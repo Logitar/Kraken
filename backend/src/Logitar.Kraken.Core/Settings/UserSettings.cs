@@ -9,7 +9,7 @@ public record UserSettings : IUserSettings
   public bool RequireUniqueEmail { get; }
   public bool RequireConfirmedAccount { get; }
 
-  public UserSettings(UniqueNameSettings uniqueName, PasswordSettings password, bool requireUniqueEmail, bool requireConfirmedAccount)
+  public UserSettings(IUniqueNameSettings uniqueName, IPasswordSettings password, bool requireUniqueEmail, bool requireConfirmedAccount)
   {
     UniqueName = uniqueName;
     Password = password;
