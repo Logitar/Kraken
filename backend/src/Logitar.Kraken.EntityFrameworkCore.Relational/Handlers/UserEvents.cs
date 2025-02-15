@@ -104,6 +104,7 @@ internal class UserEvents : INotificationHandler<UserAddressChanged>,
       _context.Users.Add(user);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(user, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -125,6 +126,7 @@ internal class UserEvents : INotificationHandler<UserAddressChanged>,
       _context.Users.Remove(user);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(user, delete: true, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -181,6 +183,7 @@ internal class UserEvents : INotificationHandler<UserAddressChanged>,
       user.SetEmail(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(user, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -519,6 +522,7 @@ internal class UserEvents : INotificationHandler<UserAddressChanged>,
       user.SetUniqueName(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(user, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -547,6 +551,7 @@ internal class UserEvents : INotificationHandler<UserAddressChanged>,
       user.Update(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(user, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -558,5 +563,31 @@ internal class UserEvents : INotificationHandler<UserAddressChanged>,
       .Include(x => x.Identifiers)
       .Include(x => x.Roles)
       .SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+  }
+
+  private async Task UpdateActorAsync(UserEntity user, CancellationToken cancellationToken)
+  {
+    await UpdateActorAsync(user, delete: false, cancellationToken);
+  }
+  private async Task UpdateActorAsync(UserEntity user, bool delete, CancellationToken cancellationToken)
+  {
+    ActorEntity? actor = await _context.Actors.SingleOrDefaultAsync(x => x.Id == user.Id, cancellationToken);
+    if (actor == null)
+    {
+      actor = new(user);
+
+      _context.Actors.Add(actor);
+    }
+    else
+    {
+      actor.Update(user);
+    }
+
+    if (delete)
+    {
+      actor.Delete();
+    }
+
+    await _context.SaveChangesAsync(cancellationToken);
   }
 }

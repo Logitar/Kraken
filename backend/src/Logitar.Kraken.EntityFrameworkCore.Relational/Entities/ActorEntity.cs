@@ -15,8 +15,43 @@ public sealed class ActorEntity
   public string? EmailAddress { get; private set; }
   public string? PictureUrl { get; private set; }
 
+  public ActorEntity(ApiKeyEntity apiKey)
+  {
+    Id = apiKey.Id;
+    Key = apiKey.StreamId;
+
+    Type = ActorType.ApiKey;
+
+    Update(apiKey);
+  }
+  public ActorEntity(UserEntity user)
+  {
+    Id = user.Id;
+    Key = user.StreamId;
+
+    Type = ActorType.User;
+
+    Update(user);
+  }
+
   private ActorEntity()
   {
+  }
+
+  public void Delete()
+  {
+    IsDeleted = true;
+  }
+
+  public void Update(ApiKeyEntity apiKey)
+  {
+    DisplayName = apiKey.Name;
+  }
+  public void Update(UserEntity user)
+  {
+    DisplayName = user.FullName ?? user.UniqueName;
+    EmailAddress = user.EmailAddress;
+    PictureUrl = user.Picture;
   }
 
   public override bool Equals(object? obj) => obj is ActorEntity actor && actor.Id == Id;

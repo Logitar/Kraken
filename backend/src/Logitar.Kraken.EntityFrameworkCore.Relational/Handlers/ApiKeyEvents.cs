@@ -63,6 +63,7 @@ internal class ApiKeyEvents : INotificationHandler<ApiKeyAuthenticated>,
       _context.ApiKeys.Add(apiKey);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(apiKey, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -84,6 +85,7 @@ internal class ApiKeyEvents : INotificationHandler<ApiKeyAuthenticated>,
       _context.ApiKeys.Remove(apiKey);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(apiKey, delete: true, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -170,6 +172,7 @@ internal class ApiKeyEvents : INotificationHandler<ApiKeyAuthenticated>,
       apiKey.Update(@event);
 
       await _context.SaveChangesAsync(cancellationToken);
+      await UpdateActorAsync(apiKey, cancellationToken);
 
       _logger.LogInformation("Handled {Event} event.", @event.GetType().Name);
     }
@@ -178,5 +181,31 @@ internal class ApiKeyEvents : INotificationHandler<ApiKeyAuthenticated>,
   private async Task<ApiKeyEntity?> FindAsync(DomainEvent @event, CancellationToken cancellationToken)
   {
     return await _context.ApiKeys.Include(x => x.Roles).SingleOrDefaultAsync(x => x.StreamId == @event.StreamId.Value, cancellationToken);
+  }
+
+  private async Task UpdateActorAsync(ApiKeyEntity apiKey, CancellationToken cancellationToken)
+  {
+    await UpdateActorAsync(apiKey, delete: false, cancellationToken);
+  }
+  private async Task UpdateActorAsync(ApiKeyEntity apiKey, bool delete, CancellationToken cancellationToken)
+  {
+    ActorEntity? actor = await _context.Actors.SingleOrDefaultAsync(x => x.Id == apiKey.Id, cancellationToken);
+    if (actor == null)
+    {
+      actor = new(apiKey);
+
+      _context.Actors.Add(actor);
+    }
+    else
+    {
+      actor.Update(apiKey);
+    }
+
+    if (delete)
+    {
+      actor.Delete();
+    }
+
+    await _context.SaveChangesAsync(cancellationToken);
   }
 }
