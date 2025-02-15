@@ -2,13 +2,16 @@
 using Logitar.Kraken.Contracts.Search;
 using Logitar.Kraken.Core.Roles.Commands;
 using Logitar.Kraken.Core.Roles.Queries;
+using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Models.Role;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/roles")]
 public class RoleController : ControllerBase
 {

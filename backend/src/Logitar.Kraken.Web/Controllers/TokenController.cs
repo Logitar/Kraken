@@ -1,11 +1,14 @@
 ﻿using Logitar.Kraken.Contracts.Tokens;
 using Logitar.Kraken.Core.Tokens.Commands;
+using Logitar.Kraken.Web.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/tokens")]
 public class TokenController : ControllerBase
 {

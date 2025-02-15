@@ -2,13 +2,16 @@
 using Logitar.Kraken.Contracts.Sessions;
 using Logitar.Kraken.Core.Sessions.Commands;
 using Logitar.Kraken.Core.Sessions.Queries;
+using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Models.Session;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/sessions")]
 public class SessionController : ControllerBase
 {

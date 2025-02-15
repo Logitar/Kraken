@@ -2,13 +2,16 @@
 using Logitar.Kraken.Contracts.Search;
 using Logitar.Kraken.Core.ApiKeys.Commands;
 using Logitar.Kraken.Core.ApiKeys.Queries;
+using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Models.ApiKey;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/keys")]
 public class ApiKeyController : ControllerBase
 {

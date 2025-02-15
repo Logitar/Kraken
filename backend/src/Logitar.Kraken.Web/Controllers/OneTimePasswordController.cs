@@ -1,12 +1,15 @@
 ﻿using Logitar.Kraken.Contracts.Passwords;
 using Logitar.Kraken.Core.Passwords.Commands;
 using Logitar.Kraken.Core.Passwords.Queries;
+using Logitar.Kraken.Web.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/one-time-passwords")]
 public class OneTimePasswordController : ControllerBase
 {

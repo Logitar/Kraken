@@ -2,13 +2,16 @@
 using Logitar.Kraken.Contracts.Search;
 using Logitar.Kraken.Core.Dictionaries.Commands;
 using Logitar.Kraken.Core.Dictionaries.Queries;
+using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Models.Dictionary;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/dictionaries")]
 public class DictionaryController : ControllerBase
 {

@@ -6,10 +6,12 @@ using Logitar.Kraken.EntityFrameworkCore.SqlServer;
 using Logitar.Kraken.Infrastructure;
 using Logitar.Kraken.Web;
 using Logitar.Kraken.Web.Authentication;
+using Logitar.Kraken.Web.Authorization;
 using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Extensions;
 using Logitar.Kraken.Web.Settings;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
 
@@ -46,21 +48,26 @@ internal class Startup : StartupBase
       authenticationBuilder.AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(Schemes.Basic, options => { });
     }
 
-    //services.AddAuthorizationBuilder()
-    //  .SetDefaultPolicy(new AuthorizationPolicyBuilder(_authenticationSchemes).RequireAuthenticatedUser().Build()); // TODO(fpion): Authorization
+    services.AddAuthorizationBuilder()
+      .SetDefaultPolicy(new AuthorizationPolicyBuilder(_authenticationSchemes).RequireAuthenticatedUser().Build())
+      .AddPolicy(Policies.KrakenAdmin, new AuthorizationPolicyBuilder(_authenticationSchemes)
+        .RequireAuthenticatedUser()
+        .AddRequirements(new KrakenAdminRequirement())
+        .Build());
+    services.AddSingleton<IAuthorizationHandler, KrakenAdminAuthorizationHandler>();
 
-    //CookiesSettings cookiesSettings = _configuration.GetSection(CookiesSettings.SectionKey).Get<CookiesSettings>() ?? new();
-    //services.AddSession(options =>
-    //{
-    //  options.Cookie.SameSite = cookiesSettings.Session.SameSite;
-    //  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    //}); // TODO(fpion): Session
+    CookiesSettings cookiesSettings = _configuration.GetSection(CookiesSettings.SectionKey).Get<CookiesSettings>() ?? new();
+    services.AddSession(options =>
+    {
+      options.Cookie.SameSite = cookiesSettings.Session.SameSite;
+      options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    });
 
     services.AddApplicationInsightsTelemetry();
     IHealthChecksBuilder healthChecks = services.AddHealthChecks();
     services.AddOpenApi();
 
-    //services.AddDistributedMemoryCache(); // TODO(fpion): Session
+    services.AddDistributedMemoryCache();
     //services.AddExceptionHandler<ExceptionHandler>(); // TODO(fpion): ExceptionHandler
     services.AddFeatureManagement();
     //services.AddProblemDetails(); // TODO(fpion): ExceptionHandler
@@ -98,11 +105,11 @@ internal class Startup : StartupBase
     application.UseCors(application.Services.GetRequiredService<CorsSettings>());
     //application.UseStaticFiles(); // TODO(fpion): Frontend Integration
     //application.UseExceptionHandler(); // TODO(fpion): ExceptionHandler
-    //application.UseSession(); // TODO(fpion): Session
-    //application.UseMiddleware<RenewSession>(); // TODO(fpion): Session
+    application.UseSession();
+    application.UseMiddleware<RenewSession>();
     //application.UseMiddleware<RedirectNotFound>(); // TODO(fpion): Frontend Integration
     application.UseAuthentication();
-    //application.UseAuthorization(); // TODO(fpion): Authorization
+    application.UseAuthorization();
 
     application.MapControllers();
     application.MapHealthChecks("/health");

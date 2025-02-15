@@ -2,14 +2,16 @@
 using Logitar.Kraken.Contracts.Search;
 using Logitar.Kraken.Core.Realms.Commands;
 using Logitar.Kraken.Core.Realms.Queries;
+using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Models.Realm;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
-//[Authorize] // TODO(fpion): Authorization
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/realms")]
 public class RealmController : ControllerBase
 {

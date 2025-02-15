@@ -3,13 +3,16 @@ using Logitar.Kraken.Contracts.Search;
 using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Core.Users.Commands;
 using Logitar.Kraken.Core.Users.Queries;
+using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Models.User;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Logitar.Kraken.Web.Controllers;
 
 [ApiController]
+[Authorize(Policy = Policies.KrakenAdmin)]
 [Route("api/users")]
 public class UserController : ControllerBase
 {
