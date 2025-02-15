@@ -1,11 +1,18 @@
-﻿using Logitar.Kraken.Core.Realms;
+﻿using Logitar.Kraken.Core.Passwords;
+using Logitar.Kraken.Core.Realms;
 using Logitar.Kraken.Core.Tokens;
-using Logitar.Security.Cryptography;
 
 namespace Logitar.Kraken.Infrastructure.Tokens;
 
 internal class SecretHelper : ISecretHelper
 {
+  private readonly IPasswordManager _passwordManager;
+
+  public SecretHelper(IPasswordManager passwordManager)
+  {
+    _passwordManager = passwordManager;
+  }
+
   public Secret Encrypt(string secret, RealmId? realmId)
   {
     secret = secret.Remove(" ");
@@ -19,7 +26,7 @@ internal class SecretHelper : ISecretHelper
 
   public Secret Generate(RealmId? realmId)
   {
-    string secret = RandomStringGenerator.GetString(Secret.MinimumLength);
+    _ = _passwordManager.Generate(Secret.MinimumLength, out string secret);
     return Encrypt(secret, realmId);
   }
 }
