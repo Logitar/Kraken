@@ -1,4 +1,5 @@
-﻿using Logitar.Kraken.Constants;
+﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
+using Logitar.Kraken.Constants;
 using Logitar.Kraken.Core;
 using Logitar.Kraken.EntityFrameworkCore.Relational;
 using Logitar.Kraken.EntityFrameworkCore.SqlServer;
@@ -54,8 +55,7 @@ internal class Startup : StartupBase
     //}); // TODO(fpion): Session
 
     services.AddApplicationInsightsTelemetry();
-    //IHealthChecksBuilder healthChecks = services.AddHealthChecks(); // TODO(fpion): HealthChecks
-
+    IHealthChecksBuilder healthChecks = services.AddHealthChecks();
     services.AddOpenApi();
 
     //services.AddDistributedMemoryCache(); // TODO(fpion): Session
@@ -68,8 +68,8 @@ internal class Startup : StartupBase
     {
       case DatabaseProvider.EntityFrameworkCoreSqlServer:
         services.AddLogitarKrakenEntityFrameworkCoreSqlServer(_configuration);
-        //healthChecks.AddDbContextCheck<EventContext>(); // TODO(fpion): HealthChecks
-        //healthChecks.AddDbContextCheck<KrakenContext>(); // TODO(fpion): HealthChecks
+        healthChecks.AddDbContextCheck<EventContext>();
+        healthChecks.AddDbContextCheck<KrakenContext>();
         break;
       default:
         throw new DatabaseProviderNotSupportedException(databaseProvider);
@@ -103,6 +103,6 @@ internal class Startup : StartupBase
     //application.UseAuthorization(); // TODO(fpion): Authorization
 
     application.MapControllers();
-    //application.MapHealthChecks("/health"); // TODO(fpion): HealthChecks
+    application.MapHealthChecks("/health");
   }
 }
