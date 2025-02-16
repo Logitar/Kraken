@@ -16,13 +16,6 @@
 - CreateOrReplaceDictionaryCommand
 - UpdateDictionaryCommand
 
-## Password
-
-- PasswordInput ⚠️
-- PasswordManager ⚠️
-- Pbkdf2Password ⚠️
-- Pbkdf2Strategy ⚠️
-
 ## Realm (2)
 
 - CreateOrReplaceRealmCommand
