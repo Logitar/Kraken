@@ -5,6 +5,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Users.Queries;
 
+/// <exception cref="TooManyResultsException{T}"></exception>
 public record ReadUserQuery(Guid? Id, string? UniqueName, CustomIdentifierModel? Identifier) : Activity, IRequest<UserModel?>;
 
 internal class ReadUserQueryHandler : IRequestHandler<ReadUserQuery, UserModel?>

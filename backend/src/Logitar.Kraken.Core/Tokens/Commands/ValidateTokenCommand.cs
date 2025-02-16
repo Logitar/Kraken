@@ -8,6 +8,8 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Tokens.Commands;
 
+/// <exception cref="SecurityTokenBlacklistedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record ValidateTokenCommand(ValidateTokenPayload Payload) : Activity, IRequest<ValidatedTokenModel>;
 
 internal class ValidateTokenCommandHandler : IRequestHandler<ValidateTokenCommand, ValidatedTokenModel>

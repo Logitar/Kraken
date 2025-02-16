@@ -9,6 +9,8 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Commands;
 
+/// <exception cref="LocaleAlreadyUsedException"></exception>
+/// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 public record InitializeConfigurationCommand(string DefaultLocale, string UniqueName, string Password) : Activity, IRequest
 {

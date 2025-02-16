@@ -14,6 +14,10 @@ using TimeZone = Logitar.Kraken.Core.Localization.TimeZone;
 
 namespace Logitar.Kraken.Core.Users.Commands;
 
+/// <exception cref="EmailAddressAlreadyUsedException"></exception>
+/// <exception cref="RolesNotFoundException"></exception>
+/// <exception cref="UniqueNameAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record UpdateUserCommand(Guid Id, UpdateUserPayload Payload) : Activity, IRequest<UserModel?>
 {
   public override IActivity Anonymize()

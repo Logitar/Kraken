@@ -5,6 +5,11 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.ApiKeys.Commands;
 
+/// <exception cref="ApiKeyIsExpiredException"></exception>
+/// <exception cref="ApiKeyNotFoundException"></exception>
+/// <exception cref="IncorrectApiKeySecretException"></exception>
+/// <exception cref="InvalidApiKeyException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record AuthenticateApiKeyCommand(AuthenticateApiKeyPayload Payload) : Activity, IRequest<ApiKeyModel>;
 
 internal class AuthenticateApiKeyCommandHandler : IRequestHandler<AuthenticateApiKeyCommand, ApiKeyModel>

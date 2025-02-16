@@ -9,6 +9,8 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Passwords.Commands;
 
+/// <exception cref="IdAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record CreateOneTimePasswordCommand(CreateOneTimePasswordPayload Payload) : Activity, IRequest<OneTimePasswordModel>;
 
 internal class CreateOneTimePasswordCommandHandler : IRequestHandler<CreateOneTimePasswordCommand, OneTimePasswordModel>

@@ -8,6 +8,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Configurations.Commands;
 
+/// <exception cref="ValidationException"></exception>
 public record ReplaceConfigurationCommand(ReplaceConfigurationPayload Payload, long? Version) : IRequest<ConfigurationModel>;
 
 internal class ReplaceConfigurationCommandHandler : IRequestHandler<ReplaceConfigurationCommand, ConfigurationModel>

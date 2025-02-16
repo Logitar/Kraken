@@ -11,6 +11,8 @@ namespace Logitar.Kraken.Core.ApiKeys.Commands;
 
 public record CreateOrReplaceApiKeyResult(ApiKeyModel? ApiKey = null, bool Created = false);
 
+/// <exception cref="RolesNotFoundException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceApiKeyCommand(Guid? Id, CreateOrReplaceApiKeyPayload Payload, long? Version) : Activity, IRequest<CreateOrReplaceApiKeyResult>;
 
 internal class CreateOrReplaceApiKeyCommandHandler : IRequestHandler<CreateOrReplaceApiKeyCommand, CreateOrReplaceApiKeyResult>

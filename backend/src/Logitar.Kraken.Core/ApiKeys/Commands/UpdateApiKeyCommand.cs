@@ -9,6 +9,8 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.ApiKeys.Commands;
 
+/// <exception cref="RolesNotFoundException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record UpdateApiKeyCommand(Guid Id, UpdateApiKeyPayload Payload) : Activity, IRequest<ApiKeyModel?>;
 
 internal class UpdateApiKeyCommandHandler : IRequestHandler<UpdateApiKeyCommand, ApiKeyModel?>

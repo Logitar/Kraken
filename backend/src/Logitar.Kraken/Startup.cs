@@ -92,9 +92,9 @@ internal class Startup : StartupBase
     services.AddOpenApi();
 
     services.AddDistributedMemoryCache();
-    //services.AddExceptionHandler<ExceptionHandler>(); // TODO(fpion): ExceptionHandler
+    services.AddExceptionHandler<ExceptionHandler>();
     services.AddFeatureManagement();
-    //services.AddProblemDetails(); // TODO(fpion): ExceptionHandler
+    services.AddProblemDetails();
 
     DatabaseProvider databaseProvider = EnvironmentHelper.GetEnum(
       "DATABASE_PROVIDER",
@@ -130,7 +130,7 @@ internal class Startup : StartupBase
     application.UseHttpsRedirection();
     application.UseCors(application.Services.GetRequiredService<CorsSettings>());
     //application.UseStaticFiles(); // TODO(fpion): Frontend Integration
-    //application.UseExceptionHandler(); // TODO(fpion): ExceptionHandler
+    application.UseExceptionHandler();
     application.UseSession();
     application.UseMiddleware<RenewSession>();
     //application.UseMiddleware<RedirectNotFound>(); // TODO(fpion): Frontend Integration

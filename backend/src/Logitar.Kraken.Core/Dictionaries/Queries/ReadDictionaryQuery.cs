@@ -3,6 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Dictionaries.Queries;
 
+/// <exception cref="TooManyResultsException{T}"></exception>
 public record ReadDictionaryQuery(Guid? Id, string? Language) : Activity, IRequest<DictionaryModel>;
 
 internal class ReadDictionaryQueryHandler : IRequestHandler<ReadDictionaryQuery, DictionaryModel?>

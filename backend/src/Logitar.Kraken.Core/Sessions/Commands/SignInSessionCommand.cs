@@ -10,6 +10,12 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Sessions.Commands;
 
+/// <exception cref="IdAlreadyUsedException"></exception>
+/// <exception cref="IncorrectUserPasswordException"></exception>
+/// <exception cref="UserHasNoPasswordException"></exception>
+/// <exception cref="UserIsDisabledException"></exception>
+/// <exception cref="UserNotFoundException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record SignInSessionCommand(SignInSessionPayload Payload) : Activity, IRequest<SessionModel>
 {
   public override IActivity Anonymize()

@@ -7,6 +7,11 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Passwords.Commands;
 
+/// <exception cref="IncorrectOneTimePasswordPasswordException"></exception>
+/// <exception cref="MaximumAttemptsReachedException"></exception>
+/// <exception cref="OneTimePasswordAlreadyUsedException"></exception>
+/// <exception cref="OneTimePasswordIsExpiredException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record ValidateOneTimePasswordCommand(Guid Id, ValidateOneTimePasswordPayload Payload) : Activity, IRequest<OneTimePasswordModel?>;
 
 internal class ValidateOneTimePasswordCommandHandler : IRequestHandler<ValidateOneTimePasswordCommand, OneTimePasswordModel?>

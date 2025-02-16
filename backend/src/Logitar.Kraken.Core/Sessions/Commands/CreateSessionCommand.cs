@@ -10,6 +10,9 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Sessions.Commands;
 
+/// <exception cref="IdAlreadyUsedException"></exception>
+/// <exception cref="UserNotFoundException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record CreateSessionCommand(CreateSessionPayload Payload) : Activity, IRequest<SessionModel>;
 
 internal class CreateSessionCommandHandler : IRequestHandler<CreateSessionCommand, SessionModel>

@@ -8,6 +8,8 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Roles.Commands;
 
+/// <exception cref="UniqueNameAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record UpdateRoleCommand(Guid Id, UpdateRolePayload Payload) : Activity, IRequest<RoleModel?>;
 
 internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, RoleModel?>

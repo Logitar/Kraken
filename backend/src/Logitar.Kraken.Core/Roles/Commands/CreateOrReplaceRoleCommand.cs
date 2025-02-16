@@ -10,6 +10,8 @@ namespace Logitar.Kraken.Core.Roles.Commands;
 
 public record CreateOrReplaceRoleResult(RoleModel? Role = null, bool Created = false);
 
+/// <exception cref="UniqueNameAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceRoleCommand(Guid? Id, CreateOrReplaceRolePayload Payload, long? Version) : Activity, IRequest<CreateOrReplaceRoleResult>;
 
 internal class CreateOrReplaceRoleCommandHandler : IRequestHandler<CreateOrReplaceRoleCommand, CreateOrReplaceRoleResult>

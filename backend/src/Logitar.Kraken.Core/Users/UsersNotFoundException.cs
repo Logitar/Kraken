@@ -2,7 +2,7 @@
 
 namespace Logitar.Kraken.Core.Users;
 
-class UsersNotFoundException : NotFoundException
+public class UsersNotFoundException : NotFoundException
 {
   private const string ErrorMessage = "The specified users could not be found.";
 

@@ -3,6 +3,7 @@ using MediatR;
 
 namespace Logitar.Kraken.Core.Roles.Queries;
 
+/// <exception cref="TooManyResultsException{T}"></exception>
 public record ReadRoleQuery(Guid? Id, string? UniqueName) : Activity, IRequest<RoleModel?>;
 
 internal class ReadRoleQueryHandler : IRequestHandler<ReadRoleQuery, RoleModel?>

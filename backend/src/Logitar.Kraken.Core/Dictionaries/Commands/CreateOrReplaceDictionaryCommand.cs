@@ -10,6 +10,8 @@ namespace Logitar.Kraken.Core.Dictionaries.Commands;
 
 public record CreateOrReplaceDictionaryResult(DictionaryModel? Dictionary = null, bool Created = false);
 
+/// <exception cref="LanguageAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceDictionaryCommand(Guid? Id, CreateOrReplaceDictionaryPayload Payload, long? Version) : Activity, IRequest<CreateOrReplaceDictionaryResult>;
 
 internal class ReplaceDictionaryCommandHandler : IRequestHandler<CreateOrReplaceDictionaryCommand, CreateOrReplaceDictionaryResult>

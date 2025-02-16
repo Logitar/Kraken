@@ -14,6 +14,10 @@ namespace Logitar.Kraken.Core.Users.Commands;
 
 public record CreateOrReplaceUserResult(UserModel? User = null, bool Created = false);
 
+/// <exception cref="EmailAddressAlreadyUsedException"></exception>
+/// <exception cref="RolesNotFoundException"></exception>
+/// <exception cref="UniqueNameAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
 public record CreateOrReplaceUserCommand(Guid? Id, CreateOrReplaceUserPayload Payload, long? Version) : Activity, IRequest<CreateOrReplaceUserResult>
 {
   public override IActivity Anonymize()
