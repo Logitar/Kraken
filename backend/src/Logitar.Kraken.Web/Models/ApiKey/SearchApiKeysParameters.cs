@@ -7,6 +7,9 @@ namespace Logitar.Kraken.Web.Models.ApiKey;
 
 public record SearchApiKeysParameters : SearchParameters
 {
+  [FromQuery(Name = "authenticated")]
+  public bool? HasAuthenticated { get; set; }
+
   [FromQuery(Name = "role")]
   public Guid? RoleId { get; set; }
 
@@ -18,7 +21,11 @@ public record SearchApiKeysParameters : SearchParameters
 
   public SearchApiKeysPayload ToPayload()
   {
-    SearchApiKeysPayload payload = new();
+    SearchApiKeysPayload payload = new()
+    {
+      HasAuthenticated = HasAuthenticated,
+      RoleId = RoleId
+    };
     if (IsExpired.HasValue)
     {
       payload.Status = new ApiKeyStatus(IsExpired.Value, Moment);
