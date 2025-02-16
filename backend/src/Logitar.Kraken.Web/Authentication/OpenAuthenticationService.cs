@@ -1,4 +1,5 @@
 ﻿using Logitar.Kraken.Contracts.Actors;
+using Logitar.Kraken.Contracts.Realms;
 using Logitar.Kraken.Contracts.Roles;
 using Logitar.Kraken.Contracts.Sessions;
 using Logitar.Kraken.Contracts.Tokens;
@@ -14,6 +15,8 @@ namespace Logitar.Kraken.Web.Authentication;
 
 public class OpenAuthenticationService : IOpenAuthenticationService
 {
+  private const string RealmIdClaim = "realm_id";
+
   private readonly IMediator _mediator;
   private readonly OpenAuthenticationSettings _settings;
 
@@ -110,6 +113,11 @@ public class OpenAuthenticationService : IOpenAuthenticationService
     {
       payload.Claims.Add(new(Rfc7519ClaimNames.Roles, role.UniqueName));
     }
+
+    if (user.Realm != null)
+    {
+      payload.Claims.Add(new(RealmIdClaim, user.Realm.Id.ToString()));
+    }
   }
 
   public async Task<SessionModel> GetSessionAsync(string accessToken, CancellationToken cancellationToken)
@@ -185,6 +193,12 @@ public class OpenAuthenticationService : IOpenAuthenticationService
           break;
         case Rfc7519ClaimNames.Username:
           user.UniqueName = claim.Value;
+          break;
+        case RealmIdClaim:
+          user.Realm = new RealmModel
+          {
+            Id = Guid.Parse(claim.Value)
+          };
           break;
       }
     }

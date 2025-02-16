@@ -9,8 +9,9 @@ public record ChangePasswordPayload
   {
   }
 
-  public ChangePasswordPayload(string newPassword)
+  public ChangePasswordPayload(string newPassword, string? currentPassword = null)
   {
+    Current = currentPassword;
     New = newPassword;
   }
 }

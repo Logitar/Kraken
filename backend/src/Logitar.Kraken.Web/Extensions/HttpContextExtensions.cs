@@ -6,7 +6,6 @@ using Logitar.Kraken.Contracts.Users;
 using Logitar.Kraken.Web.Constants;
 using Logitar.Kraken.Web.Settings;
 using Microsoft.Extensions.Primitives;
-using System.Text.Json;
 
 namespace Logitar.Kraken.Web.Extensions;
 

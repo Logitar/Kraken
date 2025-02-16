@@ -55,6 +55,10 @@ internal class Startup : StartupBase
       .AddPolicy(Policies.KrakenAdmin, new AuthorizationPolicyBuilder(_authenticationSchemes)
         .RequireAuthenticatedUser()
         .AddRequirements(new KrakenAdminRequirement())
+        .Build())
+      .AddPolicy(Policies.KrakenUser, new AuthorizationPolicyBuilder(_authenticationSchemes)
+        .RequireAuthenticatedUser()
+        .AddRequirements(new KrakenUserRequirement())
         .Build());
     services.AddSingleton<IAuthorizationHandler, KrakenAdminAuthorizationHandler>();
 

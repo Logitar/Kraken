@@ -43,7 +43,7 @@ public class KrakenAdminAuthorizationHandler : AuthorizationHandler<KrakenAdminR
         }
         else
         {
-          context.Fail(new AuthorizationFailureReason(this, "The user should not reside into a Realm."));
+          context.Fail(new AuthorizationFailureReason(this, "The User should not reside into a Realm."));
         }
       }
     }
