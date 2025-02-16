@@ -1,4 +1,5 @@
-﻿using Logitar.Kraken.Contracts.Roles;
+﻿using Logitar.Kraken.Contracts.Actors;
+using Logitar.Kraken.Contracts.Roles;
 using Logitar.Kraken.Contracts.Sessions;
 using Logitar.Kraken.Contracts.Tokens;
 using Logitar.Kraken.Contracts.Users;
@@ -111,12 +112,101 @@ public class OpenAuthenticationService : IOpenAuthenticationService
     }
   }
 
-  public Task<SessionModel> GetSessionAsync(string accessToken, CancellationToken cancellationToken)
+  public async Task<SessionModel> GetSessionAsync(string accessToken, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException(); // TODO(fpion): implement
+    ValidatedTokenModel identity = await ValidateAsync(accessToken, cancellationToken);
+    UserModel user = ExtractUser(identity);
+    if (user.Sessions.Count != 1)
+    {
+      throw new ArgumentException($"The access token did not contain a '{Rfc7519ClaimNames.SessionId}' claim.", nameof(accessToken));
+    }
+    return user.Sessions.Single();
   }
-  public Task<UserModel> GetUserAsync(string accessToken, CancellationToken cancellationToken)
+  public async Task<UserModel> GetUserAsync(string accessToken, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException(); // TODO(fpion): implement
+    ValidatedTokenModel identity = await ValidateAsync(accessToken, cancellationToken);
+    return ExtractUser(identity);
+  }
+  private async Task<ValidatedTokenModel> ValidateAsync(string accessToken, CancellationToken cancellationToken)
+  {
+    ValidateTokenPayload payload = new(accessToken)
+    {
+      Type = _settings.AccessToken.Type
+    };
+    ValidateTokenCommand command = new(payload);
+    return await _mediator.Send(command, cancellationToken);
+  }
+  private static UserModel ExtractUser(ValidatedTokenModel identity)
+  {
+    UserModel user = new();
+
+    if (identity.Subject != null)
+    {
+      user.Id = Guid.Parse(identity.Subject);
+    }
+
+    if (identity.Email != null)
+    {
+      user.Email = identity.Email;
+      user.IsConfirmed = user.Email.IsVerified;
+    }
+
+    Guid? sessionId = null;
+    foreach (ClaimModel claim in identity.Claims)
+    {
+      switch (claim.Type)
+      {
+        case Rfc7519ClaimNames.AuthenticationTime:
+          user.AuthenticatedOn = ClaimHelper.ExtractDateTime(new Claim(claim.Name, claim.Value, claim.Type));
+          break;
+        case Rfc7519ClaimNames.FirstName:
+          user.FirstName = claim.Value;
+          break;
+        case Rfc7519ClaimNames.FullName:
+          user.FullName = claim.Value;
+          break;
+        case Rfc7519ClaimNames.LastName:
+          user.LastName = claim.Value;
+          break;
+        case Rfc7519ClaimNames.MiddleName:
+          user.MiddleName = claim.Value;
+          break;
+        case Rfc7519ClaimNames.Picture:
+          user.Picture = claim.Value;
+          break;
+        case Rfc7519ClaimNames.Roles:
+          user.Roles.Add(new RoleModel
+          {
+            UniqueName = claim.Value
+          });
+          break;
+        case Rfc7519ClaimNames.SessionId:
+          sessionId = Guid.Parse(claim.Value);
+          break;
+        case Rfc7519ClaimNames.Username:
+          user.UniqueName = claim.Value;
+          break;
+      }
+    }
+    if (sessionId.HasValue)
+    {
+      ActorModel actor = new(user);
+      SessionModel session = new()
+      {
+        Id = sessionId.Value,
+        CreatedBy = actor,
+        UpdatedBy = actor,
+        IsActive = true,
+        User = user
+      };
+      if (user.AuthenticatedOn.HasValue)
+      {
+        session.CreatedOn = user.AuthenticatedOn.Value;
+        session.UpdatedOn = user.AuthenticatedOn.Value;
+      }
+      user.Sessions.Add(session);
+    }
+
+    return user;
   }
 }
