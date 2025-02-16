@@ -60,13 +60,13 @@ internal class CreateOrReplaceRealmCommandHandler : IRequestHandler<CreateOrRepl
         return new CreateOrReplaceRealmResult();
       }
 
-      Secret secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
+      Secret secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate(realmId) : _secretHelper.Encrypt(payload.Secret, realmId);
       realm = new(uniqueSlug, secret, actorId, realmId);
       created = true;
     }
     else if (payload.Secret != null)
     {
-      realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
+      realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate(realm.Id) : _secretHelper.Encrypt(payload.Secret, realm.Id);
     }
 
     Realm reference = (command.Version.HasValue

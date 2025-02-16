@@ -79,14 +79,14 @@ public class JsonWebTokenManager : ITokenManager
       {
         throw new SecurityTokenBlacklistedException(blacklistedIds);
       }
-    }
 
-    if (options.Consume)
-    {
-      Claim? expiresClaim = claimsPrincipal.FindAll(Rfc7519ClaimNames.ExpirationTime).OrderBy(x => x.Value).FirstOrDefault();
-      DateTime? expiresOn = expiresClaim == null ? null : ClaimHelper.ExtractDateTime(expiresClaim).Add(validationParameters.ClockSkew);
+      if (options.Consume)
+      {
+        Claim? expiresClaim = claimsPrincipal.FindAll(Rfc7519ClaimNames.ExpirationTime).OrderBy(x => x.Value).FirstOrDefault();
+        DateTime? expiresOn = expiresClaim == null ? null : ClaimHelper.ExtractDateTime(expiresClaim).Add(validationParameters.ClockSkew);
 
-      await TokenBlacklist.BlacklistAsync(tokenIds, expiresOn, cancellationToken);
+        await TokenBlacklist.BlacklistAsync(tokenIds, expiresOn, cancellationToken);
+      }
     }
 
     return claimsPrincipal;

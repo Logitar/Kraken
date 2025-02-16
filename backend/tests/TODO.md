@@ -16,13 +16,6 @@
 - CreateOrReplaceDictionaryCommand
 - UpdateDictionaryCommand
 
-## Password
-
-- PasswordInput ⚠️
-- PasswordManager ⚠️
-- Pbkdf2Password ⚠️
-- Pbkdf2Strategy ⚠️
-
 ## Realm (2)
 
 - CreateOrReplaceRealmCommand
@@ -43,8 +36,6 @@
 ## Tokens (2)
 
 - CreateTokenCommand
-- JsonWebTokenManager ⚠️
-- SecretHelper ⚠️
 - ValidateTokenCommand
 
 ## User (7)
@@ -56,4 +47,3 @@
 - SaveUserIdentifierCommand
 - SignOutUserCommand
 - UpdateUserCommand
-- UserManager ⚠️

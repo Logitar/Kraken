@@ -65,7 +65,7 @@ internal class UpdateRealmCommandHandler : IRequestHandler<UpdateRealmCommand, R
 
     if (payload.Secret != null)
     {
-      realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate() : _secretHelper.Encrypt(payload.Secret);
+      realm.Secret = string.IsNullOrWhiteSpace(payload.Secret) ? _secretHelper.Generate(realm.Id) : _secretHelper.Encrypt(payload.Secret, realm.Id);
     }
     if (payload.Url != null)
     {
