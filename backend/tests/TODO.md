@@ -49,4 +49,3 @@
 - SaveUserIdentifierCommand
 - SignOutUserCommand
 - UpdateUserCommand
-- UserManager ⚠️
