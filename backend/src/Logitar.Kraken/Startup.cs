@@ -129,11 +129,11 @@ internal class Startup : StartupBase
 
     application.UseHttpsRedirection();
     application.UseCors(application.Services.GetRequiredService<CorsSettings>());
-    //application.UseStaticFiles(); // TODO(fpion): Frontend Integration
+    application.UseStaticFiles();
     application.UseExceptionHandler();
     application.UseSession();
     application.UseMiddleware<RenewSession>();
-    //application.UseMiddleware<RedirectNotFound>(); // TODO(fpion): Frontend Integration
+    application.UseMiddleware<RedirectNotFound>();
     application.UseAuthentication();
     application.UseAuthorization();
 

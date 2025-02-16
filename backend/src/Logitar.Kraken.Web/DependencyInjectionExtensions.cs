@@ -7,7 +7,7 @@ public static class DependencyInjectionExtensions
 {
   public static IServiceCollection AddLogitarKrakenWeb(this IServiceCollection services, IConfiguration configuration)
   {
-    services.AddControllers()
+    services.AddControllersWithViews()
       .AddJsonOptions(options =>
       {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

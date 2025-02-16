@@ -34,4 +34,8 @@
     <ProjectReference Include="..\Logitar.Kraken.Web\Logitar.Kraken.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
