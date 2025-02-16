@@ -12,6 +12,10 @@ public record AddressPayload : ContactPayload, IAddress
   {
   }
 
+  public AddressPayload(IAddress address) : this(address.Street, address.Locality, address.PostalCode, address.Region, address.Country, address.IsVerified)
+  {
+  }
+
   public AddressPayload(string street, string locality, string? postalCode, string? region, string country, bool isVerified) : base(isVerified)
   {
     Street = street;

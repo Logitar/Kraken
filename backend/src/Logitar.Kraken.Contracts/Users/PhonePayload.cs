@@ -10,6 +10,10 @@ public record PhonePayload : ContactPayload, IPhone
   {
   }
 
+  public PhonePayload(IPhone phone) : this(phone.CountryCode, phone.Number, phone.Extension, phone.IsVerified)
+  {
+  }
+
   public PhonePayload(string? countryCode, string number, string? extension, bool isVerified) : base(isVerified)
   {
     CountryCode = countryCode;

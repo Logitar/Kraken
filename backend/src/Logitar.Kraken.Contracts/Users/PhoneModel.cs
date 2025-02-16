@@ -11,6 +11,11 @@ public record PhoneModel : ContactModel, IPhone
   {
   }
 
+  public PhoneModel(IPhone phone, string e164Formatted) : this(phone.CountryCode, phone.Number, phone.Extension, e164Formatted)
+  {
+    IsVerified = phone.IsVerified;
+  }
+
   public PhoneModel(string? countryCode, string number, string? extension, string e164Formatted)
   {
     CountryCode = countryCode;

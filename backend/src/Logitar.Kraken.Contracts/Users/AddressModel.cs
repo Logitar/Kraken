@@ -13,6 +13,11 @@ public record AddressModel : ContactModel, IAddress
   {
   }
 
+  public AddressModel(IAddress address, string formatted) : this(address.Street, address.Locality, address.PostalCode, address.Region, address.Country, formatted)
+  {
+    IsVerified = address.IsVerified;
+  }
+
   public AddressModel(string street, string locality, string? postalCode, string? region, string country, string formatted)
   {
     Street = street;

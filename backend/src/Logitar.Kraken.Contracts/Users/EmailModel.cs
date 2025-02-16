@@ -8,6 +8,11 @@ public record EmailModel : ContactModel, IEmail
   {
   }
 
+  public EmailModel(IEmail email) : this(email.Address)
+  {
+    IsVerified = email.IsVerified;
+  }
+
   public EmailModel(string address)
   {
     Address = address;
