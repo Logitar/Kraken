@@ -16,7 +16,7 @@ public static class DependencyInjectionExtensions
 
     services.AddSingleton(CookiesSettings.Initialize(configuration));
     services.AddSingleton(CorsSettings.Initialize(configuration));
-    // TODO(fpion): OAuth settings
+    services.AddSingleton(OpenAuthenticationSettings.Initialize(configuration));
 
     return services.AddSingleton<IApplicationContext, HttpApplicationContext>();
   }

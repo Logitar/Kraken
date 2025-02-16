@@ -75,6 +75,7 @@ internal class Mapper
   {
     ConfigurationModel destination = new()
     {
+      Secret = source.Secret.Value,
       UniqueNameSettings = new UniqueNameSettingsModel(source.UniqueNameSettings),
       PasswordSettings = new PasswordSettingsModel(source.PasswordSettings)
     };
@@ -138,6 +139,9 @@ internal class Mapper
           break;
         case ConfigurationKeys.RequiredPasswordUniqueChars:
           destination.PasswordSettings.RequiredUniqueChars = int.Parse(configuration.Value);
+          break;
+        case ConfigurationKeys.Secret:
+          destination.Secret = configuration.Value;
           break;
       }
     }
@@ -224,6 +228,7 @@ internal class Mapper
       UniqueSlug = source.UniqueSlug,
       DisplayName = source.DisplayName,
       Description = source.Description,
+      Secret = source.Secret,
       Url = source.Url,
       UniqueNameSettings = source.GetUniqueNameSettings(),
       PasswordSettings = source.GetPasswordSettings(),

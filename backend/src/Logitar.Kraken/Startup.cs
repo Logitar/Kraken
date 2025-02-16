@@ -48,7 +48,7 @@ internal class Startup : StartupBase
     {
       authenticationBuilder.AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(Schemes.Basic, options => { });
     }
-    // TODO(fpion): OpenAuthenticationService implementation
+    services.AddTransient<IOpenAuthenticationService, OpenAuthenticationService>();
 
     services.AddAuthorizationBuilder()
       .SetDefaultPolicy(new AuthorizationPolicyBuilder(_authenticationSchemes).RequireAuthenticatedUser().Build())

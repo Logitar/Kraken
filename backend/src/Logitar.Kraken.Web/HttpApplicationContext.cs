@@ -51,7 +51,7 @@ internal class HttpApplicationContext : IApplicationContext
 
   public RealmModel? Realm => Context.GetRealm();
   public RealmId? RealmId => Realm == null ? null : new RealmId(Realm.Id);
-  public Secret Secret => throw new NotImplementedException(); // TODO(fpion): new (Realm?.Secret ?? Configuration.Secret);
+  public Secret Secret => new(Realm?.Secret ?? Configuration.Secret);
   public IUserSettings UserSettings => new UserSettings(UniqueNameSettings, Realm?.PasswordSettings ?? Configuration.PasswordSettings, Realm?.RequireUniqueEmail ?? false, Realm?.RequireConfirmedAccount ?? false);
   public IUniqueNameSettings UniqueNameSettings => Realm?.UniqueNameSettings ?? Configuration.UniqueNameSettings;
 }
