@@ -8,7 +8,9 @@ public class RealmModel : AggregateModel
   public string? DisplayName { get; set; }
   public string? Description { get; set; }
 
-  public string Secret { get; set; } = string.Empty; // TODO(fpion): JsonIgnore?
+  [JsonIgnore]
+  public string Secret { get; set; } = string.Empty;
+
   public string? Url { get; set; }
 
   public UniqueNameSettingsModel UniqueNameSettings { get; set; } = new();

@@ -16,8 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="System.Globalization" />
     <Using Include="System.Text" />
+    <Using Include="System.Text.Json.Serialization" />
   </ItemGroup>
 
 </Project>
