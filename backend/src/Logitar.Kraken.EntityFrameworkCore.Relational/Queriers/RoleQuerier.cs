@@ -1,4 +1,5 @@
-﻿using Logitar.EventSourcing;
+﻿using Logitar.Data;
+using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts.Actors;
 using Logitar.Kraken.Contracts.Roles;
 using Logitar.Kraken.Contracts.Search;
@@ -15,12 +16,14 @@ internal class RoleQuerier : IRoleQuerier
 {
   private readonly IActorService _actorService;
   private readonly IApplicationContext _applicationContext;
+  private readonly IQueryHelper _queryHelper;
   private readonly DbSet<RoleEntity> _roles;
 
-  public RoleQuerier(IActorService actorService, IApplicationContext applicationContext, KrakenContext context)
+  public RoleQuerier(IActorService actorService, IApplicationContext applicationContext, IQueryHelper queryHelper, KrakenContext context)
   {
     _actorService = actorService;
     _applicationContext = applicationContext;
+    _queryHelper = queryHelper;
     _roles = context.Roles;
   }
 
@@ -77,9 +80,52 @@ internal class RoleQuerier : IRoleQuerier
     return role == null ? null : await MapAsync(role, cancellationToken);
   }
 
-  public Task<SearchResults<RoleModel>> SearchAsync(SearchRolesPayload payload, CancellationToken cancellationToken)
+  public async Task<SearchResults<RoleModel>> SearchAsync(SearchRolesPayload payload, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException();
+    IQueryBuilder builder = _queryHelper.From(Roles.Table).SelectAll(Roles.Table)
+      .WhereRealm(Roles.RealmUid, _applicationContext.RealmId)
+      .ApplyIdFilter(Roles.Id, payload.Ids);
+    _queryHelper.ApplyTextSearch(builder, payload.Search, Roles.UniqueName, Roles.DisplayName);
+
+    IQueryable<RoleEntity> query = _roles.FromQuery(builder).AsNoTracking();
+
+    long total = await query.LongCountAsync(cancellationToken);
+
+    IOrderedQueryable<RoleEntity>? ordered = null;
+    foreach (RoleSortOption sort in payload.Sort)
+    {
+      switch (sort.Field)
+      {
+        case RoleSort.CreatedOn:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.CreatedOn) : query.OrderBy(x => x.CreatedOn))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.CreatedOn) : ordered.ThenBy(x => x.CreatedOn));
+          break;
+        case RoleSort.DisplayName:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.DisplayName) : query.OrderBy(x => x.DisplayName))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.DisplayName) : ordered.ThenBy(x => x.DisplayName));
+          break;
+        case RoleSort.UniqueName:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.UniqueName) : query.OrderBy(x => x.UniqueName))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.UniqueName) : ordered.ThenBy(x => x.UniqueName));
+          break;
+        case RoleSort.UpdatedOn:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.UpdatedOn) : query.OrderBy(x => x.UpdatedOn))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.UpdatedOn) : ordered.ThenBy(x => x.UpdatedOn));
+          break;
+      }
+    }
+    query = ordered ?? query;
+
+    query = query.ApplyPaging(payload);
+
+    RoleEntity[] roles = await query.ToArrayAsync(cancellationToken);
+    IReadOnlyCollection<RoleModel> items = await MapAsync(roles, cancellationToken);
+
+    return new SearchResults<RoleModel>(items, total);
   }
 
   private async Task<RoleModel> MapAsync(RoleEntity role, CancellationToken cancellationToken)

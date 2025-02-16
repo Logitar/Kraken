@@ -92,6 +92,7 @@ internal class LanguageQuerier : ILanguageQuerier
   public async Task<SearchResults<LanguageModel>> SearchAsync(SearchLanguagesPayload payload, CancellationToken cancellationToken)
   {
     IQueryBuilder builder = _queryHelper.From(Languages.Table).SelectAll(Languages.Table)
+      .WhereRealm(Languages.RealmUid, _applicationContext.RealmId)
       .ApplyIdFilter(Languages.Id, payload.Ids);
     _queryHelper.ApplyTextSearch(builder, payload.Search, Languages.Code, Languages.DisplayName, Languages.EnglishName, Languages.NativeName);
 

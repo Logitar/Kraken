@@ -1,4 +1,5 @@
-﻿using Logitar.EventSourcing;
+﻿using Logitar.Data;
+using Logitar.EventSourcing;
 using Logitar.Kraken.Contracts;
 using Logitar.Kraken.Contracts.Actors;
 using Logitar.Kraken.Contracts.Search;
@@ -16,12 +17,14 @@ internal class UserQuerier : IUserQuerier
 {
   private readonly IActorService _actorService;
   private readonly IApplicationContext _applicationContext;
+  private readonly IQueryHelper _queryHelper;
   private readonly DbSet<UserEntity> _users;
 
-  public UserQuerier(IActorService actorService, IApplicationContext applicationContext, KrakenContext context)
+  public UserQuerier(IActorService actorService, IApplicationContext applicationContext, KrakenContext context, IQueryHelper queryHelper)
   {
     _actorService = actorService;
     _applicationContext = applicationContext;
+    _queryHelper = queryHelper;
     _users = context.Users;
   }
 
@@ -121,9 +124,126 @@ internal class UserQuerier : IUserQuerier
     return user == null ? null : await MapAsync(user, cancellationToken);
   }
 
-  public Task<SearchResults<UserModel>> SearchAsync(SearchUsersPayload payload, CancellationToken cancellationToken)
+  public async Task<SearchResults<UserModel>> SearchAsync(SearchUsersPayload payload, CancellationToken cancellationToken)
   {
-    throw new NotImplementedException();
+    IQueryBuilder builder = _queryHelper.From(Users.Table).SelectAll(Users.Table)
+      .WhereRealm(Users.RealmUid, _applicationContext.RealmId)
+      .ApplyIdFilter(Users.Id, payload.Ids);
+    _queryHelper.ApplyTextSearch(builder, payload.Search, Users.UniqueName, Users.AddressFormatted, Users.EmailAddress, Users.PhoneE164Formatted, Users.FirstName, Users.MiddleName, Users.LastName, Users.Nickname);
+
+    if (payload.HasAuthenticated.HasValue)
+    {
+      NullOperator @operator = payload.HasAuthenticated.Value ? Operators.IsNotNull() : Operators.IsNull();
+      builder.Where(Users.AuthenticatedOn, @operator);
+    }
+    if (payload.HasPassword.HasValue)
+    {
+      builder.Where(Users.HasPassword, Operators.IsEqualTo(payload.HasPassword.Value));
+    }
+    if (payload.IsDisabled.HasValue)
+    {
+      builder.Where(Users.IsDisabled, Operators.IsEqualTo(payload.IsDisabled.Value));
+    }
+    if (payload.IsConfirmed.HasValue)
+    {
+      builder.Where(Users.IsConfirmed, Operators.IsEqualTo(payload.IsConfirmed.Value));
+    }
+    if (payload.RoleId.HasValue)
+    {
+      // TODO(fpion): implement
+    }
+
+    IQueryable<UserEntity> query = _users.FromQuery(builder).AsNoTracking()
+      .Include(x => x.Identifiers)
+      .Include(x => x.Roles);
+
+    long total = await query.LongCountAsync(cancellationToken);
+
+    IOrderedQueryable<UserEntity>? ordered = null;
+    foreach (UserSortOption sort in payload.Sort)
+    {
+      switch (sort.Field)
+      {
+        case UserSort.AuthenticatedOn:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.AuthenticatedOn) : query.OrderBy(x => x.AuthenticatedOn))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.AuthenticatedOn) : ordered.ThenBy(x => x.AuthenticatedOn));
+          break;
+        case UserSort.Birthdate:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.Birthdate) : query.OrderBy(x => x.Birthdate))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.Birthdate) : ordered.ThenBy(x => x.Birthdate));
+          break;
+        case UserSort.CreatedOn:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.DisabledOn) : query.OrderBy(x => x.DisabledOn))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.DisabledOn) : ordered.ThenBy(x => x.DisabledOn));
+          break;
+        case UserSort.DisabledOn:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.DisabledOn) : query.OrderBy(x => x.DisabledOn))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.DisabledOn) : ordered.ThenBy(x => x.DisabledOn));
+          break;
+        case UserSort.EmailAddress:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.EmailAddress) : query.OrderBy(x => x.EmailAddress))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.EmailAddress) : ordered.ThenBy(x => x.EmailAddress));
+          break;
+        case UserSort.FirstName:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.FirstName) : query.OrderBy(x => x.FirstName))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.FirstName) : ordered.ThenBy(x => x.FirstName));
+          break;
+        case UserSort.FullName:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.FullName) : query.OrderBy(x => x.FullName))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.FullName) : ordered.ThenBy(x => x.FullName));
+          break;
+        case UserSort.LastName:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.LastName) : query.OrderBy(x => x.LastName))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.LastName) : ordered.ThenBy(x => x.LastName));
+          break;
+        case UserSort.MiddleName:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.MiddleName) : query.OrderBy(x => x.MiddleName))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.MiddleName) : ordered.ThenBy(x => x.MiddleName));
+          break;
+        case UserSort.Nickname:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.Nickname) : query.OrderBy(x => x.Nickname))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.Nickname) : ordered.ThenBy(x => x.Nickname));
+          break;
+        case UserSort.PasswordChangedOn:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.PasswordChangedOn) : query.OrderBy(x => x.PasswordChangedOn))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.PasswordChangedOn) : ordered.ThenBy(x => x.PasswordChangedOn));
+          break;
+        case UserSort.PhoneNumber:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.PhoneE164Formatted) : query.OrderBy(x => x.PhoneE164Formatted))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.PhoneE164Formatted) : ordered.ThenBy(x => x.PhoneE164Formatted));
+          break;
+        case UserSort.UniqueName:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.UniqueName) : query.OrderBy(x => x.UniqueName))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.UniqueName) : ordered.ThenBy(x => x.UniqueName));
+          break;
+        case UserSort.UpdatedOn:
+          ordered = (ordered == null)
+            ? (sort.IsDescending ? query.OrderByDescending(x => x.UpdatedOn) : query.OrderBy(x => x.UpdatedOn))
+            : (sort.IsDescending ? ordered.ThenByDescending(x => x.UpdatedOn) : ordered.ThenBy(x => x.UpdatedOn));
+          break;
+      }
+    }
+    query = ordered ?? query;
+
+    query = query.ApplyPaging(payload);
+
+    UserEntity[] users = await query.ToArrayAsync(cancellationToken);
+    IReadOnlyCollection<UserModel> items = await MapAsync(users, cancellationToken);
+
+    return new SearchResults<UserModel>(items, total);
   }
 
   private async Task<UserModel> MapAsync(UserEntity user, CancellationToken cancellationToken)

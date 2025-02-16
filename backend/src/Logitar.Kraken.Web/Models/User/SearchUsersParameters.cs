@@ -17,7 +17,10 @@ public record SearchUsersParameters : SearchParameters
   public bool? IsDisabled { get; set; }
 
   [FromQuery(Name = "confirmed")]
-  public bool? isConfirmed { get; set; }
+  public bool? IsConfirmed { get; set; }
+
+  [FromQuery(Name = "role")]
+  public Guid? RoleId { get; set; }
 
   public SearchUsersPayload ToPayload()
   {
@@ -26,7 +29,8 @@ public record SearchUsersParameters : SearchParameters
       HasAuthenticated = HasAuthenticated,
       HasPassword = HasPassword,
       IsDisabled = IsDisabled,
-      IsConfirmed = isConfirmed
+      IsConfirmed = IsConfirmed,
+      RoleId = RoleId
     };
     Fill(payload);
 
