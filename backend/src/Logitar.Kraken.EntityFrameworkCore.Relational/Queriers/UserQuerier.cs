@@ -150,7 +150,8 @@ internal class UserQuerier : IUserQuerier
     }
     if (payload.RoleId.HasValue)
     {
-      // TODO(fpion): implement
+      builder.Join(UserRoles.UserId, Users.UserId)
+        .Join(Roles.RoleId, UserRoles.RoleId, new OperatorCondition(Roles.Id, Operators.IsEqualTo(payload.RoleId.Value)));
     }
 
     IQueryable<UserEntity> query = _users.FromQuery(builder).AsNoTracking()

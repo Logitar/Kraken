@@ -59,7 +59,8 @@ internal class ApiKeyQuerier : IApiKeyQuerier
     }
     if (payload.RoleId.HasValue)
     {
-      // TODO(fpion): implement
+      builder.Join(ApiKeyRoles.ApiKeyId, ApiKeys.ApiKeyId)
+        .Join(Roles.RoleId, ApiKeyRoles.RoleId, new OperatorCondition(Roles.Id, Operators.IsEqualTo(payload.RoleId.Value)));
     }
     if (payload.Status != null)
     {
