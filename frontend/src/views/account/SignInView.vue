@@ -56,8 +56,6 @@ const onSubmit = handleSubmit(async () => {
     <form @submit.prevent="onSubmit">
       <UsernameInput required v-model="username" />
       <PasswordInput required ref="passwordRef" v-model="password" />
-      <p>{{ username }}</p>
-      <p>{{ password }}</p>
       <TarButton
         :disabled="isSubmitting"
         icon="fas fa-arrow-right-to-bracket"
