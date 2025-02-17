@@ -5,3 +5,8 @@ export type CurrentUser = {
   emailAddress?: string;
   pictureUrl?: string;
 };
+
+export type SignInPayload = {
+  username: string;
+  password: string;
+};

@@ -1,9 +1,21 @@
 {
+  "password": {
+    "changed": "Your password has been changed.",
+    "changedOn": "Last changed on {date}",
+    "confirm": "Password Confirmation",
+    "current": "Current Password",
+    "failed": "Password change failed!",
+    "invalid": "Please check you provided your correct current password.",
+    "label": "Password",
+    "new": "New Password",
+    "submit": "Change password"
+  },
   "signIn": {
     "failed": "Sign in failed!",
     "invalidCredentials": "Please check you provided the correct email username and password.",
     "submit": "Sign in",
     "title": "Sign In"
   },
-  "signOut": "Sign Out"
+  "signOut": "Sign Out",
+  "username": "Username"
 }

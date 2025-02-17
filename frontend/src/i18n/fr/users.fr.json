@@ -1,9 +1,21 @@
 {
+  "password": {
+    "changed": "Votre mot de passe a été modifié.",
+    "changedOn": "Dernière modification le {date}",
+    "confirm": "Confirmation du mot de passe",
+    "current": "Mot de passe actuel",
+    "failed": "Modification du mot de passe échouée !",
+    "invalid": "Veuillez vérifier que vous avez entré le bon mot de passe actuel.",
+    "label": "Mot de passe",
+    "new": "Nouveau mot de passe",
+    "submit": "Modifier le mot de passe"
+  },
   "signIn": {
     "failed": "Connexion échouée !",
     "invalidCredentials": "Veuillez vérifier que vous avez entré votre nom d’utilisateur et mot de passe.",
     "submit": "Se connecter",
     "title": "Connexion"
   },
-  "signOut": "Déconnexion"
+  "signOut": "Déconnexion",
+  "username": "Nom d’utilisateur"
 }

@@ -1,4 +1,19 @@
 {
+  "actions": {
+    "close": "Close"
+  },
   "brand": "Kraken",
-  "copyright": "© Logitar {version} {year}."
+  "copyright": "© Logitar {version} {year}.",
+  "loading": "Loading…",
+  "toasts": {
+    "error": {
+      "message": "An unexpected error occurred. Please try again later or contact our support team.",
+      "title": "Error!"
+    },
+    "success": "Success!",
+    "warning": {
+      "signedOut": "You have been signed-out, please try sign-in to your account again.",
+      "title": "Warning!"
+    }
+  }
 }
