@@ -5,8 +5,8 @@ namespace Logitar.Kraken.Core.Users.Events;
 
 public record UserSignedIn : DomainEvent, INotification
 {
-  public UserSignedIn(DateTime signedInOn)
+  public UserSignedIn(DateTime occurredOn)
   {
-    OccurredOn = signedInOn;
+    OccurredOn = occurredOn;
   }
 }
