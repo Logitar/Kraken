@@ -44,6 +44,17 @@ const router = createRouter({
       path: "/languages/:id",
       component: () => import("./views/languages/LanguageEdit.vue"),
     },
+    // Roles
+    {
+      name: "RoleList",
+      path: "/roles",
+      component: () => import("./views/roles/RoleList.vue"),
+    },
+    {
+      name: "RoleEdit",
+      path: "/roles/:id",
+      component: () => import("./views/roles/RoleEdit.vue"),
+    },
     // NotFound
     {
       name: "NotFound",
