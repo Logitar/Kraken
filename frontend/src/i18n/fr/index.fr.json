@@ -1,10 +1,52 @@
 {
   "actions": {
-    "close": "Fermer"
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "create": "Créer",
+    "refresh": "Rafraîchir",
+    "save": "Enregistrer"
   },
   "brand": "Kraken",
+  "by": "Par",
   "copyright": "© Logitar {version} {year}.",
+  "count": "Nombre de résultats",
+  "description": "Description",
+  "displayName": "Nom d’affichage",
   "loading": "Chargement…",
+  "locale": {
+    "alreadyUsed": {
+      "help": "Veuillez sélectionner une autre langue.",
+      "lead": "La langue existe déjà."
+    },
+    "label": "Langue",
+    "placeholder": "Sélectionnez une langue"
+  },
+  "notFound": {
+    "help": "La page demandée n’a pu être trouvée.",
+    "lead": "Page introuvable",
+    "link": "Aller à l’accueil"
+  },
+  "pagination": {
+    "first": "Première page",
+    "label": "Pagination",
+    "last": "Dernière page",
+    "next": "Prochaine page",
+    "previous": "Page précédente"
+  },
+  "revision": " (révision {revision})",
+  "search": "Recherche",
+  "sort": {
+    "isDescending": "Descendant",
+    "select": {
+      "label": "Tri",
+      "placeholder": "Sélectionnez un tri"
+    }
+  },
+  "status": {
+    "createdOn": "Création le {date} par",
+    "updatedOn": "Dernière modification le {date} par"
+  },
+  "system": "Système",
   "toasts": {
     "error": {
       "message": "Une erreur inattendue s’est produite. Veuillez réessayer plus tard ou contacter notre équipe de support.",

@@ -33,6 +33,17 @@ const router = createRouter({
       path: "/sign-out",
       component: () => import("./views/account/SignOutView.vue"),
     },
+    // Languages
+    {
+      name: "LanguageList",
+      path: "/languages",
+      component: () => import("./views/languages/LanguageList.vue"),
+    },
+    {
+      name: "LanguageEdit",
+      path: "/languages/:id",
+      component: () => import("./views/languages/LanguageEdit.vue"),
+    },
     // NotFound
     {
       name: "NotFound",

@@ -11,7 +11,7 @@ public record SearchParameters
   [FromQuery(Name = "ids")]
   public List<Guid> Ids { get; set; } = [];
 
-  [FromQuery(Name = "search_terms")]
+  [FromQuery(Name = "search")]
   public List<string> SearchTerms { get; set; } = [];
 
   [FromQuery(Name = "search_operator")]

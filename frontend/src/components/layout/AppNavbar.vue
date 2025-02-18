@@ -72,9 +72,9 @@ watchEffect(() => {
             <a class="nav-link" :href="scalarUrl" target="_blank"> <font-awesome-icon icon="fas fa-vial" /> Scalar</a>
           </li>
           <template v-if="user">
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <RouterLink :to="{ name: 'LanguageList' }" class="nav-link"><font-awesome-icon icon="fas fa-language" /> {{ t("languages.list") }}</RouterLink>
-            </li> -->
+            </li>
           </template>
         </ul>
 
