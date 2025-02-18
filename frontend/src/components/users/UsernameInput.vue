@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 import AppInput from "@/components/shared/AppInput.vue";
-import type { UsernameSettings } from "@/types/settings";
+import type { UniqueNameSettings } from "@/types/settings";
 import type { ValidationRules } from "@/types/validation";
 
 const { t } = useI18n();
@@ -12,7 +12,7 @@ const props = defineProps<{
   disabled?: boolean | string;
   modelValue?: string;
   required?: boolean | string;
-  settings?: UsernameSettings;
+  settings?: UniqueNameSettings;
 }>();
 
 const rules = computed<ValidationRules>(() => {

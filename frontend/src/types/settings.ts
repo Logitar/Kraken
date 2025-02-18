@@ -8,6 +8,6 @@ export type PasswordSettings = {
   hashingStrategy: string;
 };
 
-export type UsernameSettings = {
+export type UniqueNameSettings = {
   allowedCharacters?: string;
 };
