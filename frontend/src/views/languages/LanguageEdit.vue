@@ -87,7 +87,7 @@ onMounted(async () => {
           <DefaultButton :language="language" @error="handleError" @saved="onSetDefault" />
         </div>
         <LocaleAlreadyUsed v-model="localeAlreadyUsed" />
-        <LocaleSelect required v-model="locale" />
+        <LocaleSelect class="mb-3" required v-model="locale" />
         <div class="mb-3">
           <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />
         </div>

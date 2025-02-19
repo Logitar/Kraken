@@ -54,8 +54,8 @@ const onSubmit = handleSubmit(async () => {
       <strong>{{ t("users.signIn.failed") }}</strong> {{ t("users.signIn.invalidCredentials") }}
     </TarAlert>
     <form @submit.prevent="onSubmit">
-      <UsernameInput required v-model="username" />
-      <PasswordInput required ref="passwordRef" v-model="password" />
+      <UsernameInput class="mb-3" required v-model="username" />
+      <PasswordInput class="mb-3" required ref="passwordRef" v-model="password" />
       <TarButton
         :disabled="isSubmitting"
         icon="fas fa-arrow-right-to-bracket"

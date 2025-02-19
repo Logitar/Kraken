@@ -95,11 +95,11 @@ onMounted(async () => {
       <StatusDetail :aggregate="role" />
       <form @submit.prevent="onSubmit">
         <UniqueNameAlreadyUsed v-model="uniqueNameAlreadyUsed" />
-        <div class="row">
+        <div class="mb-3 row">
           <UniqueNameInput class="col" required v-model="uniqueName" />
           <DisplayNameInput class="col" v-model="displayName" />
         </div>
-        <DescriptionTextarea v-model="description" />
+        <DescriptionTextarea class="mb-3" v-model="description" />
         <div class="mb-3">
           <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />
         </div>
