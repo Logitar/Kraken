@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { parsingUtils, stringUtils } from "logitar-js";
 import { useField } from "vee-validate";
 
-import type { ValidationListeners, ValidationRules, ValidationType } from "@/types/validation";
+import type { ValidationListeners, ValidationRules } from "@/types/validation";
 
 const { isDateTimeInput, isNumericInput, isTextualInput } = inputUtils;
 const { isNullOrWhiteSpace } = stringUtils;
@@ -15,12 +15,10 @@ const props = withDefaults(
   defineProps<
     InputOptions & {
       rules?: ValidationRules;
-      validation?: ValidationType;
     }
   >(),
   {
     id: () => nanoid(),
-    validation: "client",
   },
 );
 
@@ -34,16 +32,13 @@ const describedBy = computed<string>(() => {
   ids.push(`${props.id}_invalid-feedback`);
   return ids.join(" ");
 });
-const inputMax = computed<number | string | undefined>(() => (props.validation === "server" || isDateTimeInput(props.type) ? props.max : undefined));
-const inputMin = computed<number | string | undefined>(() => (props.validation === "server" || isDateTimeInput(props.type) ? props.min : undefined));
+const inputMax = computed<number | string | undefined>(() => (isDateTimeInput(props.type) ? props.max : undefined));
+const inputMin = computed<number | string | undefined>(() => (isDateTimeInput(props.type) ? props.min : undefined));
 const inputName = computed<string>(() => props.name ?? props.id);
-const inputRequired = computed<boolean | "label">(() => (parseBoolean(props.required) ? (props.validation === "server" ? true : "label") : false));
+const inputRequired = computed<false | "label">(() => (parseBoolean(props.required) ? "label" : false));
 
 const validationRules = computed<ValidationRules>(() => {
   const rules: ValidationRules = {};
-  if (props.validation === "server") {
-    return rules;
-  }
 
   const required: boolean | undefined = parseBoolean(props.required);
   if (required) {
@@ -90,7 +85,7 @@ const { errorMessage, handleChange, meta, value } = useField<string>(inputName, 
 });
 const inputStatus = computed<InputStatus | undefined>(() => {
   if (meta.dirty || meta.touched) {
-    return props.status ?? (props.validation === "server" ? undefined : meta.valid ? "valid" : "invalid");
+    return props.status ?? (meta.valid ? "valid" : "invalid");
   }
   return undefined;
 });
@@ -119,9 +114,8 @@ defineExpose({ focus });
     :label="label"
     :max="inputMax"
     :min="inputMin"
-    :model-value="validation === 'server' ? modelValue : value"
+    :model-value="value"
     :name="name"
-    :pattern="validation === 'server' ? pattern : undefined"
     :placeholder="placeholder"
     :plaintext="plaintext"
     :readonly="readonly"

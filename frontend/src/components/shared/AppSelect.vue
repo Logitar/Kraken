@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { parsingUtils } from "logitar-js";
 import { useField } from "vee-validate";
 
-import type { ValidationListeners, ValidationRules, ValidationType } from "@/types/validation";
+import type { ValidationListeners, ValidationRules } from "@/types/validation";
 
 const { parseBoolean } = parsingUtils;
 
@@ -13,12 +13,10 @@ const props = withDefaults(
   defineProps<
     SelectOptions & {
       rules?: ValidationRules;
-      validation?: ValidationType;
     }
   >(),
   {
     id: () => nanoid(),
-    validation: "client",
   },
 );
 
@@ -33,13 +31,10 @@ const describedBy = computed<string>(() => {
   return ids.join(" ");
 });
 const inputName = computed<string>(() => props.name ?? props.id);
-const inputRequired = computed<boolean | "label">(() => (parseBoolean(props.required) ? (props.validation === "server" ? true : "label") : false));
+const inputRequired = computed<false | "label">(() => (parseBoolean(props.required) ? "label" : false));
 
 const validationRules = computed<ValidationRules>(() => {
   const rules: ValidationRules = {};
-  if (props.validation === "server") {
-    return rules;
-  }
 
   const required: boolean | undefined = parseBoolean(props.required);
   if (required) {
@@ -55,7 +50,7 @@ const { errorMessage, handleChange, meta, value } = useField<string>(inputName, 
 });
 const inputStatus = computed<SelectStatus | undefined>(() => {
   if (meta.dirty || meta.touched) {
-    return props.status ?? (props.validation === "server" ? undefined : meta.valid ? "valid" : "invalid");
+    return props.status ?? (meta.valid ? "valid" : "invalid");
   }
   return undefined;
 });
@@ -83,7 +78,7 @@ defineExpose({ focus });
     :floating="floating"
     :id="id"
     :label="label"
-    :model-value="validation === 'server' ? modelValue : value"
+    :model-value="value"
     :multiple="multiple"
     :name="name"
     :options="options"
