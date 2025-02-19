@@ -17,6 +17,7 @@ import {
   faSave,
   faStar,
   faUser,
+  faUsersGear,
   faVial,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -35,6 +36,7 @@ library.add(
   faSave,
   faStar,
   faUser,
+  faUsersGear,
   faVial,
 );
 
