@@ -11,6 +11,7 @@ import UniqueNameAlreadyUsed from "@/components/shared/UniqueNameAlreadyUsed.vue
 import UniqueNameInput from "@/components/shared/UniqueNameInput.vue";
 import type { ApiError } from "@/types/api";
 import type { CreateOrReplaceRolePayload, Role } from "@/types/roles";
+import { CustomAttributeState } from "@/types/custom";
 import { ErrorCodes } from "@/enums/errorCodes";
 import { StatusCodes } from "@/enums/statusCodes";
 import { handleErrorKey } from "@/inject/App";
@@ -23,6 +24,7 @@ const route = useRoute();
 const router = useRouter();
 const toasts = useToastStore();
 
+const customAttributes = ref<CustomAttributeState[]>([]);
 const description = ref<string>("");
 const displayName = ref<string>("");
 const role = ref<Role>();
@@ -34,7 +36,8 @@ const hasChanges = computed<boolean>(() =>
     role.value &&
       (role.value.uniqueName !== uniqueName.value ||
         (role.value.displayName ?? "") !== displayName.value ||
-        (role.value.description ?? "" !== description.value)),
+        (role.value.description ?? "" !== description.value) ||
+        customAttributes.value.some((customAttribute) => customAttribute.hasChanges)),
   ),
 );
 
@@ -43,6 +46,7 @@ function setModel(model: Role): void {
   uniqueName.value = model.uniqueName;
   displayName.value = model.displayName ?? "";
   description.value = model.description ?? "";
+  customAttributes.value = model.customAttributes.map((customAttribute) => new CustomAttributeState(customAttribute));
 }
 
 const { handleSubmit, isSubmitting } = useForm();
@@ -54,7 +58,7 @@ const onSubmit = handleSubmit(async () => {
         uniqueName: uniqueName.value,
         displayName: displayName.value,
         description: description.value,
-        customAttributes: role.value.customAttributes, // TODO(fpion): implement
+        customAttributes: customAttributes.value.filter(({ status }) => status !== "deleted").map((state) => state.toCustomAttribute()),
       };
       const updatedRole: Role = await replaceRole(role.value.id, payload, role.value.version);
       setModel(updatedRole);
@@ -100,6 +104,7 @@ onMounted(async () => {
           <DisplayNameInput class="col" v-model="displayName" />
         </div>
         <DescriptionTextarea class="mb-3" v-model="description" />
+        <!-- TODO(fpion): CustomAttributes -->
         <div class="mb-3">
           <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />
         </div>
