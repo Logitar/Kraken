@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { parsingUtils, stringUtils } from "logitar-js";
 import { useField } from "vee-validate";
 
-import type { ShowStatus, ValidationListeners, ValidationRules, ValidationType } from "@/types/validation";
+import type { ValidationListeners, ValidationRules, ValidationType } from "@/types/validation";
 
 const { isDateTimeInput, isNumericInput, isTextualInput } = inputUtils;
 const { isNullOrWhiteSpace } = stringUtils;
@@ -15,13 +15,11 @@ const props = withDefaults(
   defineProps<
     InputOptions & {
       rules?: ValidationRules;
-      showStatus?: ShowStatus;
       validation?: ValidationType;
     }
   >(),
   {
     id: () => nanoid(),
-    showStatus: "touched",
     validation: "client",
   },
 );
@@ -91,7 +89,7 @@ const { errorMessage, handleChange, meta, value } = useField<string>(inputName, 
   label: displayLabel,
 });
 const inputStatus = computed<InputStatus | undefined>(() => {
-  if (props.showStatus === "always" || (props.showStatus === "touched" && (meta.dirty || meta.touched))) {
+  if (meta.dirty || meta.touched) {
     return props.status ?? (props.validation === "server" ? undefined : meta.valid ? "valid" : "invalid");
   }
   return undefined;
