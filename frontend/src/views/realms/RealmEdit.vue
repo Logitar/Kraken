@@ -6,6 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import CustomAttributeList from "@/components/custom/CustomAttributeList.vue";
 import RealmGeneral from "@/components/realms/RealmGeneral.vue";
+import RealmSettings from "@/components/realms/RealmSettings.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import type { ApiError } from "@/types/api";
 import type { Configuration } from "@/types/configuration";
@@ -34,13 +35,23 @@ function setMetadata(updated: Realm): void {
   }
 }
 
-function onUpdate(updated: Realm): void {
+function onGeneralUpdate(updated: Realm): void {
   if (realm.value) {
     setMetadata(updated);
     realm.value.uniqueSlug = updated.uniqueSlug;
     realm.value.displayName = updated.displayName ?? "";
     realm.value.description = updated.description ?? "";
     realm.value.url = updated.url ?? "";
+  }
+  toasts.success("realms.updated");
+}
+function onSettingsUpdate(updated: Realm): void {
+  if (realm.value) {
+    setMetadata(updated);
+    realm.value.uniqueNameSettings = { ...updated.uniqueNameSettings };
+    realm.value.passwordSettings = { ...updated.passwordSettings };
+    realm.value.requireUniqueEmail = updated.requireUniqueEmail;
+    realm.value.requireConfirmedAccount = updated.requireConfirmedAccount;
   }
   toasts.success("realms.updated");
 }
@@ -84,9 +95,11 @@ onMounted(async () => {
       <StatusDetail :aggregate="realm" />
       <TarTabs>
         <TarTab active id="general" :title="t('general')">
-          <RealmGeneral :realm="realm" :settings="configuration.uniqueNameSettings" @error="handleError" @updated="onUpdate" />
+          <RealmGeneral :realm="realm" :settings="configuration.uniqueNameSettings" @error="handleError" @updated="onGeneralUpdate" />
         </TarTab>
-        <!-- TODO(fpion): Settings -->
+        <TarTab id="settings" :title="t('settings.title')">
+          <RealmSettings :realm="realm" @error="handleError" @updated="onSettingsUpdate" />
+        </TarTab>
         <TarTab id="custom-attributes" :title="t('customAttributes.label')">
           <CustomAttributeList :custom-attributes="realm.customAttributes" :save="updateCustomAttributes" />
         </TarTab>

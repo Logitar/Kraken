@@ -80,6 +80,7 @@ onMounted(async () => {
       <h1>{{ t("configuration.title") }}</h1>
       <StatusDetail :aggregate="configuration" />
       <form @submit.prevent="onSubmit">
+        <!-- TODO(fpion): set/reset token secret -->
         <UniqueNameSettingsEdit v-model="uniqueNameSettings" />
         <PasswordSettingsEdit v-model="passwordSettings" />
         <div class="mb-3">

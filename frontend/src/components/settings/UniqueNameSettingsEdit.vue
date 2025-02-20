@@ -22,7 +22,7 @@ function onAllowedCharactersUpdate(allowedCharacters: string): void {
 
 <template>
   <div>
-    <h3>{{ t("settings.uniqueName.title") }}</h3>
+    <h5>{{ t("settings.uniqueName.title") }}</h5>
     <AppInput
       class="mb-3"
       described-by="allowed-characters-help"

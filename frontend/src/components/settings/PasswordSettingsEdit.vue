@@ -63,7 +63,7 @@ function onRequireNonAlphanumericUpdate(requireNonAlphanumeric: boolean): void {
 
 <template>
   <div>
-    <h3>{{ t("settings.password.title") }}</h3>
+    <h5>{{ t("settings.password.title") }}</h5>
     <div class="mb-3 row">
       <AppInput
         class="col"

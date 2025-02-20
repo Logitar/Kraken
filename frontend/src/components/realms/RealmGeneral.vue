@@ -79,6 +79,7 @@ watch(
         <DisplayNameInput class="col" v-model="displayName" />
         <UniqueSlugInput class="col" :name-value="displayName" required v-model="uniqueSlug" />
       </div>
+      <!-- TODO(fpion): URL -->
       <DescriptionTextarea class="mb-3" v-model="description" />
       <div class="mb-3">
         <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />

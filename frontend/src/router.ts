@@ -37,7 +37,7 @@ const router = createRouter({
     {
       name: "Configuration",
       path: "/configuration",
-      component: () => import("./views/configuration/ConfigurationView.vue"),
+      component: () => import("./views/configuration/ConfigurationEdit.vue"),
     },
     // Languages
     {
