@@ -21,3 +21,5 @@ export function isError(e: unknown, status?: number, code?: string): boolean {
     return false;
   }
 }
+
+// TODO(fpion): unit tests
