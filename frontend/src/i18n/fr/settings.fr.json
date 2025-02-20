@@ -24,12 +24,12 @@
   },
   "users": {
     "requireConfirmedAccount": {
-      "help": "todo:requireConfirmedAccount:help",
-      "label": "todo:requireConfirmedAccount:label"
+      "help": "todo",
+      "label": "Exiger un compte confirmé"
     },
     "requireUniqueEmail": {
-      "help": "todo:requireUniqueEmail:help",
-      "label": "todo:requireUniqueEmail:label"
+      "help": "todo",
+      "label": "Exiger une adresse courriel unique"
     },
     "title": "Utilisateurs"
   }

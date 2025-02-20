@@ -80,16 +80,28 @@ watch(
     <PasswordSettingsEdit v-model="passwordSettings" />
     <h5>{{ t("settings.users.title") }}</h5>
     <div class="mb-3">
-      <TarCheckbox id="require-unique-email" :label="t('settings.users.requireUniqueEmail.label')" v-model="requireUniqueEmail" />
-      <div class="form-text">
-        <!-- TODO(fpion): help -->
-      </div>
+      <TarCheckbox
+        described-by="require-unique-email-help"
+        id="require-unique-email"
+        :label="t('settings.users.requireUniqueEmail.label')"
+        v-model="requireUniqueEmail"
+      >
+        <template #after>
+          <div id="require-unique-email-help" class="form-text">{{ t("settings.users.requireUniqueEmail.help") }}</div>
+        </template>
+      </TarCheckbox>
     </div>
     <div class="mb-3">
-      <TarCheckbox id="require-confirmed-account" :label="t('settings.users.requireConfirmedAccount.label')" v-model="requireConfirmedAccount" />
-      <div class="form-text">
-        <!-- TODO(fpion): help -->
-      </div>
+      <TarCheckbox
+        described-by="require-confirmed-account-help"
+        id="require-confirmed-account"
+        :label="t('settings.users.requireConfirmedAccount.label')"
+        v-model="requireConfirmedAccount"
+      >
+        <template #after>
+          <div id="require-confirmed-account-help" class="form-text">{{ t("settings.users.requireConfirmedAccount.help") }}</div>
+        </template>
+      </TarCheckbox>
     </div>
     <div class="mb-3">
       <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />

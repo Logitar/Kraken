@@ -14,7 +14,7 @@
     },
     "title": "Passwords"
   },
-  "title": "Paramètres",
+  "title": "Settings",
   "uniqueName": {
     "allowedCharacters": {
       "help": "The allowed characters in unique names (users, roles, field types and contents).",
@@ -24,13 +24,13 @@
   },
   "users": {
     "requireConfirmedAccount": {
-      "help": "todo:requireConfirmedAccount:help",
-      "label": "todo:requireConfirmedAccount"
+      "help": "todo",
+      "label": "Require confirmed account"
     },
     "requireUniqueEmail": {
-      "help": "todo:requireUniqueEmail:help",
-      "label": "todo:requireUniqueEmail"
+      "help": "todo",
+      "label": "Require unique email address"
     },
-    "label": "Users"
+    "title": "Users"
   }
 }
