@@ -73,6 +73,9 @@ watchEffect(() => {
           </li>
           <template v-if="user">
             <li class="nav-item">
+              <RouterLink :to="{ name: 'Configuration' }" class="nav-link"><font-awesome-icon icon="fas fa-gear" /> {{ t("configuration.title") }}</RouterLink>
+            </li>
+            <li class="nav-item">
               <RouterLink :to="{ name: 'RealmList' }" class="nav-link"><font-awesome-icon icon="fas fa-chess-rook" /> {{ t("realms.list") }}</RouterLink>
             </li>
             <li class="nav-item">

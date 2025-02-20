@@ -1,0 +1,25 @@
+{
+  "password": {
+    "requireDigit": "Require digit (0-9)",
+    "requireLowercase": "Require lowercase (a-z)",
+    "requireNonAlphanumeric": "Require non alphanumeric (ex.: ! / $ % ? & * _ +)",
+    "requireUppercase": "Require uppercase (A-Z)",
+    "requiredLength": {
+      "help": "The minimum length of a password, in number of characters.",
+      "label": "Required Length"
+    },
+    "requiredUniqueChars": {
+      "help": "The minimum number of different characters in a password.",
+      "label": "Required Unique Characters"
+    },
+    "title": "Passwords"
+  },
+  "title": "Paramètres",
+  "uniqueName": {
+    "allowedCharacters": {
+      "help": "The allowed characters in unique names (users, roles, field types and contents).",
+      "label": "Allowed Characters"
+    },
+    "title": "Unique Names"
+  }
+}

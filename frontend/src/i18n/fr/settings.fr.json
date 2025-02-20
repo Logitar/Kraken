@@ -1,0 +1,25 @@
+{
+  "password": {
+    "requireDigit": "Exiger un chiffre (0-9)",
+    "requireLowercase": "Exiger une minuscule (a-z)",
+    "requireNonAlphanumeric": "Exiger un caractère spécial (ex.: ! / $ % ? & * _ +)",
+    "requireUppercase": "Exiger une majuscule (A-Z)",
+    "requiredLength": {
+      "help": "La longueur maximale d’un mot de passe, en nombre de caractères.",
+      "label": "Nombre de caractères minimal"
+    },
+    "requiredUniqueChars": {
+      "help": "Le nombre minimal de caractères différents dans un mot de passe.",
+      "label": "Nombre de caractères uniques"
+    },
+    "title": "Mots de passe"
+  },
+  "title": "Paramètres",
+  "uniqueName": {
+    "allowedCharacters": {
+      "help": "Les caractères permis dans les noms uniques (utilisateurs, rôles, types de champs et contenus).",
+      "label": "Caractères permis"
+    },
+    "title": "Noms uniques"
+  }
+}
