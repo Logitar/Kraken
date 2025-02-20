@@ -1,17 +1,26 @@
 {
   "actions": {
+    "add": "Add",
     "cancel": "Cancel",
     "close": "Close",
     "create": "Create",
     "refresh": "Refresh",
+    "remove": "Remove",
+    "restore": "Restore",
     "save": "Save"
   },
   "brand": "Kraken",
   "by": "By",
   "copyright": "© Logitar {version} {year}.",
   "count": "Count",
+  "customAttributes": {
+    "key": "Key",
+    "label": "Custom Attributes",
+    "value": "Value"
+  },
   "description": "Description",
   "displayName": "Display Name",
+  "general": "General",
   "loading": "Loading…",
   "locale": {
     "alreadyUsed": {

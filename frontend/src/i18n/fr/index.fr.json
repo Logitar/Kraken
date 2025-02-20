@@ -1,17 +1,26 @@
 {
   "actions": {
+    "add": "Ajouter",
     "cancel": "Annuler",
     "close": "Fermer",
     "create": "Créer",
     "refresh": "Rafraîchir",
+    "remove": "Retirer",
+    "restore": "Restaurer",
     "save": "Enregistrer"
   },
   "brand": "Kraken",
   "by": "Par",
   "copyright": "© Logitar {version} {year}.",
   "count": "Nombre de résultats",
+  "customAttributes": {
+    "key": "Clé",
+    "label": "Attributs personnalisés",
+    "value": "Valeur"
+  },
   "description": "Description",
   "displayName": "Nom d’affichage",
+  "general": "Général",
   "loading": "Chargement…",
   "locale": {
     "alreadyUsed": {

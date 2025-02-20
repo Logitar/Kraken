@@ -1,4 +1,5 @@
 import type { Aggregate } from "./aggregate";
+import type { Change } from "./change";
 import type { CustomAttribute } from "./custom";
 import type { Realm } from "./realms";
 import type { SearchPayload, SortOption } from "./search";
@@ -33,4 +34,11 @@ export type RoleSortOption = SortOption & {
 
 export type SearchRolesPayload = SearchPayload & {
   sort: RoleSortOption[];
+};
+
+export type UpdateRolePayload = {
+  uniqueName?: string;
+  displayName?: Change<string>;
+  description?: Change<string>;
+  customAttributes: CustomAttribute[];
 };

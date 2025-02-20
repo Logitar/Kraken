@@ -1,86 +1,70 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from "vue";
-import { useForm } from "vee-validate";
+import { TarTab, TarTabs } from "logitar-vue3-ui";
+import { inject, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-import AppSaveButton from "@/components/shared/AppSaveButton.vue";
-import DescriptionTextarea from "@/components/shared/DescriptionTextarea.vue";
-import DisplayNameInput from "@/components/shared/DisplayNameInput.vue";
+import CustomAttributeList from "@/components/custom/CustomAttributeList.vue";
+import RoleGeneral from "@/components/roles/RoleGeneral.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
-import UniqueNameAlreadyUsed from "@/components/shared/UniqueNameAlreadyUsed.vue";
-import UniqueNameInput from "@/components/shared/UniqueNameInput.vue";
 import type { ApiError } from "@/types/api";
-import type { CreateOrReplaceRolePayload, Role } from "@/types/roles";
-import { CustomAttributeState } from "@/types/custom";
-import { ErrorCodes } from "@/enums/errorCodes";
+import type { Configuration } from "@/types/configuration";
+import type { CustomAttribute } from "@/types/custom";
+import type { Role, UpdateRolePayload } from "@/types/roles";
 import { StatusCodes } from "@/enums/statusCodes";
 import { handleErrorKey } from "@/inject/App";
-import { isError } from "@/helpers/errors";
-import { readRole, replaceRole } from "@/api/roles";
+import { readConfiguration } from "@/api/configuration";
+import { readRole, updateRole } from "@/api/roles";
 import { useToastStore } from "@/stores/toast";
 
 const handleError = inject(handleErrorKey) as (e: unknown) => void;
 const route = useRoute();
 const router = useRouter();
 const toasts = useToastStore();
+const { t } = useI18n();
 
-const customAttributes = ref<CustomAttributeState[]>([]);
-const description = ref<string>("");
-const displayName = ref<string>("");
+const configuration = ref<Configuration>();
 const role = ref<Role>();
-const uniqueName = ref<string>("");
-const uniqueNameAlreadyUsed = ref<boolean>(false);
 
-const hasChanges = computed<boolean>(() =>
-  Boolean(
-    role.value &&
-      (role.value.uniqueName !== uniqueName.value ||
-        (role.value.displayName ?? "") !== displayName.value ||
-        (role.value.description ?? "" !== description.value) ||
-        customAttributes.value.some((customAttribute) => customAttribute.hasChanges)),
-  ),
-);
-
-function setModel(model: Role): void {
-  role.value = model;
-  uniqueName.value = model.uniqueName;
-  displayName.value = model.displayName ?? "";
-  description.value = model.description ?? "";
-  customAttributes.value = model.customAttributes.map((customAttribute) => new CustomAttributeState(customAttribute));
+function setMetadata(updated: Role): void {
+  if (role.value) {
+    role.value.version = updated.version;
+    role.value.updatedBy = updated.updatedBy;
+    role.value.updatedOn = updated.updatedOn;
+  }
 }
 
-const { handleSubmit, isSubmitting } = useForm();
-const onSubmit = handleSubmit(async () => {
-  uniqueNameAlreadyUsed.value = false;
+function onUpdate(updated: Role): void {
+  if (role.value) {
+    setMetadata(updated);
+    role.value.uniqueName = updated.uniqueName;
+    role.value.displayName = updated.displayName ?? "";
+    role.value.description = updated.description ?? "";
+  }
+  toasts.success("roles.updated");
+}
+
+async function updateCustomAttributes(customAttributes: CustomAttribute[]): Promise<void> {
   if (role.value) {
     try {
-      const payload: CreateOrReplaceRolePayload = {
-        uniqueName: uniqueName.value,
-        displayName: displayName.value,
-        description: description.value,
-        customAttributes: customAttributes.value.filter(({ status }) => status !== "deleted").map((state) => state.toCustomAttribute()),
-      };
-      const updatedRole: Role = await replaceRole(role.value.id, payload, role.value.version);
-      setModel(updatedRole);
+      const payload: UpdateRolePayload = { customAttributes };
+      const updated: Role = await updateRole(role.value.id, payload);
+      setMetadata(updated);
+      role.value.customAttributes = [...updated.customAttributes];
       toasts.success("roles.updated");
     } catch (e: unknown) {
-      if (isError(e, StatusCodes.Conflict, ErrorCodes.LocaleAlreadyUsed)) {
-        uniqueNameAlreadyUsed.value = true;
-      } else {
-        handleError(e);
-      }
+      handleError(e);
     }
   }
-});
+}
 
 onMounted(async () => {
   try {
     const id = route.params.id?.toString();
     if (id) {
-      const role: Role = await readRole(id);
-      setModel(role);
+      role.value = await readRole(id);
+      configuration.value = await readConfiguration();
     }
-    // TODO(fpion): load realm or configuration, for unique name settings
   } catch (e: unknown) {
     const { status } = e as ApiError;
     if (status === StatusCodes.NotFound) {
@@ -94,21 +78,17 @@ onMounted(async () => {
 
 <template>
   <main class="container">
-    <template v-if="role">
+    <template v-if="role && configuration">
       <h1>{{ role.displayName ?? role.uniqueName }}</h1>
       <StatusDetail :aggregate="role" />
-      <form @submit.prevent="onSubmit">
-        <UniqueNameAlreadyUsed v-model="uniqueNameAlreadyUsed" />
-        <div class="mb-3 row">
-          <UniqueNameInput class="col" required v-model="uniqueName" />
-          <DisplayNameInput class="col" v-model="displayName" />
-        </div>
-        <DescriptionTextarea class="mb-3" v-model="description" />
-        <!-- TODO(fpion): CustomAttributes -->
-        <div class="mb-3">
-          <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />
-        </div>
-      </form>
+      <TarTabs>
+        <TarTab active id="general" :title="t('general')">
+          <RoleGeneral :role="role" :settings="configuration.uniqueNameSettings" @error="handleError" @updated="onUpdate" />
+        </TarTab>
+        <TarTab id="custom-attributes" :title="t('customAttributes.label')">
+          <CustomAttributeList :custom-attributes="role.customAttributes" :save="updateCustomAttributes" />
+        </TarTab>
+      </TarTabs>
     </template>
   </main>
 </template>

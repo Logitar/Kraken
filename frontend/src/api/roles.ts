@@ -1,8 +1,8 @@
 import { urlUtils } from "logitar-js";
 
-import type { CreateOrReplaceRolePayload, Role, SearchRolesPayload } from "@/types/roles";
+import type { CreateOrReplaceRolePayload, Role, SearchRolesPayload, UpdateRolePayload } from "@/types/roles";
 import type { SearchResults } from "@/types/search";
-import { get, post, put } from ".";
+import { get, patch, post, put } from ".";
 
 function createUrlBuilder(id?: string): urlUtils.IUrlBuilder {
   return id ? new urlUtils.UrlBuilder({ path: "/api/roles/{id}" }).setParameter("id", id) : new urlUtils.UrlBuilder({ path: "/api/roles" });
@@ -41,4 +41,9 @@ export async function searchRoles(payload: SearchRolesPayload): Promise<SearchRe
     .setQuery("limit", payload.limit.toString())
     .buildRelative();
   return (await get<SearchResults<Role>>(url)).data;
+}
+
+export async function updateRole(id: string, payload: UpdateRolePayload): Promise<Role> {
+  const url: string = createUrlBuilder(id).buildRelative();
+  return (await patch<UpdateRolePayload, Role>(url, payload)).data;
 }
