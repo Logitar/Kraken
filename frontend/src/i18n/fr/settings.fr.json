@@ -21,5 +21,16 @@
       "label": "Caractères permis"
     },
     "title": "Noms uniques"
+  },
+  "users": {
+    "requireConfirmedAccount": {
+      "help": "todo:requireConfirmedAccount:help",
+      "label": "todo:requireConfirmedAccount:label"
+    },
+    "requireUniqueEmail": {
+      "help": "todo:requireUniqueEmail:help",
+      "label": "todo:requireUniqueEmail:label"
+    },
+    "title": "Utilisateurs"
   }
 }

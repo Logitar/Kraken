@@ -21,5 +21,16 @@
       "label": "Allowed Characters"
     },
     "title": "Unique Names"
+  },
+  "users": {
+    "requireConfirmedAccount": {
+      "help": "todo:requireConfirmedAccount:help",
+      "label": "todo:requireConfirmedAccount"
+    },
+    "requireUniqueEmail": {
+      "help": "todo:requireUniqueEmail:help",
+      "label": "todo:requireUniqueEmail"
+    },
+    "label": "Users"
   }
 }

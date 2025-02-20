@@ -1,10 +1,21 @@
 <script setup lang="ts">
-import { TarCheckbox, type CheckboxOptions } from "logitar-vue3-ui";
-import { ref } from "vue";
+import { TarCheckbox } from "logitar-vue3-ui";
+import { computed, ref, watch } from "vue";
+import { useForm } from "vee-validate";
+import { useI18n } from "vue-i18n";
 
+import AppSaveButton from "@/components/shared/AppSaveButton.vue";
 import PasswordSettingsEdit from "@/components/settings/PasswordSettingsEdit.vue";
 import UniqueNameSettingsEdit from "@/components/settings/UniqueNameSettingsEdit.vue";
 import type { PasswordSettings, UniqueNameSettings } from "@/types/settings";
+import type { Realm, UpdateRealmPayload } from "@/types/realms";
+import { updateRealm } from "@/api/realms";
+
+const { t } = useI18n();
+
+const props = defineProps<{
+  realm: Realm;
+}>();
 
 const passwordSettings = ref<PasswordSettings>({
   requiredLength: 8,
@@ -15,14 +26,78 @@ const passwordSettings = ref<PasswordSettings>({
   requireDigit: true,
   hashingStrategy: "PBKDF2",
 });
+const requireConfirmedAccount = ref<boolean>(true);
+const requireUniqueEmail = ref<boolean>(true);
 const uniqueNameSettings = ref<UniqueNameSettings>({});
+
+const hasChanges = computed<boolean>(
+  () =>
+    (props.realm.uniqueNameSettings.allowedCharacters ?? "") !== (uniqueNameSettings.value.allowedCharacters ?? "") ||
+    props.realm.passwordSettings.requiredLength !== passwordSettings.value.requiredLength ||
+    props.realm.passwordSettings.requiredUniqueChars !== passwordSettings.value.requiredUniqueChars ||
+    props.realm.passwordSettings.requireLowercase !== passwordSettings.value.requireLowercase ||
+    props.realm.passwordSettings.requireUppercase !== passwordSettings.value.requireUppercase ||
+    props.realm.passwordSettings.requireDigit !== passwordSettings.value.requireDigit ||
+    props.realm.passwordSettings.requireNonAlphanumeric !== passwordSettings.value.requireNonAlphanumeric ||
+    props.realm.passwordSettings.hashingStrategy !== passwordSettings.value.hashingStrategy ||
+    props.realm.requireUniqueEmail !== requireUniqueEmail.value ||
+    props.realm.requireConfirmedAccount !== requireConfirmedAccount.value,
+);
+
+const emit = defineEmits<{
+  (e: "error", value: unknown): void;
+  (e: "updated", value: Realm): void;
+}>();
+
+const { handleSubmit, isSubmitting } = useForm();
+const onSubmit = handleSubmit(async () => {
+  try {
+    const payload: UpdateRealmPayload = {
+      uniqueNameSettings: undefined, // TODO(fpion): implement
+      passwordSettings: undefined, // TODO(fpion): implement
+      requireUniqueEmail: props.realm.requireUniqueEmail !== requireUniqueEmail.value ? requireUniqueEmail.value : undefined,
+      requireConfirmedAccount: props.realm.requireConfirmedAccount !== requireConfirmedAccount.value ? requireConfirmedAccount.value : undefined,
+      customAttributes: [],
+    };
+    const realm: Realm = await updateRealm(props.realm.id, payload);
+    emit("updated", realm);
+  } catch (e: unknown) {
+    emit("error", e);
+  }
+});
+
+watch(
+  () => props.realm,
+  (realm) => {
+    uniqueNameSettings.value = { ...realm.uniqueNameSettings };
+    passwordSettings.value = { ...realm.passwordSettings };
+    requireUniqueEmail.value = realm.requireUniqueEmail;
+    requireConfirmedAccount.value = realm.requireConfirmedAccount;
+  },
+  { deep: true, immediate: true },
+);
 </script>
 
 <template>
-  <div>
+  <form @submit.prevent="onSubmit">
     <!-- TODO(fpion): set/reset token secret -->
     <UniqueNameSettingsEdit v-model="uniqueNameSettings" />
     <PasswordSettingsEdit v-model="passwordSettings" />
-    <!-- TODO(fpion): checkboxes (2) -->
-  </div>
+    <h5>{{ t("settings.users.title") }}</h5>
+    <div class="mb-3">
+      <TarCheckbox id="require-unique-email" :label="t('settings.users.requireUniqueEmail.label')" v-model="requireUniqueEmail" />
+      <div class="form-text">
+        <!-- TODO(fpion): help -->
+      </div>
+    </div>
+    <div class="mb-3">
+      <TarCheckbox id="require-confirmed-account" :label="t('settings.users.requireConfirmedAccount.label')" v-model="requireConfirmedAccount" />
+      <div class="form-text">
+        <!-- TODO(fpion): help -->
+      </div>
+    </div>
+    <div class="mb-3">
+      <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />
+    </div>
+  </form>
 </template>
