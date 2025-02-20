@@ -9,6 +9,7 @@ import StatusDetail from "@/components/shared/StatusDetail.vue";
 import UniqueNameSettingsEdit from "@/components/settings/UniqueNameSettingsEdit.vue";
 import type { Configuration, ReplaceConfigurationPayload } from "@/types/configuration";
 import type { PasswordSettings, UniqueNameSettings } from "@/types/settings";
+import { arePasswordEqual, areUniqueNameEqual } from "@/helpers/settings";
 import { handleErrorKey } from "@/inject/App";
 import { readConfiguration, replaceConfiguration } from "@/api/configuration";
 import { useToastStore } from "@/stores/toast";
@@ -32,14 +33,8 @@ const uniqueNameSettings = ref<UniqueNameSettings>({});
 const hasChanges = computed<boolean>(() =>
   Boolean(
     configuration.value &&
-      ((configuration.value.uniqueNameSettings.allowedCharacters ?? "") !== (uniqueNameSettings.value.allowedCharacters ?? "") ||
-        configuration.value.passwordSettings.requiredLength !== passwordSettings.value.requiredLength ||
-        configuration.value.passwordSettings.requiredUniqueChars !== passwordSettings.value.requiredUniqueChars ||
-        configuration.value.passwordSettings.requireLowercase !== passwordSettings.value.requireLowercase ||
-        configuration.value.passwordSettings.requireUppercase !== passwordSettings.value.requireUppercase ||
-        configuration.value.passwordSettings.requireDigit !== passwordSettings.value.requireDigit ||
-        configuration.value.passwordSettings.requireNonAlphanumeric !== passwordSettings.value.requireNonAlphanumeric ||
-        configuration.value.passwordSettings.hashingStrategy !== passwordSettings.value.hashingStrategy),
+      (!areUniqueNameEqual(configuration.value.uniqueNameSettings, uniqueNameSettings.value) ||
+        !arePasswordEqual(configuration.value.passwordSettings, passwordSettings.value)),
   ),
 );
 

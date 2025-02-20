@@ -9,6 +9,7 @@ import PasswordSettingsEdit from "@/components/settings/PasswordSettingsEdit.vue
 import UniqueNameSettingsEdit from "@/components/settings/UniqueNameSettingsEdit.vue";
 import type { PasswordSettings, UniqueNameSettings } from "@/types/settings";
 import type { Realm, UpdateRealmPayload } from "@/types/realms";
+import { arePasswordEqual, areUniqueNameEqual } from "@/helpers/settings";
 import { updateRealm } from "@/api/realms";
 
 const { t } = useI18n();
@@ -32,14 +33,8 @@ const uniqueNameSettings = ref<UniqueNameSettings>({});
 
 const hasChanges = computed<boolean>(
   () =>
-    (props.realm.uniqueNameSettings.allowedCharacters ?? "") !== (uniqueNameSettings.value.allowedCharacters ?? "") ||
-    props.realm.passwordSettings.requiredLength !== passwordSettings.value.requiredLength ||
-    props.realm.passwordSettings.requiredUniqueChars !== passwordSettings.value.requiredUniqueChars ||
-    props.realm.passwordSettings.requireLowercase !== passwordSettings.value.requireLowercase ||
-    props.realm.passwordSettings.requireUppercase !== passwordSettings.value.requireUppercase ||
-    props.realm.passwordSettings.requireDigit !== passwordSettings.value.requireDigit ||
-    props.realm.passwordSettings.requireNonAlphanumeric !== passwordSettings.value.requireNonAlphanumeric ||
-    props.realm.passwordSettings.hashingStrategy !== passwordSettings.value.hashingStrategy ||
+    !areUniqueNameEqual(props.realm.uniqueNameSettings, uniqueNameSettings.value) ||
+    !arePasswordEqual(props.realm.passwordSettings, passwordSettings.value) ||
     props.realm.requireUniqueEmail !== requireUniqueEmail.value ||
     props.realm.requireConfirmedAccount !== requireConfirmedAccount.value,
 );
@@ -53,8 +48,8 @@ const { handleSubmit, isSubmitting } = useForm();
 const onSubmit = handleSubmit(async () => {
   try {
     const payload: UpdateRealmPayload = {
-      uniqueNameSettings: undefined, // TODO(fpion): implement
-      passwordSettings: undefined, // TODO(fpion): implement
+      uniqueNameSettings: areUniqueNameEqual(props.realm.uniqueNameSettings, uniqueNameSettings.value) ? undefined : uniqueNameSettings.value,
+      passwordSettings: arePasswordEqual(props.realm.passwordSettings, passwordSettings.value) ? undefined : passwordSettings.value,
       requireUniqueEmail: props.realm.requireUniqueEmail !== requireUniqueEmail.value ? requireUniqueEmail.value : undefined,
       requireConfirmedAccount: props.realm.requireConfirmedAccount !== requireConfirmedAccount.value ? requireConfirmedAccount.value : undefined,
       customAttributes: [],
