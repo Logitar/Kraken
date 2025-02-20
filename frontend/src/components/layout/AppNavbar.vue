@@ -73,10 +73,13 @@ watchEffect(() => {
           </li>
           <template v-if="user">
             <li class="nav-item">
-              <RouterLink :to="{ name: 'LanguageList' }" class="nav-link"><font-awesome-icon icon="fas fa-language" /> {{ t("languages.list") }}</RouterLink>
+              <RouterLink :to="{ name: 'RealmList' }" class="nav-link"><font-awesome-icon icon="fas fa-chess-rook" /> {{ t("realms.list") }}</RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink :to="{ name: 'RoleList' }" class="nav-link"><font-awesome-icon icon="fas fa-users-gear" /> {{ t("roles.list") }}</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'LanguageList' }" class="nav-link"><font-awesome-icon icon="fas fa-language" /> {{ t("languages.list") }}</RouterLink>
             </li>
           </template>
         </ul>

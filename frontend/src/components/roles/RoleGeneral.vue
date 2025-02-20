@@ -47,7 +47,7 @@ const onSubmit = handleSubmit(async () => {
     const role: Role = await updateRole(props.role.id, payload);
     emit("updated", role);
   } catch (e: unknown) {
-    if (isError(e, StatusCodes.Conflict, ErrorCodes.LocaleAlreadyUsed)) {
+    if (isError(e, StatusCodes.Conflict, ErrorCodes.UniqueNameAlreadyUsed)) {
       uniqueNameAlreadyUsed.value = true;
     } else {
       emit("error", e);

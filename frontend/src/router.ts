@@ -44,6 +44,17 @@ const router = createRouter({
       path: "/languages/:id",
       component: () => import("./views/languages/LanguageEdit.vue"),
     },
+    // Realms
+    {
+      name: "RealmList",
+      path: "/realms",
+      component: () => import("./views/realms/RealmList.vue"),
+    },
+    {
+      name: "RealmEdit",
+      path: "/realms/:id",
+      component: () => import("./views/realms/RealmEdit.vue"),
+    },
     // Roles
     {
       name: "RoleList",

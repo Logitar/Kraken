@@ -1,0 +1,23 @@
+{
+  "create": "New Realm",
+  "created": "The realm has been created.",
+  "empty": "This list is empty.",
+  "list": "Realms",
+  "sort": {
+    "options": {
+      "CreatedOn": "Created on",
+      "DisplayName": "Display Name",
+      "UniqueSlug": "Unique Slug",
+      "UpdatedOn": "Updated on"
+    }
+  },
+  "uniqueSlug": {
+    "alreadyUsed": {
+      "help": "Please enter a different unique slug.",
+      "lead": "The unique slug is already used."
+    },
+    "custom": "Custom",
+    "label": "Unique Slug"
+  },
+  "updated": "The realm has been updated."
+}
