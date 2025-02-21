@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useForm } from "vee-validate";
+import { useI18n } from "vue-i18n";
 
 import AppSaveButton from "@/components/shared/AppSaveButton.vue";
 import DescriptionTextarea from "@/components/shared/DescriptionTextarea.vue";
 import DisplayNameInput from "@/components/shared/DisplayNameInput.vue";
 import UniqueSlugAlreadyUsed from "./UniqueSlugAlreadyUsed.vue";
 import UniqueSlugInput from "./UniqueSlugInput.vue";
+import UrlInput from "@/components/shared/UrlInput.vue";
 import type { Realm, UpdateRealmPayload } from "@/types/realms";
 import type { UniqueNameSettings } from "@/types/settings";
 import { ErrorCodes } from "@/enums/errorCodes";
 import { StatusCodes } from "@/enums/statusCodes";
 import { isError } from "@/helpers/errors";
 import { updateRealm } from "@/api/realms";
+
+const { t } = useI18n();
 
 const props = defineProps<{
   realm: Realm;
@@ -79,7 +83,20 @@ watch(
         <DisplayNameInput class="col" v-model="displayName" />
         <UniqueSlugInput class="col" :name-value="displayName" required v-model="uniqueSlug" />
       </div>
-      <!-- TODO(fpion): URL -->
+      <UrlInput
+        class="mb-3"
+        described-by="url-help"
+        floating
+        :go-text="t('actions.go')"
+        id="url"
+        :label="t('realms.url.label')"
+        :placeholder="t('realms.url.label')"
+        v-model="url"
+      >
+        <template #after>
+          <div id="url-help" class="form-text">{{ t("realms.url.help") }}</div>
+        </template>
+      </UrlInput>
       <DescriptionTextarea class="mb-3" v-model="description" />
       <div class="mb-3">
         <AppSaveButton :disabled="isSubmitting || !hasChanges" :loading="isSubmitting" />

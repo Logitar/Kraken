@@ -24,11 +24,11 @@
   },
   "users": {
     "requireConfirmedAccount": {
-      "help": "todo",
+      "help": "Lorsque activé, les comptes utilisateurs doivent être confirmés (n’importe quel contact vérifié) afin de s’y connecter.",
       "label": "Exiger un compte confirmé"
     },
     "requireUniqueEmail": {
-      "help": "todo",
+      "help": "Lorsque activé, l’unicité des adresses courriel sera appliquée lors de la création ou de la modification d’un utilisateur.",
       "label": "Exiger une adresse courriel unique"
     },
     "title": "Utilisateurs"

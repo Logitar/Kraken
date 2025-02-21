@@ -24,11 +24,11 @@
   },
   "users": {
     "requireConfirmedAccount": {
-      "help": "todo",
+      "help": "When enabled, users need a confirmed account (any verified contact) to sign-in.",
       "label": "Require confirmed account"
     },
     "requireUniqueEmail": {
-      "help": "todo",
+      "help": "When enabled, user email address uniqueness will be enforced when creating or updating an user.",
       "label": "Require unique email address"
     },
     "title": "Users"
