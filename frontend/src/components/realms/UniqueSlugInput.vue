@@ -30,7 +30,7 @@ const emit = defineEmits<{
 }>();
 
 function onCustomUpdate(value: boolean): void {
-  // TODO(fpion): not working correctly
+  // TODO(fpion): not working correctly because of VeeValidate!
   isCustom.value = value;
   if (!value) {
     emit("update:model-value", slugify(props.nameValue));
