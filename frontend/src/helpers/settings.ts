@@ -15,5 +15,3 @@ export function arePasswordEqual(a: PasswordSettings, b: PasswordSettings): bool
 export function areUniqueNameEqual(a: UniqueNameSettings, b: UniqueNameSettings): boolean {
   return (a.allowedCharacters ?? "") === (b.allowedCharacters ?? "");
 }
-
-// TODO(fpion): unit tests

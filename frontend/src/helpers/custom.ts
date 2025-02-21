@@ -28,5 +28,3 @@ export function toCustomAttributeState(customAttribute: CustomAttribute): Custom
     isDeleted: false,
   };
 }
-
-// TODO(fpion): unit tests
