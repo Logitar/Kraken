@@ -18,6 +18,6 @@ export const useAccountStore = defineStore(
     return { currentUser, signIn, signOut };
   },
   {
-    persist: true,
+    // persist: true, // TODO(fpion): build is failing!
   },
 );

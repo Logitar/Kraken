@@ -107,7 +107,7 @@ public class AccountController : ControllerBase
         statusCode: StatusCodes.Status400BadRequest,
         title: "Invalid Credentials",
         type: null,
-        extensions: new Dictionary<string, object?> { ["error"] = error.Code });
+        extensions: new Dictionary<string, object?> { ["error"] = error });
     }
   }
 

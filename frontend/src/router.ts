@@ -33,6 +33,45 @@ const router = createRouter({
       path: "/sign-out",
       component: () => import("./views/account/SignOutView.vue"),
     },
+    // Configuration
+    {
+      name: "Configuration",
+      path: "/configuration",
+      component: () => import("./views/configuration/ConfigurationEdit.vue"),
+    },
+    // Languages
+    {
+      name: "LanguageList",
+      path: "/languages",
+      component: () => import("./views/languages/LanguageList.vue"),
+    },
+    {
+      name: "LanguageEdit",
+      path: "/languages/:id",
+      component: () => import("./views/languages/LanguageEdit.vue"),
+    },
+    // Realms
+    {
+      name: "RealmList",
+      path: "/realms",
+      component: () => import("./views/realms/RealmList.vue"),
+    },
+    {
+      name: "RealmEdit",
+      path: "/realms/:id",
+      component: () => import("./views/realms/RealmEdit.vue"),
+    },
+    // Roles
+    {
+      name: "RoleList",
+      path: "/roles",
+      component: () => import("./views/roles/RoleList.vue"),
+    },
+    {
+      name: "RoleEdit",
+      path: "/roles/:id",
+      component: () => import("./views/roles/RoleEdit.vue"),
+    },
     // NotFound
     {
       name: "NotFound",

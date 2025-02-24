@@ -72,9 +72,18 @@ watchEffect(() => {
             <a class="nav-link" :href="scalarUrl" target="_blank"> <font-awesome-icon icon="fas fa-vial" /> Scalar</a>
           </li>
           <template v-if="user">
-            <!-- <li class="nav-item">
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'Configuration' }" class="nav-link"><font-awesome-icon icon="fas fa-gear" /> {{ t("configuration.title") }}</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'RealmList' }" class="nav-link"><font-awesome-icon icon="fas fa-chess-rook" /> {{ t("realms.list") }}</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'RoleList' }" class="nav-link"><font-awesome-icon icon="fas fa-users-gear" /> {{ t("roles.list") }}</RouterLink>
+            </li>
+            <li class="nav-item">
               <RouterLink :to="{ name: 'LanguageList' }" class="nav-link"><font-awesome-icon icon="fas fa-language" /> {{ t("languages.list") }}</RouterLink>
-            </li> -->
+            </li>
           </template>
         </ul>
 

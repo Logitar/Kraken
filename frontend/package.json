@@ -28,10 +28,10 @@
     "@vee-validate/i18n": "~4.9.6",
     "@vee-validate/rules": "~4.9.6",
     "bootstrap": "^5.3.3",
-    "logitar-vue3-ui": "^2.5.3",
-    "pinia": "^2.3.1",
+    "logitar-vue3-ui": "^3.1.0",
+    "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",
-    "vee-validate": "^4.9.6",
+    "vee-validate": "~4.9.6",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.1",
     "vue-router": "^4.5.0"

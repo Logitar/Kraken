@@ -1,0 +1,27 @@
+{
+  "create": "Nouvelle langue",
+  "created": "La langue a été créée.",
+  "default": {
+    "label": "Par défaut",
+    "set": "La langue a été définie par défaut."
+  },
+  "empty": "Cette liste est vide.",
+  "identification": "Identification",
+  "list": "Langues",
+  "otherNames": "Autres noms",
+  "select": {
+    "label": "Langue",
+    "placeholder": "Sélectionnez une langue"
+  },
+  "sort": {
+    "options": {
+      "Code": "Code",
+      "CreatedOn": "Date de création",
+      "DisplayName": "Nom d’affichage",
+      "EnglishName": "Nom anglais",
+      "NativeName": "Nom natif",
+      "UpdatedOn": "Dernière modification"
+    }
+  },
+  "updated": "La langue a été enregistrée."
+}

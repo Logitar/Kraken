@@ -19,7 +19,6 @@ internal class HttpApplicationContext : IApplicationContext
   private readonly IHttpContextAccessor _httpContextAccessor;
 
   private ConfigurationModel Configuration => _cacheService.Configuration ?? throw new InvalidOperationException("The configuration was not found in the cache.");
-  private HttpContext Context => _httpContextAccessor.HttpContext ?? throw new InvalidOperationException($"The {nameof(_httpContextAccessor.HttpContext)} is required.");
 
   public HttpApplicationContext(ICacheService cacheService, IHttpContextAccessor httpContextAccessor)
   {
@@ -31,25 +30,35 @@ internal class HttpApplicationContext : IApplicationContext
   {
     get
     {
-      UserModel? user = Context.GetUser();
-      if (user != null)
+      if (_httpContextAccessor.HttpContext != null)
       {
-        return new ActorId(user.Id);
-      }
+        UserModel? user = _httpContextAccessor.HttpContext.GetUser();
+        if (user != null)
+        {
+          return new ActorId(user.Id);
+        }
 
-      ApiKeyModel? apiKey = Context.GetApiKey();
-      if (apiKey != null)
-      {
-        return new ActorId(apiKey.Id);
+        ApiKeyModel? apiKey = _httpContextAccessor.HttpContext.GetApiKey();
+        if (apiKey != null)
+        {
+          return new ActorId(apiKey.Id);
+        }
       }
 
       return null;
     }
   }
 
-  public string BaseUrl => new Uri($"{Context.Request.Scheme}://{Context.Request.Host}", UriKind.Absolute).ToString().Trim('/');
+  public string BaseUrl
+  {
+    get
+    {
+      HttpContext context = _httpContextAccessor.HttpContext ?? throw new InvalidOperationException($"The {nameof(_httpContextAccessor.HttpContext)} is required.");
+      return new Uri($"{context.Request.Scheme}://{context.Request.Host}", UriKind.Absolute).ToString().Trim('/');
+    }
+  }
 
-  public RealmModel? Realm => Context.GetRealm();
+  public RealmModel? Realm => _httpContextAccessor.HttpContext?.GetRealm();
   public RealmId? RealmId => Realm == null ? null : new RealmId(Realm.Id);
   public Secret Secret => new(Realm?.Secret ?? Configuration.Secret);
   public IUserSettings UserSettings => new UserSettings(UniqueNameSettings, Realm?.PasswordSettings ?? Configuration.PasswordSettings, Realm?.RequireUniqueEmail ?? false, Realm?.RequireConfirmedAccount ?? false);
