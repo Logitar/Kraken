@@ -14,5 +14,7 @@ export const useI18nStore = defineStore(
 
     return { locale, setLocale };
   },
-  { persist: true },
+  {
+    // persist: true, // TODO(fpion): build is failing!
+  },
 );
