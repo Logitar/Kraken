@@ -1,6 +1,6 @@
 import { urlUtils } from "logitar-js";
 
-import type { ApiKey, CreateOrReplaceApiKeyPayload, SearchApiKeysPayload, UpdateApiKeyPayload } from "@/types/keys";
+import type { ApiKey, CreateOrReplaceApiKeyPayload, SearchApiKeysPayload, UpdateApiKeyPayload } from "@/types/apiKeys";
 import type { SearchResults } from "@/types/search";
 import { get, patch, post, put } from ".";
 

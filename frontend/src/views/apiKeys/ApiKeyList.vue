@@ -8,13 +8,13 @@ import { useRoute, useRouter } from "vue-router";
 
 import AppPagination from "@/components/shared/AppPagination.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
-import CreateApiKey from "@/components/keys/CreateApiKey.vue";
+import CreateApiKey from "@/components/apiKeys/CreateApiKey.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
 import SortSelect from "@/components/shared/SortSelect.vue";
 import StatusBlock from "@/components/shared/StatusBlock.vue";
-import type { ApiKey, ApiKeySort, SearchApiKeysPayload } from "@/types/keys";
+import type { ApiKey, ApiKeySort, SearchApiKeysPayload } from "@/types/apiKeys";
 import { handleErrorKey } from "@/inject/App";
-import { searchApiKeys } from "@/api/keys";
+import { searchApiKeys } from "@/api/apiKeys";
 import { useToastStore } from "@/stores/toast";
 
 const handleError = inject(handleErrorKey) as (e: unknown) => void;

@@ -5,8 +5,8 @@ import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 
 import DisplayNameInput from "@/components/shared/DisplayNameInput.vue";
-import type { ApiKey, CreateOrReplaceApiKeyPayload } from "@/types/keys";
-import { createApiKey } from "@/api/keys";
+import type { ApiKey, CreateOrReplaceApiKeyPayload } from "@/types/apiKeys";
+import { createApiKey } from "@/api/apiKeys";
 
 const { t } = useI18n();
 

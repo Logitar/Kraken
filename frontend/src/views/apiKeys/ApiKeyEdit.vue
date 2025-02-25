@@ -4,16 +4,16 @@ import { inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-import ApiKeyGeneral from "@/components/keys/ApiKeyGeneral.vue";
+import ApiKeyGeneral from "@/components/apiKeys/ApiKeyGeneral.vue";
 import CustomAttributeList from "@/components/custom/CustomAttributeList.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
-import XApiKey from "@/components/keys/XApiKey.vue";
+import XApiKey from "@/components/apiKeys/XApiKey.vue";
 import type { ApiError } from "@/types/api";
-import type { ApiKey, UpdateApiKeyPayload } from "@/types/keys";
+import type { ApiKey, UpdateApiKeyPayload } from "@/types/apiKeys";
 import type { CustomAttribute } from "@/types/custom";
 import { StatusCodes } from "@/enums/statusCodes";
 import { handleErrorKey } from "@/inject/App";
-import { readApiKey, updateApiKey } from "@/api/keys";
+import { readApiKey, updateApiKey } from "@/api/apiKeys";
 import { useToastStore } from "@/stores/toast";
 
 const handleError = inject(handleErrorKey) as (e: unknown) => void;

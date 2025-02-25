@@ -7,8 +7,8 @@ import AppSaveButton from "@/components/shared/AppSaveButton.vue";
 import DateTimeInput from "@/components/shared/DateTimeInput.vue";
 import DescriptionTextarea from "@/components/shared/DescriptionTextarea.vue";
 import DisplayNameInput from "@/components/shared/DisplayNameInput.vue";
-import type { ApiKey, UpdateApiKeyPayload } from "@/types/keys";
-import { updateApiKey } from "@/api/keys";
+import type { ApiKey, UpdateApiKeyPayload } from "@/types/apiKeys";
+import { updateApiKey } from "@/api/apiKeys";
 
 const { t } = useI18n();
 
