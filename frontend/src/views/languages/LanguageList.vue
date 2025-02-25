@@ -145,7 +145,6 @@ watch(
         class="col-lg-4"
         :descending="isDescending"
         :model-value="sort"
-        #
         :options="sortOptions"
         @descending="setQuery('isDescending', $event.toString())"
         @update:model-value="setQuery('sort', $event ?? '')"

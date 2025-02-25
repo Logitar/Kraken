@@ -2,6 +2,7 @@
   "actions": {
     "add": "Add",
     "cancel": "Cancel",
+    "clipboard": "Copy to clipboard",
     "close": "Close",
     "create": "Create",
     "go": "Go",
