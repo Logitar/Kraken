@@ -1,0 +1,24 @@
+{
+  "authenticatedOnFormat": "Last used on {date}",
+  "create": "New API Key",
+  "created": "The API key has been created.",
+  "empty": "This list is empty.",
+  "expired": "Expired",
+  "expiresOn": "Expires on",
+  "list": "API Keys",
+  "name": "Name",
+  "sort": {
+    "options": {
+      "AuthenticatedOn": "Last used",
+      "CreatedOn": "Created on",
+      "ExpiresOn": "Expires on",
+      "Name": "Name",
+      "UpdatedOn": "Updated on"
+    }
+  },
+  "updated": "The API key has been updated.",
+  "xApiKey": {
+    "lead": "Your new API key",
+    "help": "Make sure you save it — you won't be able to access it again."
+  }
+}

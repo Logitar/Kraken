@@ -1,8 +1,14 @@
 {
+  "added": "The role has been added.",
   "create": "New Role",
   "created": "The role has been created.",
   "empty": "This list is empty.",
   "list": "Roles",
+  "removed": "The role has been removed.",
+  "select": {
+    "label": "Role",
+    "placeholder": "Select a role"
+  },
   "sort": {
     "options": {
       "CreatedOn": "Created on",

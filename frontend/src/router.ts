@@ -33,6 +33,17 @@ const router = createRouter({
       path: "/sign-out",
       component: () => import("./views/account/SignOutView.vue"),
     },
+    // API Keys
+    {
+      name: "ApiKeyList",
+      path: "/api-keys",
+      component: () => import("./views/apiKeys/ApiKeyList.vue"),
+    },
+    {
+      name: "ApiKeyEdit",
+      path: "/api-keys/:id",
+      component: () => import("./views/apiKeys/ApiKeyEdit.vue"),
+    },
     // Configuration
     {
       name: "Configuration",

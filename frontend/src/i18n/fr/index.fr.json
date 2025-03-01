@@ -2,6 +2,7 @@
   "actions": {
     "add": "Ajouter",
     "cancel": "Annuler",
+    "clipboard": "Copier dans le presse-papiers",
     "close": "Fermer",
     "create": "Créer",
     "go": "Aller",

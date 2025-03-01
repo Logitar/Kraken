@@ -1,0 +1,24 @@
+{
+  "authenticatedOnFormat": "Dernière utilisation le {date}",
+  "create": "Nouvelle clé d’API",
+  "created": "La clé d’API a été créée.",
+  "empty": "Cette liste est vide.",
+  "expired": "Expirée",
+  "expiresOn": "Expiration",
+  "list": "Clés d’API",
+  "name": "Nom",
+  "sort": {
+    "options": {
+      "AuthenticatedOn": "Dernière utilisation",
+      "CreatedOn": "Date de création",
+      "ExpiresOn": "Expiration",
+      "Name": "Nom",
+      "UpdatedOn": "Dernière modification"
+    }
+  },
+  "updated": "La clé d’API a été enregistrée.",
+  "xApiKey": {
+    "lead": "Votre nouvelle clé d’API",
+    "help": "Assurez-vous de la sauvegarder — vous ne pourrez plus y accéder."
+  }
+}

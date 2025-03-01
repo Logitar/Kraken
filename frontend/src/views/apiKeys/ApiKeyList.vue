@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TarButton, type SelectOption } from "logitar-vue3-ui";
+import { TarBadge, TarButton, type SelectOption } from "logitar-vue3-ui";
 import { arrayUtils, objectUtils } from "logitar-js";
 import { computed, inject, ref, watch } from "vue";
 import { parsingUtils } from "logitar-js";
@@ -8,13 +8,13 @@ import { useRoute, useRouter } from "vue-router";
 
 import AppPagination from "@/components/shared/AppPagination.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
-import CreateRealm from "@/components/realms/CreateRealm.vue";
+import CreateApiKey from "@/components/apiKeys/CreateApiKey.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
 import SortSelect from "@/components/shared/SortSelect.vue";
 import StatusBlock from "@/components/shared/StatusBlock.vue";
-import type { Realm, RealmSort, SearchRealmsPayload } from "@/types/realms";
+import type { ApiKey, ApiKeySort, SearchApiKeysPayload } from "@/types/apiKeys";
 import { handleErrorKey } from "@/inject/App";
-import { searchRealms } from "@/api/realms";
+import { searchApiKeys } from "@/api/apiKeys";
 import { useToastStore } from "@/stores/toast";
 
 const handleError = inject(handleErrorKey) as (e: unknown) => void;
@@ -24,10 +24,10 @@ const toasts = useToastStore();
 const { isEmpty } = objectUtils;
 const { orderBy } = arrayUtils;
 const { parseBoolean, parseNumber } = parsingUtils;
-const { rt, t, tm } = useI18n();
+const { d, rt, t, tm } = useI18n();
 
 const isLoading = ref<boolean>(false);
-const realms = ref<Realm[]>([]);
+const apiKeys = ref<ApiKey[]>([]);
 const timestamp = ref<number>(0);
 const total = ref<number>(0);
 
@@ -39,13 +39,18 @@ const sort = computed<string>(() => route.query.sort?.toString() ?? "");
 
 const sortOptions = computed<SelectOption[]>(() =>
   orderBy(
-    Object.entries(tm(rt("realms.sort.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
+    Object.entries(tm(rt("apiKeys.sort.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
     "text",
   ),
 );
 
+function isExpired(apiKey: ApiKey): boolean {
+  const now: Date = new Date();
+  return Boolean(apiKey.expiresOn && new Date(apiKey.expiresOn) <= now);
+}
+
 async function refresh(): Promise<void> {
-  const payload: SearchRealmsPayload = {
+  const payload: SearchApiKeysPayload = {
     ids: [],
     search: {
       terms: search.value
@@ -54,7 +59,7 @@ async function refresh(): Promise<void> {
         .map((term) => ({ value: `%${term}%` })),
       operator: "And",
     },
-    sort: sort.value ? [{ field: sort.value as RealmSort, isDescending: isDescending.value }] : [],
+    sort: sort.value ? [{ field: sort.value as ApiKeySort, isDescending: isDescending.value }] : [],
     skip: (page.value - 1) * count.value,
     limit: count.value,
   };
@@ -62,9 +67,9 @@ async function refresh(): Promise<void> {
   const now = Date.now();
   timestamp.value = now;
   try {
-    const results = await searchRealms(payload);
+    const results = await searchApiKeys(payload);
     if (now === timestamp.value) {
-      realms.value = results.items;
+      apiKeys.value = results.items;
       total.value = results.total;
     }
   } catch (e: unknown) {
@@ -87,15 +92,18 @@ function setQuery(key: string, value: string): void {
   router.replace({ ...route, query });
 }
 
-function onCreated(realm: Realm) {
-  toasts.success("realms.created");
-  router.push({ name: "RealmEdit", params: { id: realm.id } });
+function onCreated(apiKey: ApiKey) {
+  toasts.success("apiKeys.created");
+  if (apiKey.xApiKey) {
+    sessionStorage.setItem("x-api-key", apiKey.xApiKey);
+  }
+  router.push({ name: "ApiKeyEdit", params: { id: apiKey.id } });
 }
 
 watch(
   () => route,
   (route) => {
-    if (route.name === "RealmList") {
+    if (route.name === "ApiKeyList") {
       const { query } = route;
       if (!query.page || !query.count) {
         router.replace({
@@ -125,7 +133,7 @@ watch(
 
 <template>
   <main class="container">
-    <h1>{{ t("realms.list") }}</h1>
+    <h1>{{ t("apiKeys.list") }}</h1>
     <div class="my-3">
       <TarButton
         class="me-1"
@@ -136,8 +144,9 @@ watch(
         :text="t('actions.refresh')"
         @click="refresh()"
       />
-      <CreateRealm class="ms-1" @created="onCreated" @error="handleError" />
+      <CreateApiKey class="ms-1" @created="onCreated" @error="handleError" />
     </div>
+    <!-- TODO(fpion): hasAuthenticated, roleId, status -->
     <div class="row">
       <SearchInput class="col-lg-4" :model-value="search" @update:model-value="setQuery('search', $event ?? '')" />
       <SortSelect
@@ -150,27 +159,33 @@ watch(
       />
       <CountSelect class="col-lg-4" :model-value="count" @update:model-value="setQuery('count', ($event ?? 10).toString())" />
     </div>
-    <template v-if="realms.length">
+    <template v-if="apiKeys.length">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">{{ t("realms.sort.options.UniqueSlug") }}</th>
-            <th scope="col">{{ t("realms.sort.options.DisplayName") }}</th>
-            <th scope="col">{{ t("realms.sort.options.UpdatedOn") }}</th>
+            <th scope="col">{{ t("apiKeys.sort.options.Name") }}</th>
+            <th scope="col">{{ t("apiKeys.sort.options.ExpiresOn") }}</th>
+            <th scope="col">{{ t("apiKeys.sort.options.AuthenticatedOn") }}</th>
+            <th scope="col">{{ t("apiKeys.sort.options.UpdatedOn") }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="realm in realms" :key="realm.id">
+          <tr v-for="apiKey in apiKeys" :key="apiKey.id">
             <td>
-              <RouterLink :to="{ name: 'RealmEdit', params: { id: realm.id } }"> <font-awesome-icon icon="fas fa-edit" /> {{ realm.uniqueSlug }} </RouterLink>
+              <RouterLink :to="{ name: 'ApiKeyEdit', params: { id: apiKey.id } }"><font-awesome-icon icon="fas fa-edit" /> {{ apiKey.name }}</RouterLink>
             </td>
-            <td>{{ realm.displayName ?? "—" }}</td>
-            <td><StatusBlock :actor="realm.updatedBy" :date="realm.updatedOn" /></td>
+            <td>
+              <TarBadge v-if="isExpired(apiKey)"><font-awesome-icon icon="fas fa-hourglass-end" /> {{ t("apiKeys.expired") }}</TarBadge>
+              <template v-else-if="apiKey.expiresOn">{{ d(new Date(apiKey.expiresOn), "medium") }}</template>
+              <template v-else>{{ "—" }}</template>
+            </td>
+            <td>{{ apiKey.authenticatedOn ? d(new Date(apiKey.authenticatedOn), "medium") : "—" }}</td>
+            <td><StatusBlock :actor="apiKey.updatedBy" :date="apiKey.updatedOn" /></td>
           </tr>
         </tbody>
       </table>
       <AppPagination :count="count" :model-value="page" :total="total" @update:model-value="setQuery('page', $event.toString())" />
     </template>
-    <p v-else>{{ t("realms.empty") }}</p>
+    <p v-else>{{ t("apiKeys.empty") }}</p>
   </main>
 </template>
