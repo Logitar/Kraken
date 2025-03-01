@@ -10,7 +10,7 @@
   "sort": {
     "options": {
       "AuthenticatedOn": "Dernière utilisation",
-      "DisplayName": "Nom d’affichage",
+      "CreatedOn": "Date de création",
       "ExpiresOn": "Expiration",
       "Name": "Nom",
       "UpdatedOn": "Dernière modification"
