@@ -1,8 +1,14 @@
 {
+  "added": "Le rôle a été ajouté.",
   "create": "Nouveau rôle",
   "created": "Le rôle a été créé.",
   "empty": "Cette liste est vide.",
   "list": "Rôles",
+  "removed": "Le rôle a été retiré.",
+  "select": {
+    "label": "Rôle",
+    "placeholder": "Sélectionnez un rôle"
+  },
   "sort": {
     "options": {
       "CreatedOn": "Date de création",

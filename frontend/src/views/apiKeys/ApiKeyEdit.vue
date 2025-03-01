@@ -6,11 +6,13 @@ import { useRoute, useRouter } from "vue-router";
 
 import ApiKeyGeneral from "@/components/apiKeys/ApiKeyGeneral.vue";
 import CustomAttributeList from "@/components/custom/CustomAttributeList.vue";
+import ManageRoles from "@/components/roles/ManageRoles.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import XApiKey from "@/components/apiKeys/XApiKey.vue";
 import type { ApiError } from "@/types/api";
 import type { ApiKey, UpdateApiKeyPayload } from "@/types/apiKeys";
 import type { CustomAttribute } from "@/types/custom";
+import type { Role } from "@/types/roles";
 import { StatusCodes } from "@/enums/statusCodes";
 import { handleErrorKey } from "@/inject/App";
 import { readApiKey, updateApiKey } from "@/api/apiKeys";
@@ -57,6 +59,39 @@ async function updateCustomAttributes(customAttributes: CustomAttribute[]): Prom
   }
 }
 
+async function addRole(role: Role): Promise<void> {
+  if (apiKey.value) {
+    try {
+      const payload: UpdateApiKeyPayload = {
+        customAttributes: [],
+        roles: [{ role: role.id, action: "Add" }],
+      };
+      const updated: ApiKey = await updateApiKey(apiKey.value.id, payload);
+      setMetadata(updated);
+      apiKey.value.roles = [...updated.roles];
+      toasts.success("roles.added");
+    } catch (e: unknown) {
+      handleError(e);
+    }
+  }
+}
+async function removeRole(role: Role): Promise<void> {
+  if (apiKey.value) {
+    try {
+      const payload: UpdateApiKeyPayload = {
+        customAttributes: [],
+        roles: [{ role: role.id, action: "Remove" }],
+      };
+      const updated: ApiKey = await updateApiKey(apiKey.value.id, payload);
+      setMetadata(updated);
+      apiKey.value.roles = [...updated.roles];
+      toasts.success("roles.removed");
+    } catch (e: unknown) {
+      handleError(e);
+    }
+  }
+}
+
 onMounted(async () => {
   try {
     const id = route.params.id?.toString();
@@ -90,7 +125,9 @@ onMounted(async () => {
         <TarTab id="custom-attributes" :title="t('customAttributes.label')">
           <CustomAttributeList :custom-attributes="apiKey.customAttributes" :save="updateCustomAttributes" />
         </TarTab>
-        <!-- TODO(fpion): Roles -->
+        <TarTab id="roles" :title="t('roles.list')">
+          <ManageRoles :add="addRole" :remove="removeRole" :roles="apiKey.roles" />
+        </TarTab>
       </TarTabs>
     </template>
   </main>

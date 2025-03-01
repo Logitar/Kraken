@@ -1,4 +1,4 @@
-import apiKeys from "./apiKeys.en.json"
+import apiKeys from "./apiKeys.en.json";
 import configuration from "./configuration.en.json";
 import index from "./index.en.json";
 import languages from "./languages.en.json";
