@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { InputSize, InputStatus } from "logitar-vue3-ui";
-import { dateUtils } from "logitar-js";
+import { parsingUtils } from "logitar-js";
 
 import AppInput from "./AppInput.vue";
 import type { ValidationRules } from "@/types/validation";
 
-const { toDateTimeLocal } = dateUtils;
+const { parseNumber } = parsingUtils;
 
 defineProps<{
   describedBy?: string;
@@ -13,10 +13,11 @@ defineProps<{
   floating?: boolean | string;
   id?: string;
   label?: string;
-  max?: Date;
-  min?: Date;
-  modelValue?: Date;
+  max?: number | string;
+  min?: number | string;
+  modelValue?: number | string;
   name?: string;
+  placeholder?: string;
   plaintext?: boolean | string;
   readonly?: boolean | string;
   required?: boolean | string;
@@ -26,17 +27,9 @@ defineProps<{
   step?: number | string;
 }>();
 
-const emit = defineEmits<{
-  (e: "update:model-value", value?: Date): void;
+defineEmits<{
+  (e: "update:model-value", value: number | undefined): void;
 }>();
-function onModelValueUpdate(value: string): void {
-  try {
-    const date = new Date(value);
-    emit("update:model-value", isNaN(date.getTime()) ? undefined : date);
-  } catch (e: unknown) {
-    emit("update:model-value", undefined);
-  }
-}
 </script>
 
 <template>
@@ -46,18 +39,20 @@ function onModelValueUpdate(value: string): void {
     :floating="floating"
     :id="id"
     :label="label"
-    :max="max ? toDateTimeLocal(max) : undefined"
-    :min="min ? toDateTimeLocal(min) : undefined"
-    :model-value="modelValue ? toDateTimeLocal(modelValue) : undefined"
+    :max="max"
+    :min="min"
+    :model-value="modelValue?.toString()"
     :name="name"
+    :placeholder="placeholder"
     :plaintext="plaintext"
     :readonly="readonly"
     :required="required"
     :rules="rules"
     :size="size"
+    :status="status"
     :step="step"
-    type="datetime-local"
-    @update:model-value="onModelValueUpdate"
+    type="number"
+    @update:model-value="$emit('update:model-value', $event === '' ? undefined : parseNumber($event))"
   >
     <template #before>
       <slot name="before"></slot>

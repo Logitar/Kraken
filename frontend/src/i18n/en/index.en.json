@@ -9,7 +9,8 @@
     "refresh": "Refresh",
     "remove": "Remove",
     "restore": "Restore",
-    "save": "Save"
+    "save": "Save",
+    "validate": "Validate"
   },
   "brand": "Kraken",
   "by": "By",

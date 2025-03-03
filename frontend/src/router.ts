@@ -83,6 +83,12 @@ const router = createRouter({
       path: "/roles/:id",
       component: () => import("./views/roles/RoleEdit.vue"),
     },
+    // Tokens
+    {
+      name: "Tokens",
+      path: "/tokens",
+      component: () => import("./views/TokenView.vue"),
+    },
     // NotFound
     {
       name: "NotFound",

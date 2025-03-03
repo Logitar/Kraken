@@ -1,0 +1,28 @@
+{
+  "audience": "Public (audience)",
+  "claims": {
+    "label": "Revendications",
+    "name": "Nom",
+    "other": "Autres revendications",
+    "type": "Type",
+    "validated": "Revendications validées",
+    "value": "Valeur"
+  },
+  "consumable": "Consommable",
+  "consume": "Consommer",
+  "created": {
+    "decoder": "Accéder au décodeur",
+    "label": "Votre nouveau jeton",
+    "title": "Jeton"
+  },
+  "issuer": "Émetteur (issuer)",
+  "lifetime": {
+    "label": "Durée de vie",
+    "unit": "seconde | seconde | secondes"
+  },
+  "secret": "Secret",
+  "subject": "Sujet",
+  "title": "Jetons",
+  "token": "Jeton",
+  "type": "Type"
+}

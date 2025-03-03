@@ -33,10 +33,11 @@ defineEmits<{
       floating
       :id="`${id}-key`"
       :label="t('customAttributes.key')"
+      max="255"
       :model-value="attributeKey"
       :placeholder="t('customAttributes.key')"
-      :rules="{ identifier: true, max_length: 255 }"
       required
+      :rules="{ identifier: true }"
       @update:model-value="$emit('update:key', $event)"
     />
     <AppInput
