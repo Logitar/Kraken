@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Logitar.Kraken.Web;
 
@@ -92,6 +93,10 @@ public class ExceptionHandler : IExceptionHandler
     {
       return errorException.Error;
     }
+    if (exception is SecurityTokenArgumentException || exception is SecurityTokenException)
+    {
+      return new Error(exception.GetErrorCode(), exception.Message);
+    }
     if (exception is ValidationException)
     {
       return new Error("Validation", "Validation failed.");
@@ -102,7 +107,7 @@ public class ExceptionHandler : IExceptionHandler
 
   private static int? GetStatusCode(Exception exception)
   {
-    if (exception is ValidationException || exception is BadRequestException || exception is InvalidCredentialsException)
+    if (exception is ValidationException || exception is BadRequestException || exception is InvalidCredentialsException || exception is SecurityTokenArgumentException || exception is SecurityTokenException)
     {
       return StatusCodes.Status400BadRequest;
     }

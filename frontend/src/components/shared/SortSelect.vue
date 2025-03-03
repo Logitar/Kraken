@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { TarSelect, type SelectOption } from "logitar-vue3-ui";
+import { TarCheckbox, TarSelect, type SelectOption } from "logitar-vue3-ui";
 import { useI18n } from "vue-i18n";
-
-import AppCheckbox from "./AppCheckbox.vue";
 
 const { t } = useI18n();
 
@@ -35,7 +33,7 @@ defineEmits<{
     @update:model-value="$emit('update:model-value', $event)"
   >
     <template #after>
-      <AppCheckbox :id="`${id}_desc`" :label="t('sort.isDescending')" :model-value="descending" tight @update:model-value="$emit('descending', $event)" />
+      <TarCheckbox :id="`${id}_desc`" :label="t('sort.isDescending')" :model-value="descending" @update:model-value="$emit('descending', $event)" />
     </template>
   </TarSelect>
 </template>

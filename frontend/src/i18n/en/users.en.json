@@ -1,4 +1,8 @@
 {
+  "email": {
+    "address": "Email Address",
+    "verified": "Verified"
+  },
   "password": {
     "changed": "Your password has been changed.",
     "changedOn": "Last changed on {date}",
